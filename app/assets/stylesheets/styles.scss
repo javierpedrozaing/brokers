@@ -9,6 +9,7 @@
 # General
 --------------------------------------------------------------*/
 body {
+  background-color:#000;
   font-family: "Open Sans", sans-serif;
   color: #444444;
 }
@@ -252,14 +253,20 @@ h6 {
   transition: 0.5s;
 }
 
-.mobile-nav-toggle.bi-x {
+.mobile-nav-toggle.fa-bars {
+  display: none;
+} 
+
+.mobile-nav-toggle.fa-rectangle-xmark {
   color: #fff;
 }
 
 @media (max-width: 991px) {
-  .mobile-nav-toggle {
+  .mobile-nav-toggle, .mobile-nav-toggle.fa-bars {
     display: block;
   }
+
+  
 
   .navbar ul {
     display: none;
