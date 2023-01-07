@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  company_name: MyString
+  company_licence: MyString
+  years_in_bussiness: 1
+  insurance_carrier: MyString
+  insurance_policy: MyString
+  licence: MyString
+  licencia_expiration_date: 2023-01-06
+  reserver_zip_code: MyString
+  director: false
+
+two:
+  company_name: MyString
+  company_licence: MyString
+  years_in_bussiness: 1
+  insurance_carrier: MyString
+  insurance_policy: MyString
+  licence: MyString
+  licencia_expiration_date: 2023-01-06
+  reserver_zip_code: MyString
+  director: false

@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  origin_broker: 1
+  destination_broker: 1
+  origin_agent: 1
+  assigned_agent: 1
+  property_address: MyString
+  contract_price: MyString
+  closing_date: 2023-01-06
+  destination_broker_commission_percent: MyString
+  destination_broker_commission: MyString
+  origin_broker_commision_percent: MyString
+  origin_broker_commission: MyString
+  proof_check: MyString
+
+two:
+  origin_broker: 1
+  destination_broker: 1
+  origin_agent: 1
+  assigned_agent: 1
+  property_address: MyString
+  contract_price: MyString
+  closing_date: 2023-01-06
+  destination_broker_commission_percent: MyString
+  destination_broker_commission: MyString
+  origin_broker_commision_percent: MyString
+  origin_broker_commission: MyString
+  proof_check: MyString
