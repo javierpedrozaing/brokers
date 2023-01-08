@@ -1,0 +1,45 @@
+<div class="container profile-form">  
+  <%= form_with(model: @user, url: profile_update_path(@article), method: "patch") do |f| %>
+    <% if current_user.member_since.blank? %>
+    <p>Welcome to brokersApp, you have to complete some information</p>
+  <% end %>
+    <h2>Profile</h2>
+    <%= f.hidden_field :role, value: @user.role %>
+    <div class="form-outline mb-4">
+      <%= f.label :photo, class: "form-label" %><br />
+      <%= image_tag(@user.photo) if @user.photo.attached? %>
+      <%= f.file_field :photo, accept: 'image/jpeg, image/png', class: "form-control" %>
+    </div>
+
+    <div class="form-outline mb-4">
+      <%= f.label :first_name, class: "form-label" %><br />
+      <%= f.text_field :first_name, value: @user.first_name, autofocus: true, autocomplete: "Last name", class: "form-control" %>
+    </div>
+
+    <div class="form-outline mb-4">
+      <%= f.label :last_name, class: "form-label" %><br />
+      <%= f.text_field :last_name, value: @user.last_name, autofocus: true, autocomplete: "Last name", class: "form-control" %>
+    </div>
+  
+    <div class="form-outline mb-4">
+      <%= f.label :phone, class: "form-label" %><br />
+      <%= f.text_field :phone, value: @user.phone, autofocus: true, autocomplete: "Phone", class: "form-control" %>
+    </div>
+
+    <div class="form-outline mb-4">
+      <%= f.label :email, class: "form-label" %><br />
+      <%= f.email_field :email, value: @user.email, autofocus: true, autocomplete: "email", class: "form-control" %>
+    </div>
+
+    <% if @user.role.downcase == 'broker' %>
+      <%= render 'partials/broker_profile', form: f %>
+    <% else %>
+      <%= render 'partials/agent_profile', form: f %>
+    <% end %>
+      
+    <div class="actions">
+      <%= f.submit "Update profile", class: "btn btn-primary btn-block mb-4 register"  %>      
+    </div>
+
+  <% end %>
+</div>

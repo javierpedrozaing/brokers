@@ -7,4 +7,15 @@ class User < ApplicationRecord
   has_many :referrals, class_name: "Referral"
   has_one :broker
   has_one :agent
+  has_one_attached :photo
+
+  after_create :send_notification_new_user
+
+  validates :first_name, presence: true
+  validates :last_name, presence: true
+  validates :phone, presence: true
+
+  def send_notification_new_user
+    UserMailer.welcome_email
+  end
 end

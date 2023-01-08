@@ -1,0 +1,29 @@
+<div class="form-outline mb-4">
+  <%= form.label :birthday, class: "form-label" %><br />
+  <%= form.date_field :birthday, autofocus: true, autocomplete: "Phone", class: "form-control" %>  
+  <%= form.date_field :birthday, value: @agent.birthday unless @agent.nil? %>  
+</div>
+
+<div class="form-outline mb-4">
+  <%= form.label :address, class: "form-label" %><br />
+  <%= form.text_field :address, autofocus: true, autocomplete: "Address", class: "form-control" %>  
+  <%= form.text_field :address, value: @agent.address unless @agent.nil? %>  
+</div>
+
+<div class="form-outline mb-4">
+  <%= form.label :city, class: "form-label" %><br />
+  <%= form.text_field :city, autofocus: true, autocomplete: "city", class: "form-control" %>  
+  <%= form.text_field :city, value: @agent.city unless @agent.nil? %>  
+</div>
+
+<div class="form-outline mb-4">
+  <%= form.label :state, class: "form-label" %><br />
+  <%= form.text_field :state, autofocus: true, autocomplete: "state", class: "form-control" %>  
+  <%= form.text_field :state, value: @agent.state unless @agent.nil? %>  
+</div>
+
+<div class="form-outline mb-4">
+  <%= form.label :zip_code, class: "form-label" %><br />
+  <%= form.text_field :zip_code, autofocus: true, autocomplete: "zip_code", class: "form-control" %>  
+  <%= form.text_field :zip_code, value: @agent.zip_code unless @agent.nil? %>  
+</div>
