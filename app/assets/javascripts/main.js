@@ -3,6 +3,7 @@ $( document ).ready(function() {
    * Mobile nav toggle
    */
   $('.mobile-nav-toggle').on("click", function(){
+    console.log("click button");
     $('#navbar').toggleClass('navbar');
     $('#navbar').toggleClass('navbar-mobile');
     $('.mobile-nav-toggle').toggleClass('fa-bars');

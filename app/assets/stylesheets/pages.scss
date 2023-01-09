@@ -4,18 +4,22 @@
 
 
 // Login form
-form.new_user {
+form.new_user, form.edit_user {
   width: 40%;
   margin:0 auto;
 }
 
-.btn.login, .btn.register {
+form .actions {
+  margin:20px 0px;
+}
+
+.btn.login, .btn.register, .btn.update-password {
   width: 100%;
 }
 
 @media (max-width: 768px) {
   form.new_user {
-    width: 60%;
+    width: 80%;
     margin:0 auto;
   }
 }
