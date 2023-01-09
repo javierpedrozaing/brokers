@@ -17,6 +17,11 @@
     <%= render 'partials/header' %>
     <p class="notice"><%= notice %></p>
     <p class="alert"><%= alert %></p>
+    <% flash.each do |type, msg| %>
+      <div>
+        <%= msg %>
+      </div>
+    <% end %>
     <%= yield %>
     <%= render 'partials/footer' %>
   </body>
