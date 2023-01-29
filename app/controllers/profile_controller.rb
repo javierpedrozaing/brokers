@@ -2,29 +2,38 @@ class ProfileController < ApplicationController
   before_action :get_user_role, only: :update_profile
   def index    
     @user = User.find(current_user.id)
-    @agent = Agent.find_by_user_id(current_user.id)
-    @broker = Broker.find_by_user_id(current_user.id)
+    @agent = Agent.find_by_user_id(current_user.id) || Agent.new
+    @broker = Broker.find_by_user_id(current_user.id) || Broker.new
+    
   end
 
-  def update_profile    
-    user = User.find(current_user.id)
+  def update_profile
+    user = User.find(current_user.id)    
     user.photo.attach(params[:photo]) if params[:photo]
+    user.member_end =  DateTime.now.next_year(1).to_time
     user.update!(permit_params_user)
-    broker = Broker.new(permit_params_broker)
-    agent = Agent.new(permit_params_agent)        
-   if user && broker.save! && agent.save!    
-    flash.now[:notice] = "Profile updated"
-   elsif 
-    flash.now[:alert] = "Something was wrong, try again."
+    byebug
+   if user.role == 'Broker'
+    @broker = Broker.find_by_user_id(user.id)
+    @broker.nil? ? Broker.new(permit_params_broker).save! : update_brokers_params(@broker)    
+   elsif
+    @agent = Agent.find_by_user_id(user.id)
+    @agent.nil? ? Agent.new(permit_params_agent).save! : update_agents_params(@agent)    
+   end    
+   byebug
+   if user && (@broker || @agent)   
+    redirect_to "/profile/index", flash: {notice: "Profile successfully updated"}    
+   elsif
+    redirect_to "/profile/index", flash: {alert: "Something was wrong"}
    end
   end
 
-  def update_agents_params params
-
+  def update_agents_params agent
+    agent.update!(permit_params_agent)
   end
 
-  def update_brokers_params params
-
+  def update_brokers_params broker    
+    broker.update!(permit_params_broker)
   end
 
   private

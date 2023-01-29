@@ -1,6 +1,6 @@
 <div class="form-outline mb-4">
   <%= form.label :company_name, class: "form-label" %><br />
-  <%= form.text_field :company_name,  value: @broker.company_name, autofocus: true, autocomplete: "company_name", class: "form-control" %>  
+  <%= form.text_field :company_name, value: @broker.company_name, autofocus: true, autocomplete: "company_name", class: "form-control" %>  
 </div>
 
 <div class="form-outline mb-4">
@@ -20,7 +20,7 @@
 
 <div class="form-outline mb-4">
   <%= form.label :insurance_policy, class: "form-label" %><br />
-  <%= form.text_field :insurance_policy, autofocus: true, autocomplete: "insurance_policy", class: "form-control" %>
+  <%= form.text_field :insurance_policy, value: @broker.insurance_policy, autofocus: true, autocomplete: "insurance_policy", class: "form-control" %>
 </div>
 
 <div class="form-outline mb-4">
@@ -30,32 +30,32 @@
 
 <div class="form-outline mb-4">
   <%= form.label :licencia_expiration_date, class: "form-label" %><br />
-  <%= form.date_field :licencia_expiration_date, autofocus: true, autocomplete: "licencia_expiration_date", class: "form-control" %>    
+  <%= form.date_field :licencia_expiration_date, value: @broker.licencia_expiration_date, autofocus: true, autocomplete: "licencia_expiration_date", class: "form-control" %>    
 </div>
 
 <div class="form-outline mb-4">
   <%= form.label :reserver_zip_code, class: "form-label" %><br />
-  <%= form.text_field :reserver_zip_code, autofocus: true, autocomplete: "reserver_zip_code", class: "form-control" %>    
+  <%= form.text_field :reserver_zip_code, value: @broker.reserver_zip_code, autofocus: true, autocomplete: "reserver_zip_code", class: "form-control" %>    
 </div>
 
 <div class="form-outline mb-4">
   <%= form.label :birthday, class: "form-label" %><br />
-  <%= form.date_field :birthday, autofocus: true, autocomplete: "Phone", class: "form-control" %>    
+  <%= form.date_field :birthday, value: @broker.birthday, autofocus: true, autocomplete: "Phone", class: "form-control" %>    
 </div>
 
 <div class="form-outline mb-4">
   <%= form.label :address, class: "form-label" %><br />
-  <%= form.text_field :address, autofocus: true, autocomplete: "Address", class: "form-control" %>    
+  <%= form.text_field :address, value: @broker.address, autofocus: true, autocomplete: "Address", class: "form-control" %>    
 </div>
 
 <div class="form-outline mb-4">
   <%= form.label :city, class: "form-label" %><br />
-  <%= form.text_field :city, value: @agent.city, autofocus: true, autocomplete: "city", class: "form-control" %>    
+  <%= form.text_field :city, value: @broker.city, autofocus: true, autocomplete: "city", class: "form-control" %>    
 </div>
 
 <div class="form-outline mb-4">
   <%= form.label :state, class: "form-label" %><br />
-  <%= form.text_field :state, autofocus: true, autocomplete: "state", class: "form-control" %>    
+  <%= form.text_field :state, value: @broker.state, autofocus: true, autocomplete: "state", class: "form-control" %>    
 </div>
 
 <div class="form-outline mb-4">

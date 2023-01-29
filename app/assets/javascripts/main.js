@@ -1,8 +1,8 @@
-$( document ).ready(function() {  
+$( document ).ready(function() {
   /**
    * Mobile nav toggle
    */
-  $('.mobile-nav-toggle').on("click", function(){
+  $('.mobile-nav-toggle').on("click", function() {
     console.log("click button");
     $('#navbar').toggleClass('navbar');
     $('#navbar').toggleClass('navbar-mobile');

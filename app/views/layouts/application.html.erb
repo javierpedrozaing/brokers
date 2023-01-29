@@ -14,12 +14,10 @@
   </head>
 
   <body>
-    <%= render 'partials/header' %>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
-    <% flash.each do |type, msg| %>
-      <div>
-        <%= msg %>
+    <%= render 'partials/header' %>    
+    <% flash.each do |type, msg| %>   
+      <div class="<%= type %>_message" role="alert">
+        <%= msg %> <!-- notice -->
       </div>
     <% end %>
     <%= yield %>

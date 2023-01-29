@@ -1,0 +1,29 @@
+<div class="agents-container">
+  <h3>Agents list</h3>
+  <div class="list">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">name</th>
+        <th scope="col">email</th>
+        <th scope="col">state</th>      
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+    <% count =1 %>
+    <% 10.times { |i|
+     %>
+      <tr>
+        <th scope="row"><%=  i+1 %></th>
+        <td>Mark</td>
+        <td>Otto</td>
+        <td>activo</td>
+        <td><%= link_to "Update", update_agents_path(i) %></td>
+      </tr>
+    <% } %>     
+    </tbody>
+  </table>
+  </div>
+</div>

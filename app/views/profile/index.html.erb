@@ -1,12 +1,12 @@
 <div class="container profile-form">  
-  <%= form_with(url: profile_update_profile_path(@article), method: "post") do |f| %>
+  <%= form_with(url: profile_update_profile_path(@user), method: "post") do |f| %>
     <% if current_user.member_since.blank? %>
       <p>Welcome to brokersApp, you have to complete some information</p>
     <% end %>
     <h2>Profile</h2>
     <%= f.hidden_field :role, value: @user.role %>
     <%= f.hidden_field :user_id, value: @user.id %>
-    <div class="form-outline mb-4">
+    <div class="form-outline mb-4 photo">
       <%= f.label :photo, class: "form-label" %><br />
       <%= image_tag(@user.photo) if @user.photo.attached? %>
       <%= f.file_field :photo, accept: 'image/jpeg, image/png', class: "form-control" %>
@@ -35,11 +35,6 @@
     <div class="form-outline mb-4">
       <%= f.label :member_since, class: "form-label" %><br />
       <%= f.date_field :member_since, value: @user.member_since, autofocus: true, autocomplete: "email", class: "form-control" %>
-    </div>
-
-    <div class="form-outline mb-4">
-      <%= f.label :member_end, class: "form-label" %><br />
-      <%= f.date_field :member_end, value: @user.member_end, autofocus: true, autocomplete: "email", class: "form-control" %>
     </div>
 
     <% if @user.role.downcase == 'broker' %>

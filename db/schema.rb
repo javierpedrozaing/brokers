@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_09_143651) do
+ActiveRecord::Schema.define(version: 2023_01_21_163544) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -34,11 +34,11 @@ ActiveRecord::Schema.define(version: 2023_01_09_143651) do
   end
 
   create_table "agents", force: :cascade do |t|
-    t.string "birthday"
-    t.string "address"
-    t.string "city"
-    t.string "state"
-    t.string "zip_code"
+    t.string "birthday", default: ""
+    t.string "address", default: ""
+    t.string "city", default: ""
+    t.string "state", default: ""
+    t.string "zip_code", default: ""
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "broker_id"
@@ -48,22 +48,25 @@ ActiveRecord::Schema.define(version: 2023_01_09_143651) do
   end
 
   create_table "brokers", force: :cascade do |t|
-    t.string "company_name"
-    t.string "company_licence"
+    t.string "company_name", default: ""
+    t.string "company_licence", default: ""
     t.integer "years_in_bussiness"
-    t.string "insurance_carrier"
-    t.string "insurance_policy"
-    t.string "licence"
+    t.string "insurance_carrier", default: ""
+    t.string "insurance_policy", default: ""
+    t.string "licence", default: ""
     t.date "licencia_expiration_date"
-    t.string "reserver_zip_code"
-    t.string "birthday"
-    t.string "address"
-    t.string "city"
-    t.string "state"
+    t.string "reserver_zip_code", default: ""
+    t.string "birthday", default: ""
+    t.string "address", default: ""
+    t.string "city", default: ""
+    t.string "state", default: ""
     t.boolean "director"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id"
+    t.float "latitude"
+    t.float "longitude"
+    t.index ["latitude", "longitude"], name: "index_brokers_on_latitude_and_longitude"
     t.index ["user_id"], name: "index_brokers_on_user_id"
   end
 

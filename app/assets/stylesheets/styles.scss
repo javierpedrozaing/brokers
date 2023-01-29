@@ -75,6 +75,30 @@ h6 {
   transition: all 0.5s;
   background: #fff;
   box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.notice_message {
+  color: #0f5132;
+  background-color: #d1e7dd;
+  border-color: #badbcc;
+  padding: 15px;
+}
+
+.notice_message {
+  color: #0f5132;
+  background-color: #d1e7dd;
+  border-color: #badbcc;
+  padding: 15px;
+}
+
+#error_explanation
+{
+  font-size: 1rem;
+  color: red; 
+  h2 {
+    font-size: 1rem;
+  }
 }
 
 #header .logo h1 {
@@ -358,11 +382,11 @@ h6 {
 --------------------------------------------------------------*/
 #hero {
   width: 100%;
-  height: 60vh;
+  height: 40vh;
   background: url("../assets/images/hero-bg.jpg") center center;
   background-size: cover;
   position: relative;
-  margin-top: 70px;
+  margin-top: 0px;
   padding: 0;
 }
 
