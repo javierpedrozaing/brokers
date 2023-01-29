@@ -6,7 +6,18 @@ class PagesController < ApplicationController
   end
 
   def get_brokers_locations
+    geocoder = Geocoder
     brokers = Broker.all
-    render json: brokers.to_json
+    brokers_coordinates = brokers.map do |br|
+      {   
+        broker_id: br.id,
+        name: "#{br.user.first_name} #{br.user.last_name}",
+        city: br.city,
+        photo: url_for(br.user.photo),
+        coordinates: geocoder.coordinates(br.full_address)
+      }
+    end
+    brokers_coordinates.compact! 
+    render json: brokers_coordinates.to_json
   end
 end

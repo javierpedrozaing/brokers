@@ -1,5 +1,4 @@
-class ProfileController < ApplicationController
-  
+class ProfileController < ApplicationController  
   def index    
     @user = User.find(current_user.id)
     @agent = Agent.find_by_user_id(current_user.id) || Agent.new
@@ -22,6 +21,7 @@ class ProfileController < ApplicationController
    end
 
    if user && (@broker || @agent)   
+    
     redirect_to "/profile/index", flash: {notice: "Profile successfully updated"}    
    elsif
     redirect_to "/profile/index", flash: {alert: "Something was wrong"}
