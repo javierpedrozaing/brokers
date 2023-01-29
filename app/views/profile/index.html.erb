@@ -32,11 +32,6 @@
       <%= f.email_field :email, value: @user.email, autofocus: true, autocomplete: "email", class: "form-control" %>
     </div>
 
-    <div class="form-outline mb-4">
-      <%= f.label :member_since, class: "form-label" %><br />
-      <%= f.date_field :member_since, value: @user.member_since, autofocus: true, autocomplete: "email", class: "form-control" %>
-    </div>
-
     <% if @user.role.downcase == 'broker' %>
       <%= render 'partials/broker_profile', form: f %>
     <% else %>
