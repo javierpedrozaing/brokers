@@ -1,47 +1,52 @@
 // This example adds a marker to indicate the position of Bondi Beach in Sydney,
 // Australia.
-function initMap() {
+
+$(document).ready(function() {
+  getLocations();
+
+  function getLocations() {
+    Rails.ajax({
+      url: "/brokers_locations",
+      type: "get",
+      success: function(data) {     
+        debugger   
+        initMap(data)
+      },
+      error: function(data) {
+        console.error(data);
+      }
+    })
+  }
+});
+
+
+function initMap(locations) {
   
   const map = new google.maps.Map(document.getElementById("map"), {
     zoom: 12,
-    center: { lat: -33.92, lng:  151.25 },
+    center: { lat: locations[0].coordinates[0], lng: locations[0].coordinates[1] },
   });
 
-  const contentString =
-    '<div id="content">' +
-    '<div id="siteNotice">' +
-    "</div>" +
-    '<h1 id="firstHeading" class="firstHeading">Ricardo</h1>' +
-    '<div id="bodyContent">' +
-    "<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large " +
-    "sandstone rock formation in the southern part of the " +
-    "Heritage Site.</p>" +
-    '<p>Contactar <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">' +
-    "https://en.wikipedia.org/w/index.php?title=Uluru</a> " +
-    "(last visited June 22, 2009).</p>" +
-    "</div>" +
-    "</div>";
-  const infowindow = new google.maps.InfoWindow({
-    content: contentString,
-    ariaLabel: "Broker A",
-  });
-
+  const contentString = "";
+ 
   const image =
     "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
-      
-    var locations = [
-      ['Bondi Beach', -33.890542, 151.274856, 4],
-      ['Coogee Beach', -33.923036, 151.259052, 5],
-      ['Cronulla Beach', -34.028249, 151.157507, 3],
-      ['Manly Beach', -33.80010128657071, 151.28747820854187, 2],
-      ['Maroubra Beach', -33.950198, 151.259302, 1]
-    ];
-
+       
     var marker, i;
     
     for (i = 0; i < locations.length; i++) {
+
+      const infowindow = new google.maps.InfoWindow({
+        content: "<div>"
+        + "<div style='display: flex;align-items: center;justify-content: space-around;'><img style='width: 20%;' src='"+ locations[i].photo +"'></div>"
+        + "<div style='display: flex;align-items: center;justify-content: space-around;'>Hola Soy, " + locations[i].name +
+         " y estoy en la ciudad de " + locations[i].city + "</div></div>",
+      });
+
+
+      console.log(locations);
       marker = new google.maps.Marker({
-        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+        position: new google.maps.LatLng(locations[i].coordinates[0], locations[i].coordinates[1]),
         map: map,
         icon: image,
       });
@@ -55,7 +60,7 @@ function initMap() {
     }
 }
 
-window.initMap = initMap;
+window.initMap = initMap();
 
 // This example requires the Places library. Include the libraries=places
 // parameter when you first load the API. For example:
