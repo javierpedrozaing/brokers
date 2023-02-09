@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_21_163544) do
+ActiveRecord::Schema.define(version: 2023_02_03_201704) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -43,7 +43,9 @@ ActiveRecord::Schema.define(version: 2023_01_21_163544) do
     t.datetime "updated_at", null: false
     t.integer "broker_id"
     t.integer "user_id"
+    t.integer "client_id"
     t.index ["broker_id"], name: "index_agents_on_broker_id"
+    t.index ["client_id"], name: "index_agents_on_client_id"
     t.index ["user_id"], name: "index_agents_on_user_id"
   end
 
@@ -66,8 +68,19 @@ ActiveRecord::Schema.define(version: 2023_01_21_163544) do
     t.integer "user_id"
     t.float "latitude"
     t.float "longitude"
+    t.integer "agent_id"
+    t.index ["agent_id"], name: "index_brokers_on_agent_id"
     t.index ["latitude", "longitude"], name: "index_brokers_on_latitude_and_longitude"
     t.index ["user_id"], name: "index_brokers_on_user_id"
+  end
+
+  create_table "clients", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "agent_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["agent_id"], name: "index_clients_on_agent_id"
+    t.index ["user_id"], name: "index_clients_on_user_id"
   end
 
   create_table "property_types", force: :cascade do |t|

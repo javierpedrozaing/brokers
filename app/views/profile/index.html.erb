@@ -1,4 +1,4 @@
-<div class="container profile-form">  
+<div class="container profile-form">
   <%= form_with(url: profile_update_profile_path(@user), method: "post") do |f| %>
     <% if current_user.member_since.blank? %>
       <p>Welcome to brokersApp, you have to complete some information</p>

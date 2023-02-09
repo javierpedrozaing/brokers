@@ -78,21 +78,14 @@ h6 {
   position: relative;
 }
 
-.notice_message {
+.notice_message, .success_message {
   color: #0f5132;
   background-color: #d1e7dd;
   border-color: #badbcc;
   padding: 15px;
 }
 
-.notice_message {
-  color: #0f5132;
-  background-color: #d1e7dd;
-  border-color: #badbcc;
-  padding: 15px;
-}
-
-#error_explanation
+#error_explanation, .error_message
 {
   font-size: 1rem;
   color: red; 

@@ -1,28 +1,30 @@
-<div class="agents-container">
+<div class="agents-container">  
   <h3>Agents list</h3>
   <div class="list">
+  <div class="actions d-grid col-10 justify-content-md-start">
+    <%= link_to "New Agent", new_agent_path, class: "btn btn-primary mb-4" %>
+  </div>
   <table class="table">
     <thead>
       <tr>
         <th scope="col">#</th>
         <th scope="col">name</th>
         <th scope="col">email</th>
-        <th scope="col">state</th>      
+        <th scope="col">phone</th>
         <th scope="col"></th>
       </tr>
     </thead>
     <tbody>
-    <% count =1 %>
-    <% 10.times { |i|
-     %>
+    <% count = 0 %>
+    <% @agents.each do |agent| %>
       <tr>
-        <th scope="row"><%=  i+1 %></th>
-        <td>Mark</td>
-        <td>Otto</td>
-        <td>activo</td>
-        <td><%= link_to "Update", update_agents_path(i) %></td>
+        <td><%= count += 1 %></td>
+        <td><%= agent.full_name %></td>
+        <td><%= agent.user.email %></td>
+        <td><%= agent.user.phone %></td>
+        <td><%= link_to "Assign Client", assign_client_path, class: "btn btn-success" %></td>
       </tr>
-    <% } %>     
+    <% end %>
     </tbody>
   </table>
   </div>

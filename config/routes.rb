@@ -1,7 +1,17 @@
 Rails.application.routes.draw do
   get 'profile/index'
-  get 'clients', to: 'clients#index'
+
   get 'agents', to: 'agents#index'
+  get 'agents/new', to: 'agents#new', as: 'new_agent'
+  post 'agents/create', to: 'agents#create', as: 'create_agent'
+
+  match 'agents/assign_client', to: 'agents#assign_client', as: 'assign_client', via: [:get, :post]
+  match 'clients/refer_agent', to: 'clients#refer_agent', as: 'refer_agent', via: [:get, :post]
+
+  get 'clients', to: 'clients#index'
+  get 'clients/new', to: 'clients#new', as: 'new_client'
+  post 'clients/create', to: 'clients#create', as: 'create_client'
+
 
   get 'update_client/:id', to: 'clients#update', as: 'update_clients'
   get 'update_agent/:id', to: 'agents#update', as: 'update_agents'
