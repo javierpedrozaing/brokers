@@ -2,6 +2,7 @@ class ClientsController < ApplicationController
   before_action :authenticate_user!
   rescue_from ActiveRecord::RecordInvalid, with: :error_creating_user
   before_action :get_agents_by_broker_id, only: [:new, :refer_agent]
+  before_action :validate_email_registered, only: [:create]
 
   def index
     @clients = Client.all
@@ -48,7 +49,7 @@ class ClientsController < ApplicationController
       flash[:success] = "Refered created succesfully"
       redirect_to clients_path
     else
-      render :make_refer
+      render :refer_agent
     end
   end
 
@@ -58,11 +59,19 @@ class ClientsController < ApplicationController
 
   private
 
+  def validate_email_registered
+    unless params[:email].empty?
+      @user = User.find_by_email(params[:email])    
+      @user.errors.add(:email, :invalid, message: "Already in use") unless @user.nil?    
+      flash[:error] = @user.errors.full_messages.first
+      redirect_to new_agent_path    
+    end    
+  end
+
   def get_agents_by_broker_id
     @agents = Agent.where(broker_id: current_user.id)
   end
   
-
   def error_creating_user
     flash[:error] = "Error creating User, all fileds are required"
     redirect_to new_client_path

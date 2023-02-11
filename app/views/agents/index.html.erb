@@ -22,7 +22,7 @@
         <td><%= agent.full_name %></td>
         <td><%= agent.user.email %></td>
         <td><%= agent.user.phone %></td>
-        <td><%= link_to "Assign Client", assign_client_path, class: "btn btn-success" %></td>
+        <td><%= link_to "Assign Client", assign_client_path(agent.user.id), class: "btn btn-success" %></td>
       </tr>
     <% end %>
     </tbody>
