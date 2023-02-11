@@ -1,6 +1,7 @@
 class ClientsController < ApplicationController
   before_action :authenticate_user!
   rescue_from ActiveRecord::RecordInvalid, with: :error_creating_user
+  before_action :get_agents_by_broker_id, only: [:new, :refer_agent]
 
   def index
     @clients = Client.all
@@ -8,8 +9,7 @@ class ClientsController < ApplicationController
 
   def new
     @user = User.new
-    @client = Client.new
-    @agents = Agent.where(broker_id: current_user.id)
+    @client = Client.new    
   end
 
   def create    
@@ -31,10 +31,37 @@ class ClientsController < ApplicationController
   end
 
   def refer_agent
+    @user = User.find(params[:user_id])
+    @client = Client.find_by_user_id(@user.id)
+  end
 
+  def create_referral
+    client = Client.find(params[:client_id])
+    client.agent_id = params[:client][:agent_id]
+    client.type_of_house = params[:type_of_house] if  params[:type_of_house]
+    client.number_of_rooms = params[:number_of_rooms] if params[:number_of_rooms]
+    client.parkng_lot = params[:parkng_lot] if params[:parkng_lot]
+    client.budget = params[:budget] if params[:budget]
+    
+    if client.save!
+      create_transaction(params)
+      flash[:success] = "Refered created succesfully"
+      redirect_to clients_path
+    else
+      render :make_refer
+    end
+  end
+
+  def create_transaction(params)
+    # create a transaction history and calculate fee or commission
   end
 
   private
+
+  def get_agents_by_broker_id
+    @agents = Agent.where(broker_id: current_user.id)
+  end
+  
 
   def error_creating_user
     flash[:error] = "Error creating User, all fileds are required"
@@ -45,13 +72,13 @@ class ClientsController < ApplicationController
     params.permit(:first_name, :last_name, :email, :phone, :role, :password, :password_confirmation)
   end
 
-  def get_clients_by_agents_id
-    Agent.where(agent_id: get_agents_id_by_broker).map do |agent|
-      agent.clients
-    end
-  end
+  # def get_clients_by_agents_id
+  #   Agent.where(agent_id: get_agents_id_by_broker).map do |agent|
+  #     agent.clients
+  #   end
+  # end
 
-  def get_agents_id_by_broker
-    Broker.find(current_user.id).agents.pluck(:id)
-  end
+  # def get_agents_id_by_broker
+  #   Broker.find(current_user.id).agents.pluck(:id)
+  # end
 end

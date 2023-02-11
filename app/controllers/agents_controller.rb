@@ -11,6 +11,7 @@ class AgentsController < ApplicationController
 
   def create
     user = User.create(permit_params_user)
+    byebug
     if user
       agent = Agent.new
       agent.user_id = user.id

@@ -6,7 +6,9 @@ Rails.application.routes.draw do
   post 'agents/create', to: 'agents#create', as: 'create_agent'
 
   match 'agents/assign_client', to: 'agents#assign_client', as: 'assign_client', via: [:get, :post]
-  match 'clients/refer_agent', to: 'clients#refer_agent', as: 'refer_agent', via: [:get, :post]
+  
+  get 'clients/refer_agent/:user_id', to: 'clients#refer_agent', as: 'refer_agent'
+  post 'clients/create_referral/', to: 'clients#create_referral', as: 'create_referral'
 
   get 'clients', to: 'clients#index'
   get 'clients/new', to: 'clients#new', as: 'new_client'

@@ -24,7 +24,7 @@
         <td><%= client.user.email %></td>
         <td><%= client.user.phone %></td>
         <td><%= client.agent.full_name %></td>
-        <td><%= link_to "Refer Agent", refer_agent_path, class: "btn btn-success" %></td>
+        <td><%= link_to "Refer Agent", refer_agent_path(client.user.id), class: "btn btn-success" %></td>
       </tr>
     <% end %> 
     </tbody>
