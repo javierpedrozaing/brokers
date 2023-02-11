@@ -3,7 +3,8 @@
 <header id="header" class="fixed-top d-flex align-items-center">
   <div class="container d-flex align-items-center">
         <div class="logo me-auto">
-          <h1><a href="/">Brokers</a></h1>
+          <h1><a href="/">Brokers</a>
+          </h1>
             <!-- Uncomment below if you prefer to use an image logo -->
             <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
         </div>
@@ -12,7 +13,11 @@
             <li><a class="nav-link scrollto active" href="/">Home</a></li>
             <% if user_signed_in? %>
             <li>  <%= link_to 'Clients', clients_path %> </li>
+            <% if current_user.role == "Broker" %>
             <li> <%= link_to 'Agents', agents_path %> </li>
+            <% elsif current_user.role == "Agent" %>
+            <li> <%= link_to 'Brokers', search_brokers_path %> </li>
+            <% end %>
             <li class="dropdown"><a href="#"><span>Profile</span> <i class="bi bi-chevron-down"></i></a>
               <ul>                
                 <%# <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i class="bi bi-chevron-right"></i></a>

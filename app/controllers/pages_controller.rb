@@ -20,4 +20,8 @@ class PagesController < ApplicationController
     brokers_coordinates.compact! 
     render json: brokers_coordinates.to_json
   end
+
+  def search_brokers
+
+  end  
 end

@@ -25,7 +25,7 @@ class ProfileController < ApplicationController
 
     if user && (@broker || @agent)
       redirect_to "/", flash: {notice: "Profile successfully updated"}    
-    elsif      
+    elsif
       redirect_to "/profile/index", flash: {alert: "Something was wrong, try again"}
     end
   end

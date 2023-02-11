@@ -1,11 +1,11 @@
 // This example adds a marker to indicate the position of Bondi Beach in Sydney,
 // Australia.
-
 $(document).on('turbolinks:load', function(){
-  getLocations();
+  getSearchLocations();
 });
 
-function getLocations() {
+
+function getSearchLocations() {
   Rails.ajax({
     url: "/brokers_locations",
     type: "get",
@@ -19,7 +19,7 @@ function getLocations() {
         }
       });    
       //window.initMap = initMap();
-      initMap(coordinates);
+      initSearchMap(coordinates);
     },    
     error: function(data) {
       console.error(data);
@@ -28,11 +28,11 @@ function getLocations() {
 };
 
 
-function initMap(locations) {
+function initSearchMap(locations) {
   latitude = locations ? locations[0].coordinates[0] : ""
   longitude = locations ? locations[0].coordinates[1] : ""
 
-  const map = new google.maps.Map(document.getElementById("map"), {
+  const map = new google.maps.Map(document.getElementById("map-brokers"), {
     zoom: 12,
     center: { lat: latitude, lng:  longitude },
   });
