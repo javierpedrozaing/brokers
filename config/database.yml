@@ -21,7 +21,7 @@ test:
   database: db/test.sqlite3
 
 production:
-  host: "postgres://sakigaxbbushhp:30a92ca3f89a25eca053885fcbdcc4c71be8b911faac37e916a2f0b276f1e976@ec2-52-3-60-53.compute-1.amazonaws.com:5432/d8loltv74pb3pi"
+  url: <%= ENV['DATABASE_URL'] %>
   adapter: postgresql
   encoding: unicode
   username: sakigaxbbushhp
