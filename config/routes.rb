@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   get 'agents/assign_client/:user_id', to: 'agents#assign_client', as: 'assign_client'
   post 'agents/create_assignation/', to: 'agents#create_assignation', as: 'create_assignation'
 
-  get 'pages/search_brokers', to: 'pages#search_brokers', as: 'search_brokers'
+  match '/search_brokers', to: 'pages#search_brokers', as: 'search_brokers', via: [:get, :post]
   
   get 'clients/refer_agent/:user_id', to: 'clients#refer_agent', as: 'refer_agent'
   post 'clients/create_referral/', to: 'clients#create_referral', as: 'create_referral'

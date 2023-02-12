@@ -4,14 +4,9 @@
     ></script>
 
 <div class="form-search-brokers container">
-  <%= form_with(url: create_agent_path(@user), method: "post",  html: {class: "row g-3"}) do |f| %>    
+  <%= form_with(url: search_brokers_path(@user), method: "post", data: { type: :json }, html: {class: "row g-3"}) do |f| %>    
     <h3>Search Brokers</h3>
     
-     <div class="col-auto">
-      <%= f.label :broker_name, class: "form-label" %><br />
-      <%= f.text_field :broker_name, autofocus: true, autocomplete: "Broker name", class: "form-control" %>
-    </div>
-
      <div class="col-auto">
       <%= f.label :country, class: "form-label" %><br />
       <%= f.text_field :country, autofocus: true, autocomplete: "Country", class: "form-control" %>
@@ -28,7 +23,7 @@
     </div>
     
     <div class="col-auto">
-        <%= f.submit "Search",  class: "btn btn-success mb-3 search-broker" %>
+      <%= f.submit "Search",  class: "btn btn-success mb-3 search-broker", id: "search-brokers", type: "button" %>
     </div>    
   <% end %>
 

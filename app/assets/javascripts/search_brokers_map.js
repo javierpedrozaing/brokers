@@ -1,11 +1,33 @@
 // This example adds a marker to indicate the position of Bondi Beach in Sydney,
 // Australia.
+
 $(document).on('turbolinks:load', function(){
   getSearchLocations();
+
+  $("#search-brokers").on('click', () => {
+    let country = $("#country").val();
+    let state = $("#state").val();
+    let city = $("#city").val();
+    
+    let mydata = {location: {country: country, state: state, city: city}}
+    debugger
+    Rails.ajax({
+      url: "/search_brokers",
+      type: "post",
+      data: JSON.stringify(mydata),
+      success: function(position) {  
+        getSearchLocations(position);
+      },    
+      error: function(data) {
+        console.error(data);
+      }
+    })
+  })
 });
 
 
-function getSearchLocations() {
+
+function getSearchLocations(position = null) {
   Rails.ajax({
     url: "/brokers_locations",
     type: "get",
@@ -19,7 +41,7 @@ function getSearchLocations() {
         }
       });    
       //window.initMap = initMap();
-      initSearchMap(coordinates);
+      initSearchMap(coordinates, position);
     },    
     error: function(data) {
       console.error(data);
@@ -28,7 +50,7 @@ function getSearchLocations() {
 };
 
 
-function initSearchMap(locations) {
+function initSearchMap(locations, position = null) {
   latitude = locations ? locations[0].coordinates[0] : ""
   longitude = locations ? locations[0].coordinates[1] : ""
 
@@ -37,24 +59,35 @@ function initSearchMap(locations) {
     center: { lat: latitude, lng:  longitude },
   });
 
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const pos = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        };
-        
-        map.setCenter(pos);
-      },
-      () => {
-        handleLocationError(true, infoWindow, map.getCenter());
-      }
-    );
+  if (position != null) {  
+    const newpos = {
+      lat: position[0],
+      lng: position[1]
+    }
+    map.setCenter(newpos);
   } else {
-    // Browser doesn't support Geolocation
-    handleLocationError(false, infoWindow, map.getCenter());
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+          
+          map.setCenter(pos);
+        },
+        () => {
+          handleLocationError(true, infoWindow, map.getCenter());
+        }
+      );
+    } else {
+      // Browser doesn't support Geolocation
+      handleLocationError(false, infoWindow, map.getCenter());
+    }
+  
   }
+
 
   const image =
   "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
@@ -85,60 +118,3 @@ function initSearchMap(locations) {
     })(marker, i));
   }  
 }
-
-// This example requires the Places library. Include the libraries=places
-// parameter when you first load the API. For example:
-// <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
-// function initMap() {
-//   const map = new google.maps.Map(document.getElementById("map"), {
-//     center:  { lat: 41.85, lng: -87.65 },
-//     zoom: 15,
-//   });
-//   const request = {
-//     placeId: "ChIJN1t_tDeuEmsRUsoyG83frY4",
-//     fields: ["name", "formatted_address", "place_id", "geometry"],
-//   };
-//   const infowindow = new google.maps.InfoWindow();
-//   const service = new google.maps.places.PlacesService(map);
-
-//   service.getDetails(request, (place, status) => {
-
-//   const image =
-//     "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
-
-//     if (
-//       status === google.maps.places.PlacesServiceStatus.OK &&
-//       place &&
-//       place.geometry &&
-//       place.geometry.location
-//     ) {
-//       const marker = new google.maps.Marker({
-//         position: { lat: -41.89, lng: 151.274 },        
-//         map,
-//         icon: image,
-//       });
-
-//       google.maps.event.addListener(marker, "click", () => {
-//         const content = document.createElement("div");
-//         const nameElement = document.createElement("h2");
-
-//         nameElement.textContent = place.name;
-//         content.appendChild(nameElement);
-
-//         const placeIdElement = document.createElement("p");
-
-//         placeIdElement.textContent = place.place_id;
-//         content.appendChild(placeIdElement);
-
-//         const placeAddressElement = document.createElement("p");
-
-//         placeAddressElement.textContent = place.formatted_address;
-//         content.appendChild(placeAddressElement);
-//         infowindow.setContent(content);
-//         infowindow.open(map, marker);
-//       });
-//     }
-//   });
-// }
-
-// window.initMap = initMap;

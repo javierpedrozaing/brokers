@@ -22,6 +22,12 @@ class PagesController < ApplicationController
   end
 
   def search_brokers
-
+    unless request.method == 'GET'
+      location = JSON.parse(params.keys.first)['location']
+      address = ""
+      address << location['country'].to_s << " " << location['state'].to_s << " " << location['city'].to_s
+      locations = Geocoder.search(address)
+      render json: locations.first.coordinates.to_json
+    end
   end  
 end
