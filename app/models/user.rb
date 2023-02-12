@@ -4,7 +4,6 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  has_many :referrals, class_name: "Referral"
   has_one :broker
   has_one :agent
   has_one_attached :photo
