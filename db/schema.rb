@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_02_10_111531) do
+ActiveRecord::Schema.define(version: 2023_02_13_005803) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -144,7 +144,6 @@ ActiveRecord::Schema.define(version: 2023_02_10_111531) do
     t.string "proof_check"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "referred_id"
     t.integer "state_id"
     t.integer "property_type_id"
     t.integer "broker_id"
@@ -152,7 +151,6 @@ ActiveRecord::Schema.define(version: 2023_02_10_111531) do
     t.index ["agent_id"], name: "index_transactions_on_agent_id"
     t.index ["broker_id"], name: "index_transactions_on_broker_id"
     t.index ["property_type_id"], name: "index_transactions_on_property_type_id"
-    t.index ["referred_id"], name: "index_transactions_on_referred_id"
     t.index ["state_id"], name: "index_transactions_on_state_id"
   end
 
