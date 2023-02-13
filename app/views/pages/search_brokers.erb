@@ -1,5 +1,5 @@
 <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDPhgP0T_nWkm1JDtEEVzwVaySrNTHViNc&callback=initMap&libraries=places&v=weekly"
+      src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_KEY'] %>&callback=initMap&libraries=places&v=weekly"
       defer
     ></script>
 
@@ -13,7 +13,7 @@
     </div>
 
      <div class="col-auto">
-      <%= f.label :state, class: "form-label" %><br />
+      <%= f.label "state / Condado", class: "form-label" %><br />
       <%= f.text_field :state, autofocus: true, autocomplete: "State", class: "form-control" %>
     </div>
 
