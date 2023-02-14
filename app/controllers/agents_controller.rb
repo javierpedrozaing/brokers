@@ -13,20 +13,22 @@ class AgentsController < ApplicationController
   end
 
   def create    
-    user = User.create(permit_params_user)
-    if user
-      agent = Agent.new
-      agent.user_id = user.id
-      agent.broker_id = current_user.id
-      agent.save!
-    end
-
+    user = User.create(permit_params_user)    
+    agent = Agent.new
+    agent.user_id = user.id
+    agent.broker_id = current_user.id
+    agent.save!
+    
     if user && agent
-      flash[:success] = "Agent created"
-      redirect_to agents_path
+      respond_to do |format|
+        flash[:success] = "Agent created"
+        format.html { redirect_to(agents_path) }
+      end           
     else
-      flash[:error] = "Error"
-      redirect_to new_agent_path
+      respond_to do |format|
+        flash[:error] = "Error"
+        format.html { redirect_to(new_agent_path) }
+      end
     end
   end
 
@@ -68,15 +70,17 @@ class AgentsController < ApplicationController
 
   def error_creating_user
     flash[:error] = "Error creating User, all fileds are required"
-    redirect_to new_client_path
+    redirect_to new_agent_path
   end
 
   def validate_email_registered
     unless params[:email].empty?
-      @user = User.find_by_email(params[:email])
-      @user.errors.add(:email, :invalid, message: "Already in use") unless @user.nil?          
-      redirect_to new_agent_path
-    end    
+      user = User.find_by_email(params[:email])
+      if user
+        flash[:error] = "Error creating User, email is already registered"
+        redirect_to new_agent_path
+      end      
+    end
   end
   
   def permit_params_user

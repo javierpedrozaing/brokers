@@ -61,11 +61,12 @@ class ClientsController < ApplicationController
 
   def validate_email_registered
     unless params[:email].empty?
-      @user = User.find_by_email(params[:email])    
-      @user.errors.add(:email, :invalid, message: "Already in use") unless @user.nil?    
-      flash[:error] = @user.errors.full_messages.first
-      redirect_to new_agent_path    
-    end    
+      user = User.find_by_email(params[:email])
+      if user
+        flash[:error] = "Error creating User, email is already registered"
+        redirect_to new_client_path
+      end      
+    end
   end
 
   def get_agents_by_broker_id
