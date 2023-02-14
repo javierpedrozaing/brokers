@@ -74,8 +74,7 @@ class AgentsController < ApplicationController
   def validate_email_registered
     unless params[:email].empty?
       @user = User.find_by_email(params[:email])
-      @user.errors.add(:email, :invalid, message: "Already in use") unless @user.nil?    
-      flash[:error] = @user.errors.full_messages.first
+      @user.errors.add(:email, :invalid, message: "Already in use") unless @user.nil?          
       redirect_to new_agent_path
     end    
   end
