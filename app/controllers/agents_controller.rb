@@ -74,7 +74,14 @@ class AgentsController < ApplicationController
   def validate_email_registered
     unless params[:email].empty?
       @user = User.find_by_email(params[:email])
+<<<<<<< Updated upstream
       @user.errors.add(:email, :invalid, message: "Already in use") unless @user.nil?          
+||||||| Stash base
+      @user.errors.add(:email, :invalid, message: "Already in use") unless @user.nil?    
+      flash[:error] = @user.errors.full_messages.first
+=======
+      @user.errors.add(:email, :invalid, message: "Already in use") unless @user.nil?      
+>>>>>>> Stashed changes
       redirect_to new_agent_path
     end    
   end

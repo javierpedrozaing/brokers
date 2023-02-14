@@ -10,7 +10,7 @@ $(document).on('turbolinks:load', function(){
     let city = $("#city").val();
     
     let mydata = {location: {country: country, state: state, city: city}}
-    debugger
+        
     Rails.ajax({
       url: "/search_brokers",
       type: "post",
