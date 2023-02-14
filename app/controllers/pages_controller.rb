@@ -10,12 +10,7 @@ class PagesController < ApplicationController
     brokers = Broker.all
     
     brokers_coordinates = brokers.map do |br|
-<<<<<<< Updated upstream
       photo = br.user.photo.attached? ? url_for(br.user.photo) : ''
-||||||| Stash base
-=======
-    photo = br.user.photo.attached? ? br.user.photo : ""
->>>>>>> Stashed changes
       {   
         broker_id: br.id,
         name: "#{br.user.first_name} #{br.user.last_name}",
