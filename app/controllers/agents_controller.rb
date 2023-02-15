@@ -4,7 +4,8 @@ class AgentsController < ApplicationController
   before_action :get_clients, only: [:assign_client]
 
   def index
-    @agents = Agent.where(broker_id: current_user.id)
+    broker_id = User.find(current_user.id).broker.id
+    @agents = Agent.where(broker_id: broker_id)
   end
 
   def new
@@ -16,21 +17,22 @@ class AgentsController < ApplicationController
     if @user.save
       agent = Agent.new
       agent.user_id = @user.id
-      agent.broker_id = current_user.id    
-
+      agent.broker_id = User.find(current_user.id).broker.id
+      
       respond_to do |format|
         if agent.save
            format.html { redirect_to agents_path, notice: 'Agent was successfully created.' }
-           format.json { render :new, status: :created, location: @recipe }
-        else
-          flash[:error] = "Error creating Agent. try agian"
-          redirect_to new_agent_path
+           format.json { render :new, status: :created }
+        else 
+          flash[:error] = "error creating agent"
+          format.html { render :new }
         end
      end
     else
-      render :new
-    end
-    
+      respond_to do |format|        
+        format.html { render :new }
+      end      
+    end    
   end
 
   def assign_client

@@ -1,6 +1,6 @@
 <div class="form-outline mb-4">
-  <%= form.label :birthday, class: "form-label" %><br />
-  <%= form.date_field :birthday, value: @agent.birthday, autofocus: true, autocomplete: "Phone", class: "form-control" %>  
+  <%= form.label "Registerd in", class: "form-label" %><br />
+  <%= form.text_field :created_at, value: current_user.created_at.strftime("%Y-%m-%d"), readonly: true, class: "form-control" %>    
 </div>
 
 <div class="form-outline mb-4">

@@ -3,8 +3,10 @@ class ClientsController < ApplicationController
   before_action :get_agents_by_broker_id, only: [:new, :create, :refer_agent]
   before_action :validate_email_registered, only: [:create]
 
+  # client list section for brokers and agents
   def index
     @clients = Client.all
+    # update this to get clients by agent or broker depending the current_user.role
   end
 
   def new
@@ -68,7 +70,8 @@ class ClientsController < ApplicationController
   end
 
   def get_agents_by_broker_id
-    @agents = Agent.where(broker_id: current_user.id)
+    broker_id = User.find(current_user.id).broker.id
+    @agents = Agent.where(broker_id: broker_id)
   end
   
   def error_creating_user

@@ -34,13 +34,8 @@
 </div>
 
 <div class="form-outline mb-4">
-  <%= form.label :reserver_zip_code, class: "form-label" %><br />
-  <%= form.text_field :reserver_zip_code, value: @broker.reserver_zip_code, autofocus: true, autocomplete: "reserver_zip_code", class: "form-control" %>    
-</div>
-
-<div class="form-outline mb-4">
-  <%= form.label :birthday, class: "form-label" %><br />
-  <%= form.date_field :birthday, value: @broker.birthday, autofocus: true, autocomplete: "Phone", class: "form-control" %>    
+  <%= form.label "Registerd in", class: "form-label" %><br />
+  <%= form.text_field :created_at, value: current_user.created_at.strftime("%Y-%m-%d"), readonly: true, class: "form-control" %>    
 </div>
 
 <div class="form-outline mb-4">
@@ -59,9 +54,6 @@
 </div>
 
 <div class="form-outline mb-4">
-  <%= form.label "You are a director ?", class: "form-label" %><br />
-  <%= form.radio_button :director, "Yes" %>
-  <%= form.label :yes, class: "form-label" %><br />
-  <%= form.radio_button :director, "No" %>
-  <%= form.label :no, class: "form-label" %><br />
+  <%= form.label "Company zip code", class: "form-label" %><br />
+  <%= form.text_field :reserver_zip_code, value: @broker.reserver_zip_code, autofocus: true, autocomplete: "reserver_zip_code", class: "form-control" %>    
 </div>
