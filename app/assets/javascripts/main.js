@@ -1,4 +1,5 @@
-$( document ).load(function() {
+
+$(document).on('turbolinks:load', function(){
   /**
    * Mobile nav toggle
    */
