@@ -1,4 +1,10 @@
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+<%= form_for(resource, as: resource_name, local: true, url: session_path(resource_name)) do |f| %>
+
+  <%= devise_error_messages! %>
+    <% flash.each do |key, value| %>
+       <div class="error_message <%= key %>"><%= value %></div>
+    <% end %>
+
   <h2>Login</h2>
   <div class="form-outline mb-4">
     <%= f.label :email, class: "form-label" %><br />

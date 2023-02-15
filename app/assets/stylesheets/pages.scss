@@ -2,6 +2,13 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+#errorExplanation {
+  max-width: 60%;
+  margin: 0 auto;
+  li{
+    color:red;
+  }
+}
 
 // Login form
 form.new_user, form.edit_user {

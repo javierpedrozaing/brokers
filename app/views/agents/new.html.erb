@@ -1,17 +1,14 @@
 <div class="container profile-form">
-  <%= form_with(url: create_agent_path(@user), method: "post") do |f| %>
-    <h2>Create new Agent</h2>
     <% if @user.errors.any? %>
       <div id="errorExplanation">
-        <h2><%= pluralize(@user.errors.count, "error") %> prohibited
-            this post from being saved:</h2>
-        <ul>
         <% @user.errors.full_messages.each do |msg| %>
           <li><%= msg %></li>
         <% end %>
         </ul>
       </div>
     <% end %>
+  <%= form_with(url: create_agent_path(@user), local: true, method: "post") do |f| %>
+    <h2>Create new Agent</h2>
 
     <div class="form-outline mb-4">
       <%= f.label :first_name, class: "form-label" %><br />
@@ -36,7 +33,7 @@
     <%= f.hidden_field :role, value: "Agent", class: "form-control" %>
     
     <div class="field">
-      <%= f.label :password, class: "form-label" %>
+      <%= f.label "password (6 characters minimum)", class: "form-label" %>
       <% if @minimum_password_length %>
       <em>(<%= @minimum_password_length %> characters minimum)</em>
       <% end %><br />

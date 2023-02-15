@@ -1,6 +1,6 @@
 class PagesController < ApplicationController
   def home
-    if user_signed_in? && current_user.member_since.blank?
+    if user_signed_in? && current_user.member_since.nil?
       redirect_to profile_index_path, id_user: current_user.id
     end    
   end
@@ -16,6 +16,7 @@ class PagesController < ApplicationController
         name: "#{br.user.first_name} #{br.user.last_name}",
         city: br.city,
         photo: photo,
+        phone: br.user.phone,
         coordinates: geocoder.coordinates(br.full_address)
       }
     end

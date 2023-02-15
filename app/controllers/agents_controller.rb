@@ -1,7 +1,6 @@
 class AgentsController < ApplicationController
   before_action :authenticate_user!
   before_action :validate_email_registered, only: [:create]
-  rescue_from ActiveRecord::RecordInvalid, with: :error_creating_user
   before_action :get_clients, only: [:assign_client]
 
   def index
@@ -12,24 +11,26 @@ class AgentsController < ApplicationController
     @user = User.new
   end
 
-  def create    
-    user = User.create(permit_params_user)    
-    agent = Agent.new
-    agent.user_id = user.id
-    agent.broker_id = current_user.id
-    agent.save!
-    
-    if user && agent
+  def create
+    @user = User.create(permit_params_user)
+    if @user.save
+      agent = Agent.new
+      agent.user_id = @user.id
+      agent.broker_id = current_user.id    
+
       respond_to do |format|
-        flash[:success] = "Agent created"
-        format.html { redirect_to(agents_path) }
-      end           
+        if agent.save
+           format.html { redirect_to @user, notice: 'Agent was successfully created.' }
+           format.json { render :new, status: :created, location: @recipe }
+        else
+          flash[:error] = "Error creating Agent. try agian"
+          redirect_to new_agent_path
+        end
+     end
     else
-      respond_to do |format|
-        flash[:error] = "Error"
-        format.html { redirect_to(new_agent_path) }
-      end
+      render :new
     end
+    
   end
 
   def assign_client

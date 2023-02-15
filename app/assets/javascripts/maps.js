@@ -15,7 +15,8 @@ function getLocations() {
           coordinates: data.coordinates,
           name: data.name,
           photo: data.photo,
-          city: data.city
+          city: data.city,
+          phone: data.phone
         }
       });    
       //window.initMap = initMap();
@@ -36,7 +37,7 @@ function initMap(locations) {
   longitude = locations ? locations[0].coordinates[1] : ""
 
   const map = new google.maps.Map(document.getElementById("map"), {
-    zoom: 12,
+    zoom: 5,
     center: { lat: latitude, lng:  longitude },
   });
 
@@ -70,7 +71,7 @@ function initMap(locations) {
       content: "<div>"
       + "<div style='display: flex;align-items: center;justify-content: space-around;'><img style='width: 20%;' src='"+ locations[i].photo +"'></div>"
       + "<div style='display: flex;align-items: center;justify-content: space-around;'>Hola Soy, " + locations[i].name +
-      " y estoy en la ciudad de " + locations[i].city + "</div></div>",
+      " y estoy en la ciudad de " + locations[i].city + "</div><br/><p>Call me: " + locations[i].phone + "</p></div>",
     });
 
     console.log(locations);
