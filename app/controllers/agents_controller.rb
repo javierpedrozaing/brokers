@@ -20,7 +20,7 @@ class AgentsController < ApplicationController
 
       respond_to do |format|
         if agent.save
-           format.html { redirect_to @user, notice: 'Agent was successfully created.' }
+           format.html { redirect_to agents_path, notice: 'Agent was successfully created.' }
            format.json { render :new, status: :created, location: @recipe }
         else
           flash[:error] = "Error creating Agent. try agian"

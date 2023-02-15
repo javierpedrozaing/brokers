@@ -22,7 +22,7 @@ class ClientsController < ApplicationController
     end
 
     if @user && client
-      flash[:success] = "Agent was successfully created."
+      flash[:success] = "Client was successfully created."
       redirect_to clients_path
     else
       render :new
