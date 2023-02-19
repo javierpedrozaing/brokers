@@ -51,7 +51,7 @@ class AgentsController < ApplicationController
       end
     end
     
-    if agent.save!      
+    if agent.save!
       create_transaction(params)
       flash[:success] = "Assignation created succesfully"
       redirect_to agents_path

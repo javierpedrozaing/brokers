@@ -34,12 +34,12 @@
   
   <div class="field">
     <%= f.label "Assign Agent", class: "form-label" %>
-    <%= collection_select(:client, :agent_id, @agents, :id, :full_name, {}, class: "form-control") %>
+    <%= collection_select(:client, :agent_id, @referreds, :id, :full_name, {}, class: "form-control") %>
   </div>
   
   <br/>
 
-  <%= f.hidden_field :role, value: "Client", class: "form-control" %>
+  <%= f.hidden_field :role, value: "client", class: "form-control" %>
   
 
   <div class="field">

@@ -10,7 +10,10 @@ Rails.application.routes.draw do
 
   match '/search_brokers', to: 'pages#search_brokers', as: 'search_brokers', via: [:get, :post]
   
+  get 'clients/refer_broker/:user_id', to: 'clients#refer_broker', as: 'refer_broker'
+  
   get 'clients/refer_agent/:user_id', to: 'clients#refer_agent', as: 'refer_agent'
+  
   post 'clients/create_referral/', to: 'clients#create_referral', as: 'create_referral'
 
   get 'clients', to: 'clients#index'

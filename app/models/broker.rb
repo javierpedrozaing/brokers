@@ -5,10 +5,12 @@ class Broker < ApplicationRecord
   geocoded_by :address
   after_validation :geocode, if: ->(obj){ obj.address.present? and obj.address_changed? }  
 
-
-
   def full_address
     [address, state, city].compact.join(', ')
+  end
+
+  def full_name
+    "#{self.user.first_name} #{self.user.last_name}"     
   end
 
   # def send_notification_new_user

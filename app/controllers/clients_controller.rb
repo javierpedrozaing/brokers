@@ -1,20 +1,22 @@
 class ClientsController < ApplicationController
   before_action :authenticate_user!
-  before_action :get_agents_by_broker_id, only: [:new, :create, :refer_agent]
+  before_action :get_role_user
   before_action :validate_email_registered, only: [:create]
 
-  # client list section for brokers and agents
+  # Section list clients for brokers and agents
   def index
     @clients = Client.all
-    # update this to get clients by agent or broker depending the current_user.role
+    get_clients_by(@role_user)
   end
 
   def new
     @user = User.new
-    @client = Client.new    
+    @client = Client.new
+    get_referreds_by(@role_user)
   end
 
-  def create    
+  def create
+    get_referreds_by(@role_user)
     @user = User.new(permit_params_user)
     if @user.save
       client = Client.new
@@ -31,14 +33,27 @@ class ClientsController < ApplicationController
     end
   end
 
-  def refer_agent
+  def refer_broker
+    get_referreds_by(@role_user)
     @user = User.find(params[:user_id])
     @client = Client.find_by_user_id(@user.id)
+    @brokers = Broker.all
+  end
+
+  def refer_agent
+    get_referreds_by(@role_user)
+    @user = User.find(params[:user_id])
+    @client = Client.find_by_user_id(@user.id)
+    @brokers = Broker.all
   end
 
   def create_referral
     client = Client.find(params[:client_id])
-    client.agent_id = params[:client][:agent_id]
+    # for the agent_id, if the role is broker would take the agent selected in the form, otherwise would be the current agent
+    client.agent_id = current_user.role == 'broker' ? params[:client][:agent_id] : current_user.agent.id
+    # if role user is agent, the broker_id would be the agent's broker
+    byebug
+    client.broker_id = current_user.role.downcase == 'agent' ? params[:client][:broker_id] : current_user.id
     client.type_of_house = params[:type_of_house] if  params[:type_of_house]
     client.number_of_rooms = params[:number_of_rooms] if params[:number_of_rooms]
     client.parkng_lot = params[:parkng_lot] if params[:parkng_lot]
@@ -59,6 +74,10 @@ class ClientsController < ApplicationController
 
   private
 
+  def get_role_user
+    @role_user = current_user.role
+  end
+
   def validate_email_registered
     unless params[:email].empty?
       user = User.find_by_email(params[:email])
@@ -69,9 +88,23 @@ class ClientsController < ApplicationController
     end
   end
 
-  def get_agents_by_broker_id
-    broker_id = User.find(current_user.id).broker.id
-    @agents = Agent.where(broker_id: broker_id)
+  def get_clients_by(role_user)
+    if role_user.downcase == 'broker'
+      broker = User.find(current_user.id).broker
+      @clients = Client.where(agent_id: broker.agents.ids).or(Client.where(broker_id: broker.id))
+    else
+      agent_id = User.find(current_user.id).agent.id
+      @clients = Client.where(agent_id: agent_id)
+    end
+  end
+
+  def get_referreds_by(role_user)
+    if role_user.downcase == 'broker'
+      @referreds = User.find(current_user.id).broker.agents
+    else
+      @referreds = [User.find(current_user.id).agent]
+    end
+
   end
   
   def error_creating_user

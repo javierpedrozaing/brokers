@@ -9,13 +9,14 @@ class ProfileController < ApplicationController
   end
 
   def update_profile    
-    user = User.find(current_user.id)    
+    user = User.find(current_user.id)
+    user.user_state = params[:user_state] || 'inactive'
     user.photo.attach(params[:photo]) if params[:photo]
     user.member_since =  DateTime.now
     user.member_end =  DateTime.now.next_year(1).to_time
     user.update!(permit_params_user)
       
-    if user.role == 'Broker'
+    if user.role.downcase == 'broker'
       broker_exist = Broker.find_by_user_id(user.id)
       @broker = broker_exist.nil? ? Broker.create(permit_params_broker) : update_brokers_params(broker_exist)            
     elsif
@@ -24,7 +25,7 @@ class ProfileController < ApplicationController
     end
 
     if user && (@broker || @agent)
-      redirect_to "/", flash: {notice: "Profile successfully updated"}    
+      redirect_to "/", flash: {notice: "Profile successfully updated"}
     elsif
       redirect_to "/profile/index", flash: {alert: "Something was wrong, try again"}
     end

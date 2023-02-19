@@ -24,7 +24,11 @@
         <td><%= client.user.email %></td>
         <td><%= client.user.phone %></td>
         <td><%= client.agent.full_name %></td>
-        <td><%= link_to "Refer Agent", refer_agent_path(client.user.id), class: "btn btn-success" %></td>
+        <% if current_user.role.downcase == 'agent' %>
+          <td><%= link_to "Refer Broker", refer_broker_path(client.user.id), class: "btn btn-success" %></td>
+        <% else %>
+          <td><%= link_to "Refer Agent", refer_agent_path(client.user.id), class: "btn btn-success" %></td>
+        <% end %>
       </tr>
     <% end %> 
     </tbody>
