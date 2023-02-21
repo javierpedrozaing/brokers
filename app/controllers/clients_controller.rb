@@ -18,10 +18,16 @@ class ClientsController < ApplicationController
   def create
     select_referreds_by(@role_user)
     @user = User.new(permit_params_user)
-    if @user.save
+    if @user.save!
       client = Client.new
-      client.user_id = @user.id
-      client.agent_id = params[:client][:agent_id]
+      client.user_id = @user.id      
+      if current_user.role.downcase == 'broker'
+        client.agent_id = 0
+        client.broker_id = current_user.broker.id
+      else        
+        client.agent_id = current_user.agent.id
+        client.broker_id = 0
+      end
       client.save!
     end
 
@@ -52,12 +58,12 @@ class ClientsController < ApplicationController
     # for the agent_id, if the role is broker would take the agent selected in the form, otherwise would be the current agent
     client.agent_id = current_user.role == 'broker' ? params[:client][:agent_id] : current_user.agent.id
     # if role user is agent, the broker_id would be the agent's broker    
+    
     client.broker_id = current_user.role.downcase == 'agent' ? params[:client][:broker_id] : current_user.id
     client.type_of_house = params[:type_of_house] if  params[:type_of_house]
     client.number_of_rooms = params[:number_of_rooms] if params[:number_of_rooms]
     client.parkng_lot = params[:parkng_lot] if params[:parkng_lot]
-    client.budget = params[:budget] if params[:budget]
-    
+    client.budget = params[:budget] if params[:budget]    
     if client.save!
       create_transaction(params)
       flash[:success] = "Refered created succesfully"
@@ -90,12 +96,12 @@ class ClientsController < ApplicationController
   def get_clients_by(role_user)
     if role_user.downcase == 'broker'
       broker = User.find(current_user.id).broker
-      clients = Client.where(agent_id: broker.agents.ids)
+      clients = Client.where(broker_id: broker.id, agent_id: 0)
       referidos = Client.where(broker_id: broker.id)
     else
       agent = User.find(current_user.id).agent
-      clients = Client.where(agent_id: agent.id)
-      referidos = Client.where(agent_id: agent.id).where(broker_id: agent.broker.id)
+      clients = Client.where(agent_id: agent.id, broker_id: 0)     
+      referidos = Client.where(agent_id: agent.id, broker_id: agent.broker.id) if agent.broker
     end
     [clients, referidos]
   end

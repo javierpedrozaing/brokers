@@ -4,7 +4,8 @@ class AgentsController < ApplicationController
   before_action :get_clients, only: [:assign_client]
 
   def index
-    broker_id = User.find(current_user.id).broker.id
+    user = User.find(current_user.id)
+    broker_id = user.broker.id if user.broker
     @agents = Agent.where(broker_id: broker_id)
   end
 

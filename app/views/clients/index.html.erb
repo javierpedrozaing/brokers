@@ -11,8 +11,9 @@
         <th scope="col">#</th>
         <th scope="col">name</th>
         <th scope="col">email</th>
-        <th scope="col">phone</th>            
-        <th scope="col">Agent assigned</th>
+        <th scope="col">phone</th>   
+        <th scope="col">User status</th>         
+        <th scope="col">Assigned to</th>
         <th scope="col"></th>
       </tr>
     </thead>
@@ -24,6 +25,7 @@
         <td><%= client.full_name %></td>
         <td><%= client.user.email %></td>
         <td><%= client.user.phone %></td>
+        <td><%= client.user.role.downcase != 'broker' ? 'active' : 'inactive' %></td>
         <td><%= client.agent.full_name %></td>
         <% if current_user.role.downcase == 'agent' %>
           <td><%= link_to "Refer Broker", refer_broker_path(client.user.id), class: "btn btn-success" %></td>
@@ -42,8 +44,9 @@
         <th scope="col">#</th>
         <th scope="col">name</th>
         <th scope="col">email</th>
-        <th scope="col">phone</th>            
-        <th scope="col">Agent assigned</th>
+        <th scope="col">phone</th>
+        <th scope="col">User status</th>
+        <th scope="col">Assigned to</th>
         <th scope="col"></th>
       </tr>
     </thead>
@@ -51,11 +54,13 @@
      
      <% count = 0 %>
     <% @referidos.each do |referido| %>
+      <% unless referido.id == 0 %>
       <tr>
         <td><%= count += 1 %></td>
         <td><%= referido.full_name %></td>
         <td><%= referido.user.email %></td>
         <td><%= referido.user.phone %></td>
+        <td><%= referido.user.role.downcase != 'broker' ? 'active' : 'inactive' %></td>
         <td><%= referido.agent.full_name %></td>
         <% if current_user.role.downcase == 'agent' %>
           <td><%= link_to "Refer Broker", refer_broker_path(referido.user.id), class: "btn btn-success" %></td>
@@ -63,6 +68,7 @@
           <td><%= link_to "Refer Agent", refer_agent_path(referido.user.id), class: "btn btn-success" %></td>
         <% end %>
       </tr>
+      <% end %>
     <% end %>
     </tbody>
   </table>   
