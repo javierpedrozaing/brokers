@@ -15,8 +15,8 @@ agent.user_id = user.id
 
 broker.id = 0
 broker.user_id = user.id
+agent.save
 broker.agent_id = 0
-broker.save!
-
+broker.save
 agent.broker_id = 0
 agent.save
