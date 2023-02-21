@@ -10,6 +10,7 @@
   }
 }
 
+
 // Login form
 form.new_user, form.edit_user {
   width: 40%;
@@ -41,15 +42,23 @@ form .btn.search-broker{
   margin: 10px auto;
 }
   
-.clients-container, .agents-container, .form-search-brokers  {
+.clients-container, .agents-container, .form-search-brokers, .profile-form  {
   margin-top: 20px;
   .list {
     width: 90%;
     margin: 20px auto;    
   }
   h3 {
+    width: 100%;
+    height: 30px;
+    background: rgb(245, 230, 220);
     text-align: center;
-    margin-bottom: 50px;
+  }
+  h2 {
+    width: 100%;
+    height: 40px;
+    background: rgb(220, 222, 245);
+    text-align: center;
   }
 }
 

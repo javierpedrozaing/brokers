@@ -5,7 +5,7 @@
 
 <div class="form-search-brokers container">
   <%= form_with(url: search_brokers_path(@user), method: "post", data: { type: :json }, html: {class: "row g-3"}) do |f| %>    
-    <h3>Search Brokers</h3>
+    <h2>Search Brokers</h2>
     
      <div class="col-auto">
       <%= f.label :country, class: "form-label" %><br />

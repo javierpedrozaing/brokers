@@ -1,9 +1,10 @@
 <div class="clients-container">  
-  <h3>Clients list</h3>
+  <h2>Clients list</h2>
   <div class="list">
   <div class="actions d-grid col-10 justify-content-md-start">
     <%= link_to "New Client", new_client_path, class: "btn btn-primary btn-block mb-4" %>
   </div>
+  <h3>Clients</h3>
   <table class="table">
     <thead>
       <tr>
@@ -33,5 +34,37 @@
     <% end %> 
     </tbody>
   </table>
+  <br/>
+  <h3>Clientes Referidos</h3>
+   <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">name</th>
+        <th scope="col">email</th>
+        <th scope="col">phone</th>            
+        <th scope="col">Agent assigned</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>    
+     
+     <% count = 0 %>
+    <% @referidos.each do |referido| %>
+      <tr>
+        <td><%= count += 1 %></td>
+        <td><%= referido.full_name %></td>
+        <td><%= referido.user.email %></td>
+        <td><%= referido.user.phone %></td>
+        <td><%= referido.agent.full_name %></td>
+        <% if current_user.role.downcase == 'agent' %>
+          <td><%= link_to "Refer Broker", refer_broker_path(referido.user.id), class: "btn btn-success" %></td>
+        <% else %>
+          <td><%= link_to "Refer Agent", refer_agent_path(referido.user.id), class: "btn btn-success" %></td>
+        <% end %>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>   
   </div>
 </div>

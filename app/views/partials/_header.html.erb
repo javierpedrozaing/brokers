@@ -13,9 +13,9 @@
             <li><a class="nav-link scrollto active" href="/">Home</a></li>
             <% if user_signed_in? %>
             <li>  <%= link_to 'Clients', clients_path %> </li>
-            <% if current_user.role == "Broker" %>
+            <% if current_user.role.downcase == "broker" %>
             <li> <%= link_to 'Agents', agents_path %> </li>
-            <% elsif current_user.role == "Agent" %>
+            <% elsif current_user.role.downcase == "agent" %>
             <li> <%= link_to 'Brokers', search_brokers_path %> </li>
             <% end %>
             <li class="dropdown"><a href="#"><span>Profile</span> <i class="bi bi-chevron-down"></i></a>
