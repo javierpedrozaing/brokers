@@ -7,16 +7,6 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 user = User.create! :id => 0, :first_name => 'dummy', :last_name => 'dummy', :phone => '1312313', :email => 'dummy@gmail.com', :password => '12345678', :password_confirmation => '12345678'
-agent = Agent.new
-broker = Broker.new
 
-agent.id = 0
-agent.user_id = user.id
-
-broker.id = 0
-broker.user_id = user.id
-agent.save
-broker.agent_id = 0
-broker.save
-agent.broker_id = 0
-agent.save
+broker = Broker.create! :id => 0, :user_id => user.id, :agent_id => 0
+agent = Agent.create! :id => 0, :user_id => user.id, :broker_id => broker.id
