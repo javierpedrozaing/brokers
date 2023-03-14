@@ -1,10 +1,10 @@
 <div class="clients-container">  
-  <h2>Clients list</h2>
+  <h2><%= @title  %></h2>
   <div class="list">
   <div class="actions d-grid col-10 justify-content-md-start">
     <%= link_to "New Client", new_client_path, class: "btn btn-primary btn-block mb-4" %>
   </div>
-  <h3>Clients</h3>
+  <h3>Unassign Clients</h3>
   <table class="table">
     <thead>
       <tr>
@@ -12,32 +12,76 @@
         <th scope="col">name</th>
         <th scope="col">email</th>
         <th scope="col">phone</th>   
-        <th scope="col">User status</th>         
-        <th scope="col">Assigned to</th>
+        <th scope="col">User status</th>
         <th scope="col"></th>
       </tr>
     </thead>
     <tbody>
     <% count = 0 %>
-    <% @clients.each do |client| %>  
-      <tr>
-        <td><%= count += 1 %></td>
-        <td><%= client.full_name %></td>
-        <td><%= client.user.email %></td>
-        <td><%= client.user.phone %></td>
-        <td><%= client.user.role.downcase != 'broker' ? 'active' : 'inactive' %></td>
-        <td><%= client.agent.full_name %></td>
-        <% if current_user.role.downcase == 'agent' %>
-          <td><%= link_to "Refer Broker", refer_broker_path(client.user.id), class: "btn btn-success" %></td>
-        <% else %>
-          <td><%= link_to "Refer Agent", refer_agent_path(client.user.id), class: "btn btn-success" %></td>
-        <% end %>
-      </tr>
-    <% end %> 
+    <% if @clients %>
+      <% @clients.each do |client| %>
+        <tr>
+          <td><%= count += 1 %></td>
+          <td><%= client.full_name %></td>
+          <td><%= link_to client.user.email, show_client_path(client.user.id)  %></td>          
+          <td><%= client.user.phone %></td>
+          <td><%= client.user.role.downcase != 'broker' ? 'active' : 'inactive' %></td>
+          <td><%= client.agent.full_name %></td>
+          <% if current_user.role.downcase == 'agent' %>
+            <td><%= link_to "Refer Broker", refer_broker_path(client.user.id), class: "btn btn-success" %></td>
+          <% else %>
+            <td><%= link_to "Assign Agent", refer_agent_path(client.user.id), class: "btn btn-success" %></td>
+          <% end %>
+        </tr>
+      <% end %> 
+    <% end %>
     </tbody>
   </table>
   <br/>
-  <h3>Clientes Referidos</h3>
+  <h3>Inboud Clients</h3>
+   <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">name</th>
+        <th scope="col">email</th>
+        <th scope="col">phone</th>
+        <th scope="col">User status</th>
+        <th scope="col">Assigned from</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>    
+     
+    <% count = 0 %>
+    <% if @inbound_referidos %>
+      <% @inbound_referidos.each do |referido| %>
+        <% unless referido.id == 0 %>
+        <tr>
+          <td><%= count += 1 %></td>
+          <td><%= referido.full_name %></td>
+          <td><%= referido.user.email %></td>
+          <td><%= referido.user.phone %></td>
+          <td><%= referido.user.role.downcase != 'broker' ? 'active' : 'inactive' %></td>
+          <% if current_user.role.downcase == 'broker'%>
+            <td><%= referido.agent.full_name %></td>
+          <% elsif current_user.role.downcase == 'agent' %>
+            <td><%= Broker.find(referido.broker_id).full_name %></td>
+          <% end %>
+          <% if current_user.role.downcase == 'agent' %>
+            <td><%= link_to "Refer Broker", refer_broker_path(referido.user.id), class: "btn btn-success" %></td>
+          <% else %>
+            <td><%= link_to "Refer Agent", refer_agent_path(referido.user.id), class: "btn btn-success" %></td>
+          <% end %>
+        </tr>
+        <% end %>
+      <% end %>
+    <% end %>
+    </tbody>
+  </table>
+
+   <br/>
+  <h3>Outbound Clients</h3>
    <table class="table">
     <thead>
       <tr>
@@ -52,25 +96,27 @@
     </thead>
     <tbody>    
      
-     <% count = 0 %>
-    <% @referidos.each do |referido| %>
-      <% unless referido.id == 0 %>
-      <tr>
-        <td><%= count += 1 %></td>
-        <td><%= referido.full_name %></td>
-        <td><%= referido.user.email %></td>
-        <td><%= referido.user.phone %></td>
-        <td><%= referido.user.role.downcase != 'broker' ? 'active' : 'inactive' %></td>
-        <td><%= referido.agent.full_name %></td>
-        <% if current_user.role.downcase == 'agent' %>
-          <td><%= link_to "Refer Broker", refer_broker_path(referido.user.id), class: "btn btn-success" %></td>
-        <% else %>
-          <td><%= link_to "Refer Agent", refer_agent_path(referido.user.id), class: "btn btn-success" %></td>
+    <% count = 0 %>
+    <% if @outbound_referidos %>
+      <% @outbound_referidos.each do |referido| %>
+        <% unless referido.id == 0 %>
+        <tr>
+          <td><%= count += 1 %></td>
+          <td><%= referido.full_name %></td>
+          <td><%= referido.user.email %></td>
+          <td><%= referido.user.phone %></td>
+          <td><%= referido.user.role.downcase != 'broker' ? 'active' : 'inactive' %></td>
+          <td><%= referido.agent.full_name %></td>
+          <% if current_user.role.downcase == 'agent' %>
+            <td><%= link_to "Refer Broker", refer_broker_path(referido.user.id), class: "btn btn-success" %></td>
+          <% else %>
+            <td><%= link_to "Refer Agent", refer_agent_path(referido.user.id), class: "btn btn-success" %></td>
+          <% end %>
+        </tr>
         <% end %>
-      </tr>
       <% end %>
     <% end %>
     </tbody>
-  </table>   
+  </table>
   </div>
 </div>

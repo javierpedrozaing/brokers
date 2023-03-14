@@ -2,6 +2,7 @@ class AgentsController < ApplicationController
   before_action :authenticate_user!
   before_action :validate_email_registered, only: [:create]
   before_action :get_clients, only: [:assign_client]
+  before_action :has_valid_profile
 
   def index
     user = User.find(current_user.id)
@@ -11,6 +12,26 @@ class AgentsController < ApplicationController
 
   def new
     @user = User.new
+  end
+
+  
+  def show
+    @user = User.find(params[:user_id])
+  end
+
+  def edit
+    user_id = params[:user_id]
+    agent = User.find(user_id)
+    agent.first_name = params[:first_name] if params[:first_name]
+    agent.last_name = params[:last_name] if params[:last_name]
+    agent.phone = params[:phone] if params[:phone]
+    agent.email = params[:email] if params[:email]
+    agent.user_state = params[:user_state] if params[:user_state]    
+    if agent.save!
+      redirect_to agents_path, flash: {notice: "Agent successfully updated"}
+    else
+      render :edit
+    end
   end
 
   def create
@@ -85,6 +106,17 @@ class AgentsController < ApplicationController
         redirect_to new_agent_path
       end      
     end
+  end
+
+  def has_valid_profile
+    valid = false    
+    user = User.find(current_user.id)
+    if current_user.role.downcase == 'broker'
+      valid = user.broker      
+    else
+      valid = user.agent
+    end    
+    redirect_to profile_index_path, flash: {notice: "Please complete your profile"} unless valid
   end
   
   def permit_params_user

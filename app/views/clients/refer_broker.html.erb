@@ -2,8 +2,7 @@
   <%= form_with(url: create_referral_path(@user), method: "post") do |f| %>
   <h2>Refer Broker</h2>
 
-  <%= f.hidden_field :client_id, value: @client.id %>
-
+  <%= f.hidden_field :client_id, value: @client.id %>  
   <div class="form-outline mb-4">
     <%= f.label :first_name, class: "form-label" %><br />
     <%= f.text_field :first_name, autofocus: true, autocomplete: "First name", value: @client.user.first_name, readonly: true, class: "form-control" %>

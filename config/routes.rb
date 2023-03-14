@@ -5,6 +5,9 @@ Rails.application.routes.draw do
   get 'agents/new', to: 'agents#new', as: 'new_agent'
   post 'agents/create', to: 'agents#create', as: 'create_agent'
 
+  get 'agents/show/:user_id', to: 'agents#show', as: 'show_agent'
+  post 'agents/edit/:user_id', to: 'agents#edit', as: 'edit_agent'
+
   get 'agents/assign_client/:user_id', to: 'agents#assign_client', as: 'assign_client'
   post 'agents/create_assignation/', to: 'agents#create_assignation', as: 'create_assignation'
 
@@ -20,13 +23,21 @@ Rails.application.routes.draw do
   get 'clients/new', to: 'clients#new', as: 'new_client'
   post 'clients/create', to: 'clients#create', as: 'create_client'
 
+  get 'clients/show/:user_id', to: 'clients#show', as: 'show_client'
+  post 'clients/edit/:user_id', to: 'clients#edit', as: 'edit_client'
 
   get 'update_client/:id', to: 'clients#update', as: 'update_clients'
   get 'update_agent/:id', to: 'agents#update', as: 'update_agents'
   
-  post 'profile/update_profile', to: 'profile#update_profile'
+  post 'profile/update_profile', to: 'profile#update_profile', as: 'update_profile'
   devise_for :users
   get 'brokers_locations', to: 'pages#get_brokers_locations', as: 'brokers_locations'
-  get '/', to: 'pages#home'
+  root 'pages#home'
+
+  get 'dashboard', to: 'dashboard#index', as: 'dashboard'
+  
+  get 'dashboard/show_user/:user_id', to: 'dashboard#show_user', as: 'show_user'
+
+  post 'dashboard/edit_user/:user_id', to: 'dashboard#edit_user', as: 'edit_user'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

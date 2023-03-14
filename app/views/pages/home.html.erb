@@ -16,7 +16,9 @@
 
   <main id="main">
   
-  <div id="map"></div>
+  <% unless user_signed_in? %>
+    <div id="map"></div>
+  <% end %>
   
     <!-- ======= What We Do Section ======= -->
     <section id="what-we-do" class="what-we-do">

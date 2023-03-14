@@ -4,11 +4,10 @@ class ProfileController < ApplicationController
   def index
     @user = User.find(current_user.id)
     @agent = Agent.find_by_user_id(current_user.id) || Agent.new
-    @broker = Broker.find_by_user_id(current_user.id) || Broker.new
-    
+    @broker = Broker.find_by_user_id(current_user.id) || Broker.new    
   end
 
-  def update_profile    
+  def update_profile
     user = User.find(current_user.id)
     user.user_state = params[:user_state] || 'inactive'
     user.photo.attach(params[:photo]) if params[:photo]
@@ -19,7 +18,7 @@ class ProfileController < ApplicationController
     if user.role.downcase == 'broker'
       broker_exist = Broker.find_by_user_id(user.id)
       @broker = broker_exist.nil? ? Broker.create(permit_params_broker) : update_brokers_params(broker_exist)            
-    elsif
+    elsif   
       agent_exist = Agent.find_by_user_id(user.id)
       @agent = agent_exist.nil? ? Agent.create(permit_params_agent) : update_agents_params(agent_exist)          
     end
@@ -27,7 +26,7 @@ class ProfileController < ApplicationController
     if user && (@broker || @agent)
       redirect_to "/", flash: {notice: "Profile successfully updated"}
     elsif
-      redirect_to "/profile/index", flash: {alert: "Something was wrong, try again"}
+      redirect_to profile_index_path, flash: {alert: "Something was wrong, try again"}
     end
   end
 

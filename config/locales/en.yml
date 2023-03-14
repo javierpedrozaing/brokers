@@ -31,3 +31,7 @@
 
 en:
   hello: "Hello world"
+  devise:
+    registration:
+      user:
+        signed_up_but_account_deactivated:  "This account is deactivated"

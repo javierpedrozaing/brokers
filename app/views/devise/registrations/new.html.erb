@@ -15,7 +15,7 @@
 
   <div class="form-outline mb-4">
     <%= f.label :phone, class: "form-label" %><br />
-    <%= f.text_field :phone, autofocus: true, autocomplete: "Phone", class: "form-control" %>
+    <%= f.number_field :phone, autofocus: true, autocomplete: "Phone", class: "form-control" %>
   </div>
 
   <div class="form-outline mb-4">
@@ -28,6 +28,8 @@
     <%= f.label :role, class: "form-label" %><br />
     <%= f.select :role, ["broker"], {}, { class: "form-select form-select-lg mb-3" } %>
   </div>
+
+  <%= f.hidden_field :user_state, value: current_user&.role&.downcase == 'broker' ? 'active' : 'inactive' %>
 
   <div class="field">
     <%= f.label :password, class: "form-label" %>

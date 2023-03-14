@@ -9,7 +9,7 @@ function getLocations() {
   Rails.ajax({
     url: "/brokers_locations",
     type: "get",
-    success: function(data) {     
+    success: function(data) {   
       coordinates = data.map((data) => {
         return {
           coordinates: data.coordinates,
@@ -33,14 +33,6 @@ function getLocations() {
 
 
 function initMap(locations) {
-  latitude = locations ? locations[0].coordinates[0] : ""
-  longitude = locations ? locations[0].coordinates[1] : ""
-
-  const map = new google.maps.Map(document.getElementById("map"), {
-    zoom: 5,
-    center: { lat: latitude, lng:  longitude },
-  });
-
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -59,6 +51,14 @@ function initMap(locations) {
     // Browser doesn't support Geolocation
     handleLocationError(false, infoWindow, map.getCenter());
   }
+
+  latitude = (locations && locations[0].coordinates) ? locations[0].coordinates[0] : ""
+  longitude = (locations && locations[0].coordinates) ? locations[0].coordinates[1] : ""
+
+  const map = new google.maps.Map(document.getElementById("map"), {
+    zoom: 5,
+    center: { lat: latitude, lng:  longitude },
+  });
 
   const image =
   "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";

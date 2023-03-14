@@ -7,7 +7,7 @@ class PagesController < ApplicationController
 
   def get_brokers_locations
     geocoder = Geocoder
-    brokers = Broker.all
+    brokers = Broker.all.where.not(id: 0)
     
     brokers_coordinates = brokers.map do |br|
       photo = br.user.photo.attached? ? url_for(br.user.photo) : ''
