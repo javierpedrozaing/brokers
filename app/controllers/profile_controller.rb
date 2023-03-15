@@ -9,7 +9,6 @@ class ProfileController < ApplicationController
 
   def update_profile
     user = User.find(current_user.id)
-    user.user_state = params[:user_state] || 'inactive'
     user.photo.attach(params[:photo]) if params[:photo]
     user.member_since =  DateTime.now
     user.member_end =  DateTime.now.next_year(1).to_time
