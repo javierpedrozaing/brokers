@@ -19,7 +19,7 @@ class User < ApplicationRecord
   end
 
   def is_active?
-    self.user_state == 'active'
+    self.user_state.downcase == 'active'
   end
 
   def full_name
