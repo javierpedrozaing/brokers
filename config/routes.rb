@@ -45,5 +45,7 @@ Rails.application.routes.draw do
   post 'dashboard/edit_user/:user_id', to: 'dashboard#edit_user', as: 'edit_user'
 
   get 'transactions', to: 'transactions#index', as: 'transactions'
+
+  get 'remove_user/:user_id', to: 'dashboard#remove_user', as: 'remove_user'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

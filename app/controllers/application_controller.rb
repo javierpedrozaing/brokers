@@ -15,7 +15,6 @@ class ApplicationController < ActionController::Base
         super
       end
   end
-  
 
   def countries_list
     countries = HTTParty.get('https://api.countrystatecity.in/v1/countries', {

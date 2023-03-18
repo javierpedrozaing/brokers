@@ -26,6 +26,12 @@ class DashboardController < ApplicationController
     end
   end
 
+  def remove_user
+    #todo implement function remove user
+    redirect_to dashboard_path
+  end
+  
+
   private 
 
   def has_valid_role
