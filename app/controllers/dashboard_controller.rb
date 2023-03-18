@@ -3,7 +3,7 @@ class DashboardController < ApplicationController
   before_action :has_valid_role
 
   def index
-    @users = User.all.where('id > ?', 0)
+    @users = User.all.where('id > ?', 0).reject{|u| u.role.downcase == 'admin'}
   end
 
   def show_user
