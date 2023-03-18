@@ -100,7 +100,7 @@ function initSearchMap(locations, position = null) {
       content: "<div>"
       + "<div style='display: flex;align-items: center;justify-content: space-around;'><img style='width: 20%;' src='"+ locations[i].photo +"'></div>"
       + "<div style='display: flex;align-items: center;justify-content: space-around;'>Hola Soy, " + locations[i].name +
-      " y estoy en la ciudad de " + locations[i].city + "</div></div>",
+      " y estoy en la ciudad de " + locations[i].city + "</div><br/><a href=''>Asignar agente</div>",
     });
 
     console.log(locations);

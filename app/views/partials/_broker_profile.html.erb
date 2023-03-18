@@ -24,36 +24,43 @@
 </div>
 
 <div class="form-outline mb-4">
-  <%= form.label :licence, class: "form-label" %><br />
+  <%= form.label :broker_licence, class: "form-label" %><br />
   <%= form.text_field :licence, value: @broker.licence, autofocus: true, autocomplete: "licence", class: "form-control" %>  
 </div>
 
 <div class="form-outline mb-4">
-  <%= form.label :licencia_expiration_date, class: "form-label" %><br />
+  <%= form.label :broker_licencia_expiration_date, class: "form-label" %><br />
   <%= form.date_field :licencia_expiration_date, value: @broker.licencia_expiration_date, autofocus: true, autocomplete: "licencia_expiration_date", class: "form-control" %>    
 </div>
 
-<div class="form-outline mb-4">
-  <%= form.label "Registerd in", class: "form-label" %><br />
-  <%= form.text_field :created_at, value: current_user.created_at.strftime("%Y-%m-%d"), readonly: true, class: "form-control" %>    
+<div class="form-outline mb-4">  
+  <%= form.hidden_field :created_at, value: current_user.created_at.strftime("%Y-%m-%d"), readonly: true, class: "form-control" %>    
 </div>
 
 <div class="form-outline mb-4">
-  <%= form.label :address, class: "form-label" %><br />
+  <%# todo modify for use a select %>
+  <%= form.label :company_address, class: "form-label" %><br />
   <%= form.text_field :address, value: @broker.address, autofocus: true, autocomplete: "Address", class: "form-control" %>    
 </div>
 
 <div class="form-outline mb-4">
-  <%= form.label :city, class: "form-label" %><br />
-  <%= form.text_field :city, value: @broker.city, autofocus: true, autocomplete: "city", class: "form-control" %>    
+  <%# todo modify for use a select %>
+  <%= form.label :company_country, class: "form-label" %><br />
+  <%= form.text_field :country, value: @broker.country, autofocus: true, autocomplete: "country", class: "form-control" %>    
 </div>
 
 <div class="form-outline mb-4">
-  <%= form.label :state, class: "form-label" %><br />
+  <%= form.label :company_state, class: "form-label" %><br />
   <%= form.text_field :state, value: @broker.state, autofocus: true, autocomplete: "state", class: "form-control" %>    
 </div>
 
 <div class="form-outline mb-4">
+  <%# todo modify for use a select %> 
+  <%= form.label :company_city, class: "form-label" %><br />
+  <%= form.text_field :city, value: @broker.city, autofocus: true, autocomplete: "city", class: "form-control" %>    
+</div>
+
+<div class="form-outline mb-4">
   <%= form.label "Company zip code", class: "form-label" %><br />
-  <%= form.text_field :reserver_zip_code, value: @broker.reserver_zip_code, autofocus: true, autocomplete: "reserver_zip_code", class: "form-control" %>    
+  <%= form.text_field :reserver_zip_code, maxlength: 5, size: 5, value: @broker.reserver_zip_code, autofocus: true, autocomplete: "reserver_zip_code", class: "form-control" %>    
 </div>

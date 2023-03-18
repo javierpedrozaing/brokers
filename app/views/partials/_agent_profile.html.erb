@@ -1,4 +1,4 @@
-<div class="form-outline mb-4">
+<div class="form-outline mb-4" style="display:none">
   <%= form.label "Registerd in", class: "form-label" %><br />
   <%= form.text_field :created_at, value: current_user.created_at.strftime("%Y-%m-%d"), readonly: true, class: "form-control" %>    
 </div>
@@ -9,13 +9,21 @@
 </div>
 
 <div class="form-outline mb-4">
-  <%= form.label :city, class: "form-label" %><br />
-  <%= form.text_field :city, value: @agent.city, autofocus: true, autocomplete: "city", class: "form-control" %>  
+  <%# todo modify for use a select %>
+  <%= form.label :country, class: "form-label" %><br />
+  <%= form.text_field :country, value: @agent.country, autofocus: true, autocomplete: "country", class: "form-control" %>    
 </div>
 
 <div class="form-outline mb-4">
+  <%# todo modify for use a select %>
   <%= form.label :state, class: "form-label" %><br />
   <%= form.text_field :state, value: @agent.state, autofocus: true, autocomplete: "state", class: "form-control" %>  
+</div>
+
+<div class="form-outline mb-4">
+  <%# todo modify for use a select %>
+  <%= form.label :city, class: "form-label" %><br />
+  <%= form.text_field :city, value: @agent.city, autofocus: true, autocomplete: "city", class: "form-control" %>  
 </div>
 
 <div class="form-outline mb-4">

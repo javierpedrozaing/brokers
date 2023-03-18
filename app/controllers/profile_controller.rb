@@ -1,10 +1,13 @@
 class ProfileController < ApplicationController
+  include PagesHelper
+
   before_action :authenticate_user!
 
   def index
     @user = User.find(current_user.id)
     @agent = Agent.find_by_user_id(current_user.id) || Agent.new
     @broker = Broker.find_by_user_id(current_user.id) || Broker.new    
+    @countries = countries_list
   end
 
   def update_profile
@@ -55,6 +58,7 @@ class ProfileController < ApplicationController
       :reserver_zip_code,
       :birthday,
       :address,
+      :country,
       :city,
       :state,
       :director,
@@ -63,7 +67,7 @@ class ProfileController < ApplicationController
   end
 
   def permit_params_agent
-    params.permit(:birthday, :address, :city, :state, :zip_code, :user_id)
+    params.permit(:birthday, :address, :country, :city, :state, :zip_code, :user_id)
   end
 
   def site_parms

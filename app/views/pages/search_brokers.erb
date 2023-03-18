@@ -8,20 +8,22 @@
     <h2>Search Brokers</h2>
     
      <div class="col-auto">
+      <%# todo modify for use a select %>
       <%= f.label :country, class: "form-label" %><br />
       <%= f.text_field :country, autofocus: true, autocomplete: "Country", class: "form-control" %>
     </div>
 
     <div class="col-auto">
+      <%# todo modify for use a select %>
       <%= f.label :city, class: "form-label" %><br />
       <%= f.text_field :city, autofocus: true, autocomplete: "City", class: "form-control" %>
     </div>
 
      <div class="col-auto">
+      <%# todo modify for use a select %>
       <%= f.label "state / Condado", class: "form-label" %><br />
       <%= f.text_field :state, autofocus: true, autocomplete: "State", class: "form-control" %>
     </div>
-
     
     <div class="col-auto">
       <%= f.submit "Search",  class: "btn btn-success mb-3 search-broker", id: "search-brokers", type: "button" %>

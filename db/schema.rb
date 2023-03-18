@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_13_015015) do
+ActiveRecord::Schema.define(version: 2023_03_18_000824) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -44,6 +44,7 @@ ActiveRecord::Schema.define(version: 2023_03_13_015015) do
     t.integer "broker_id"
     t.integer "user_id"
     t.integer "client_id"
+    t.string "country"
     t.index ["broker_id"], name: "index_agents_on_broker_id"
     t.index ["client_id"], name: "index_agents_on_client_id"
     t.index ["user_id"], name: "index_agents_on_user_id"
@@ -69,6 +70,7 @@ ActiveRecord::Schema.define(version: 2023_03_13_015015) do
     t.float "latitude"
     t.float "longitude"
     t.integer "agent_id"
+    t.string "country"
     t.index ["latitude", "longitude"], name: "index_brokers_on_latitude_and_longitude"
     t.index ["user_id"], name: "index_brokers_on_user_id"
   end

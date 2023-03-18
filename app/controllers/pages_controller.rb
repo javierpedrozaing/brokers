@@ -1,4 +1,6 @@
 class PagesController < ApplicationController
+  include PagesHelper
+
   def home
     if user_signed_in? && current_user.member_since.nil?
       redirect_to profile_index_path, id_user: current_user.id
@@ -38,5 +40,13 @@ class PagesController < ApplicationController
       locations = Geocoder.search(address)
       render json: locations.first.coordinates.to_json
     end
-  end  
+  end
+
+  def get_states_by_country
+    states_by_country(params[:country_id])
+  end
+
+  def get_cities_by_country
+    cities_by_country(params[:country_id])
+  end
 end
