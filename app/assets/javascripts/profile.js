@@ -2,11 +2,11 @@
 $(document).on('turbolinks:load', function(){  
   $('country').change(function(){
     $( "select option:selected" ).each(function() {
-      this.getStatesByCountry($( this ).val()); // val => ISO2 Code of Country
+      getStatesByCountry($( this ).val()); // val => ISO2 Code of Country
     });
   });
 
-  getStatesByCountry(country_id => {
+  function getStatesByCountry(country_id) {
     Rails.ajax({
       url: "/get_states_by_country",
       type: "post",
@@ -31,10 +31,10 @@ $(document).on('turbolinks:load', function(){
         console.error(data);
       }
     })
-  });
+  };
 
 
-  getCitiesByCountry(country_id => {
+  function getCitiesByCountry(country_id) {
     Rails.ajax({
       url: "/get_cities_by_country",
       type: "post",
@@ -59,7 +59,7 @@ $(document).on('turbolinks:load', function(){
         console.error(data);
       }
     })
-  });
+  };
 
 
 });

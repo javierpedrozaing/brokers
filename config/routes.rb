@@ -34,14 +34,16 @@ Rails.application.routes.draw do
   get 'brokers_locations', to: 'pages#get_brokers_locations', as: 'brokers_locations'
   root 'pages#home'
 
-  post 'get_states_by_country/:country_id', to: 'pages@get_states_by_country'
+  post 'get_states_by_country/:country_id', to: 'pages#get_states_by_country'
 
-  post 'get_cities_by_country/:country_id', to: 'pages@get_cities_by_country'
+  post 'get_cities_by_country/:country_id', to: 'pages#get_cities_by_country'
 
   get 'dashboard', to: 'dashboard#index', as: 'dashboard'
   
   get 'dashboard/show_user/:user_id', to: 'dashboard#show_user', as: 'show_user'
 
   post 'dashboard/edit_user/:user_id', to: 'dashboard#edit_user', as: 'edit_user'
+
+  get 'transactions', to: 'transactions#index', as: 'transactions'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

@@ -34,6 +34,7 @@ gem 'jbuilder', '~> 2.5'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 gem 'devise'
+gem 'httparty', '~> 0.13.7'
 gem 'google-webfonts', '~> 0.2.0'
 gem 'popper_js', '~> 2.11', '>= 2.11.6'
 gem 'jquery-rails', '~> 4.5', '>= 4.5.1'

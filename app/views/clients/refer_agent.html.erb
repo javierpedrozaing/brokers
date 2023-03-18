@@ -33,13 +33,18 @@
   <%# others fields required to refer  %>
 
   <div class="form-outline mb-4">
-    <%= f.label :type_of_house, class: "form-label" %><br />
-    <%= select_tag(:type_of_house, options_for_select([['House', 'house'], ['Appartment', 'apto'], ['Local comercial', 'local']]), class: 'form-control') %>
+    <%= f.label :type_of_property, class: "form-label" %><br />
+    <%= select_tag(:type_of_property, options_for_select([['House', 'house'], ['Appartment', 'apto'], ['Local comercial', 'local']]), class: 'form-control') %>
   </div>
 
   <div class="form-outline mb-4">
     <%= f.label :number_of_rooms, class: "form-label" %><br />
     <%= select_tag(:number_of_rooms, options_for_select([['One', '1'], ['Two', '2'], ['Three', '3'], ['Four', '4']]), class: 'form-control') %>
+  </div>
+
+  <div class="form-outline mb-4">
+    <%= f.label :number_of_bathrooms, class: "form-label" %><br />
+    <%= select_tag(:number_of_bathrooms, options_for_select([['One', '1'], ['Two', '2'], ['Three', '3'], ['Four', '4']]), class: 'form-control') %>
   </div>
 
   <div class="form-outline mb-2">

@@ -1,6 +1,4 @@
 class ProfileController < ApplicationController
-  include PagesHelper
-
   before_action :authenticate_user!
 
   def index

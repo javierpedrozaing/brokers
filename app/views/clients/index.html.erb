@@ -23,17 +23,16 @@
         <tr>
           <td><%= count += 1 %></td>
           <td><%= client.full_name %></td>
-          <td><%= link_to client.user.email, show_client_path(client.user.id)  %></td>          
+          <td><%= link_to client.user.email, show_client_path(client.user.id)  %></td>
           <td><%= client.user.phone %></td>
-          <td><%= client.user.role.downcase != 'broker' ? 'active' : 'inactive' %></td>
-          <td><%= client.agent.full_name %></td>
+          <td><%= client.user.role.downcase != 'broker' ? 'active' : 'inactive' %></td>          
           <% if current_user.role.downcase == 'agent' %>
             <td><%= link_to "Refer Broker", refer_broker_path(client.user.id), class: "btn btn-success" %></td>
           <% else %>
             <td><%= link_to "Assign Agent", refer_agent_path(client.user.id), class: "btn btn-success" %></td>
           <% end %>
         </tr>
-      <% end %> 
+      <% end %>
     <% end %>
     </tbody>
   </table>
@@ -60,7 +59,7 @@
         <tr>
           <td><%= count += 1 %></td>
           <td><%= referido.full_name %></td>
-          <td><%= referido.user.email %></td>
+          <td><%= link_to referido.user.email, show_client_path(referido.user.id)  %></td>          
           <td><%= referido.user.phone %></td>
           <td><%= referido.user.role.downcase != 'broker' ? 'active' : 'inactive' %></td>
           <% if current_user.role.downcase == 'broker'%>
@@ -90,8 +89,7 @@
         <th scope="col">email</th>
         <th scope="col">phone</th>
         <th scope="col">User status</th>
-        <th scope="col">Assigned to</th>
-        <th scope="col"></th>
+        <th scope="col">Assigned to</th>        
       </tr>
     </thead>
     <tbody>    
@@ -103,15 +101,11 @@
         <tr>
           <td><%= count += 1 %></td>
           <td><%= referido.full_name %></td>
-          <td><%= referido.user.email %></td>
+          <td><%= link_to referido.user.email, show_client_path(referido.user.id)  %></td>                    
           <td><%= referido.user.phone %></td>
           <td><%= referido.user.role.downcase != 'broker' ? 'active' : 'inactive' %></td>
           <td><%= referido.agent.full_name %></td>
-          <% if current_user.role.downcase == 'agent' %>
-            <td><%= link_to "Refer Broker", refer_broker_path(referido.user.id), class: "btn btn-success" %></td>
-          <% else %>
-            <td><%= link_to "Refer Agent", refer_agent_path(referido.user.id), class: "btn btn-success" %></td>
-          <% end %>
+        
         </tr>
         <% end %>
       <% end %>

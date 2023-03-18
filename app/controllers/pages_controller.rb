@@ -33,6 +33,7 @@ class PagesController < ApplicationController
   end
 
   def search_brokers
+    @countries = countries_list
     unless request.method == 'GET'
       location = JSON.parse(params.keys.first)['location']
       address = ""
