@@ -1,31 +1,38 @@
 
-$(document).on('turbolinks:load', function(){  
-  $('country').change(function(){
-    $( "select option:selected" ).each(function() {
-      getStatesByCountry($( this ).val()); // val => ISO2 Code of Country
-    });
+$(document).on('turbolinks:load', function(){
+
+  current_country = $('#country').val();
+  current_state = $('#state').val();
+  getCitiesByCountryandState(current_country, current_state);    
+
+  $('#country').change(function(){    
+    console.log("country => ", $( this ).val())
+    getStatesByCountry($( this ).val()); // val => ISO2 Code of Country    
+  });
+    
+  $('#state').change(function(){
+    $('#city').empty();
+    console.log("state => ", $( this ).val());
+    getCitiesByCountryandState(current_country, $( this ).val());            
   });
 
-  function getStatesByCountry(country_id) {
+  function getStatesByCountry(country) {
     Rails.ajax({
-      url: "/get_states_by_country",
-      type: "post",
-      data: {country_id: country_id},
+      type: 'POST',
+      url: '/get_states_by_country/' + country,
       success: function(data) {
-        states = data.map(state => state.name);      
-        if ( states.length > 0) {
-          states.forEach(state => {
-            $('states').append(new Option(state.name, state.iso2))
+        if(data.states.length > 0) {
+          $('#state').empty();
+          states = data.states.map(state => [state.name, state.iso2]);              
+          states.forEach((state, index) => {            
+            $('#state').append(new Option(state[0], state[1]));
+          });
+          $('#state').change(function(){
+            $('#city').empty();
+            console.log("state => ", $( this ).val());
+            getCitiesByCountryandState(country, $( this ).val());            
           });
         }
-        // [
-        //   {
-        //     "id": 4008,
-        //     "name": "Maharashtra",
-        //     "iso2": "MH"
-        //   },
-        //   ...
-        // ]
       },
       error: function(data) {
         console.error(data);
@@ -33,33 +40,24 @@ $(document).on('turbolinks:load', function(){
     })
   };
 
-
-  function getCitiesByCountry(country_id) {
+  function getCitiesByCountryandState(country, state_id) {    
     Rails.ajax({
-      url: "/get_cities_by_country",
-      type: "post",
-      data: {country_id: country_id},
+      url: '/get_cities_by_country_and_state/' + country + '/' + state_id,
+      type: 'POST',
       success: function(data) {
-        cities = data.map(city => city.name);      
-        if ( cities.length > 0) {
-          cities.forEach(city => {
-            $('cities').append(new Option(city.name, city.iso2))
-          });
+        $('#city').empty();
+        if(data.cities.length > 0) {
+          cities = data.cities.map(city => [city.name, city.id]);     
+          if ( cities.length > 0) {
+            cities.forEach(city => {
+              $('#city').append(new Option(city[0], city[1]));
+            });
+          }
         }
-        // [
-        //   {
-        //     "id": 4008,
-        //     "name": "Maharashtra",
-        //     "iso2": "MH"
-        //   },
-        //   ...
-        // ]
       },
       error: function(data) {
         console.error(data);
       }
     })
   };
-
-
 });

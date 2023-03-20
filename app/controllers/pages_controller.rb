@@ -43,11 +43,11 @@ class PagesController < ApplicationController
     end
   end
 
-  def get_states_by_country
+  def get_states_by_country    
     states_by_country(params[:country_id])
   end
 
-  def get_cities_by_country
-    cities_by_country(params[:country_id])
+  def get_cities_by_country_and_state
+    cities_by_country_and_state(params[:country_id], params[:state_id])
   end
 end

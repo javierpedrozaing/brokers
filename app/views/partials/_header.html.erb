@@ -24,9 +24,12 @@
               <% elsif current_user.role.downcase == "agent" %>
               <li> <%= link_to 'Brokers', search_brokers_path %> </li>
               <% end %>
+              
               <li class="dropdown"><a href="#"><span>Profile</span> <i class="bi bi-chevron-down"></i></a>
                 <ul>
-                  <li><%= link_to "My profile", profile_index_path, :method => :get %>
+                  <% if current_user.role.downcase != "admin" %>
+                    <li><%= link_to "My profile", profile_index_path, :method => :get %>
+                  <% end %>
                   <li><%= link_to "Edit password", edit_user_registration_path, :method => :get %>                
                   
                   <li><%= link_to "Sign out", destroy_user_session_path, :method => :delete %></li>                
