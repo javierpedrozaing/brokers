@@ -61,6 +61,23 @@ class ApplicationController < ActionController::Base
     render json: {cities: cities}
   end
 
+  def get_country(country)
+    country = HTTParty.get("https://api.countrystatecity.in/v1/countries/#{country}", {
+      headers: headers,
+      debug_output: STDOUT, # To show that User-Agent is Httparty
+    })    
+    country["name"]
+  end
+
+  def get_state(country, state)
+    state = HTTParty.get("https://api.countrystatecity.in/v1/countries/#{country}/states/#{state}", {
+      headers: headers,
+      debug_output: STDOUT, # To show that User-Agent is Httparty
+    })
+
+    state["name"]
+  end
+
   def headers
     { 'X-CSCAPI-KEY' => ENV['KEY_COUNTRIES'] }
   end

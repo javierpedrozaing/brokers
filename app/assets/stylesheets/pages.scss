@@ -64,8 +64,16 @@ form .btn.search-broker{
 
 .profile-form {
   .photo {
+    .upload-photo {
+      height: 1.6rem;
+      width: 101px;
+      margin: 0 auto;
+      padding: 1px;
+    }
     img{
-      width: 20%;
+      width: 60%;
+      margin: 0 auto;
+      display: block;
     }
   } 
 }

@@ -10,8 +10,8 @@ class PagesController < ApplicationController
   def get_brokers_locations
     geocoder = Geocoder
     brokers = Broker.all.where.not(id: 0)
-    
     brokers_coordinates = brokers.map do |br|
+      full_address = "#{br.address}, #{get_country(br.country)}, #{get_state(br.country, br.state)}"      
       photo = br.user.photo.attached? ? url_for(br.user.photo) : ''
       {   
         broker_id: br.id,
@@ -19,7 +19,7 @@ class PagesController < ApplicationController
         city: br.city,
         photo: photo,
         phone: br.user.phone,
-        coordinates: geocoder.coordinates(br.full_address)
+        coordinates: geocoder.coordinates(full_address)
       }
     end
 
@@ -50,4 +50,6 @@ class PagesController < ApplicationController
   def get_cities_by_country_and_state
     cities_by_country_and_state(params[:country_id], params[:state_id])
   end
+
+  private  
 end

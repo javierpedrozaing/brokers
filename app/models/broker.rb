@@ -6,7 +6,7 @@ class Broker < ApplicationRecord
   after_validation :geocode, if: ->(obj){ obj.address.present? and obj.address_changed? }  
 
   def full_address
-    [address, state, city].compact.join(', ')
+    [address, country, state, city].compact.join(', ')
   end
 
   def full_name

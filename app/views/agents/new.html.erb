@@ -9,7 +9,7 @@
     <% end %>
   <%= form_with(url: create_agent_path(@user), local: true, method: "post") do |f| %>
     <h2>Create new Agent</h2>
-
+    <%= f.hidden_field :user_state, value: 'active' %>
     <div class="form-outline mb-4">
       <%= f.label :first_name, class: "form-label" %><br />
       <%= f.text_field :first_name, autofocus: true, autocomplete: "First name", class: "form-control" %>

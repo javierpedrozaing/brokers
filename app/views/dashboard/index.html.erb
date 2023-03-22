@@ -27,7 +27,10 @@
               <td><%= user.phone %></td>
               <td><%= user.user_state%></td>
               <td><%= user.role %></td>
-              <td><%= link_to "Edit", show_user_path(user.id), class: "btn btn-success" %></td>              
+              <% if user.role.downcase == 'broker' %>
+              <td><%= link_to "Edit", show_user_path(user.id), class: "btn btn-success" %></td>                            
+              <% end %>
+              
             </tr>
           <% end %> 
         <% end %>

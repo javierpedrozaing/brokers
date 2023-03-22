@@ -4,9 +4,10 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  has_one :broker
-  has_one :agent
-  has_one_attached :photo
+  has_one :broker, dependent: :destroy
+  has_one :agent, dependent: :destroy
+  has_one :client, dependent: :destroy
+  has_one_attached :photo, dependent: :purge_later
 
   # after_create :send_notification_new_user
 

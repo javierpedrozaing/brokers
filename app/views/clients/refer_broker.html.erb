@@ -15,7 +15,7 @@
 
   <div class="form-outline mb-4">
     <%= f.label :phone, class: "form-label" %><br />
-    <%= f.text_field :phone, autofocus: true, autocomplete: "Phone", value: @client.user.email, readonly: true, class: "form-control" %>
+    <%= f.text_field :phone, autofocus: true, autocomplete: "Phone", value: @client.user.phone, readonly: true, class: "form-control" %>
   </div>
 
   <div class="form-outline mb-4">
@@ -32,8 +32,8 @@
   <%# others fields required to refer  %>
 
   <div class="form-outline mb-4">
-    <%= f.label :type_of_house, class: "form-label" %><br />
-    <%= select_tag(:type_of_house, options_for_select([['House', 'house'], ['Appartment', 'apto'], ['Local comercial', 'local']]), class: 'form-control') %>
+    <%= f.label :type_of_property, class: "form-label" %><br />
+    <%= select_tag(:type_of_property, options_for_select([['House', 'house'], ['Appartment', 'apto'], ['Local comercial', 'local']]), class: 'form-control') %>
   </div>
 
   <div class="form-outline mb-4">

@@ -3,6 +3,7 @@ class DashboardController < ApplicationController
   before_action :has_valid_role
 
   def index
+    # admin only can see brokers
     @users = User.all.where('id > ?', 0).reject{|u| u.role.downcase == 'admin'}
   end
 
@@ -27,8 +28,11 @@ class DashboardController < ApplicationController
   end
 
   def remove_user
-    #todo implement function remove user
-    redirect_to dashboard_path
+    session[:user_id] = nil    
+    byebug
+    user = User.find(params[:user_id])
+    user.destroy
+    redirect_to dashboard_path, flash: {notice: "User successfully removed"}
   end
   
 

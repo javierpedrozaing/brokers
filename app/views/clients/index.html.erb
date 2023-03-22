@@ -22,8 +22,8 @@
       <% @clients.each do |client| %>
         <tr>
           <td><%= count += 1 %></td>
-          <td><%= client.full_name %></td>
-          <td><%= link_to client.user.email, show_client_path(client.user.id)  %></td>
+          <td><%= link_to client.full_name, show_client_path(client.user.id) %></td>
+          <td><%= client.user.email %></td>          
           <td><%= client.user.phone %></td>
           <td><%= client.user.role.downcase != 'broker' ? 'active' : 'inactive' %></td>          
           <% if current_user.role.downcase == 'agent' %>
@@ -58,8 +58,8 @@
         <% unless referido.id == 0 %>
         <tr>
           <td><%= count += 1 %></td>
-          <td><%= referido.full_name %></td>
-          <td><%= link_to referido.user.email, show_client_path(referido.user.id)  %></td>          
+          <td><%= link_to referido.full_name, show_client_path(referido.user.id) %></td>
+          <td><%= referido.user.email %></td>          
           <td><%= referido.user.phone %></td>
           <td><%= referido.user.role.downcase != 'broker' ? 'active' : 'inactive' %></td>
           <% if current_user.role.downcase == 'broker'%>
@@ -99,9 +99,9 @@
       <% @outbound_referidos.each do |referido| %>
         <% unless referido.id == 0 %>
         <tr>
-          <td><%= count += 1 %></td>
-          <td><%= referido.full_name %></td>
-          <td><%= link_to referido.user.email, show_client_path(referido.user.id)  %></td>                    
+          <td><%= count += 1 %></td>          
+          <td><%= link_to referido.full_name, show_client_path(referido.user.id) %></td>
+          <td><%= referido.user.email %></td>                    
           <td><%= referido.user.phone %></td>
           <td><%= referido.user.role.downcase != 'broker' ? 'active' : 'inactive' %></td>
           <td><%= referido.agent.full_name %></td>

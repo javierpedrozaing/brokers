@@ -29,7 +29,7 @@
     <%= f.select :role, ["broker"], {}, { class: "form-select form-select-lg mb-3" } %>
   </div>
 
-  <%= f.hidden_field :user_state, value: current_user&.role&.downcase == 'broker' ? 'active' : 'inactive' %>
+  <%= f.hidden_field :user_state, value: current_user&.role&.downcase == 'broker' ? 'inactive' : 'active' %>
 
   <div class="field">
     <%= f.label :password, class: "form-label" %>

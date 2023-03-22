@@ -1,17 +1,24 @@
 
 $(document).on('turbolinks:load', function(){
+  if (window.location.href.indexOf("profile") > -1){
+    $('#country').data("country_name", $('#country').val());
+    $('#state').data("state_name", $('#state').val());
+    $('#city').data("city_name", $('#city').val());
 
-  current_country = $('#country').val();
-  current_state = $('#state').val();
-  getCitiesByCountryandState(current_country, current_state);    
-
-  $('#country').change(function(){    
+    current_country = $('#country').data('country_name');
+    current_state = $('#state').data('state_name');
+    
+    getCitiesByCountryandState(current_country, current_state);
+  }
+  $('#country').change(function(){
     console.log("country => ", $( this ).val())
+    $('#country').data("country_name", $(this).text().toLowerCase());
     getStatesByCountry($( this ).val()); // val => ISO2 Code of Country    
   });
     
   $('#state').change(function(){
     $('#city').empty();
+    $('#state').data("state_name", $(this).text().toLowerCase());
     console.log("state => ", $( this ).val());
     getCitiesByCountryandState(current_country, $( this ).val());            
   });
@@ -29,7 +36,7 @@ $(document).on('turbolinks:load', function(){
           });
           $('#state').change(function(){
             $('#city').empty();
-            console.log("state => ", $( this ).val());
+            $('#city').data("city_name", $(this).text().toLowerCase());            
             getCitiesByCountryandState(country, $( this ).val());            
           });
         }
