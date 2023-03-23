@@ -1,4 +1,4 @@
-<div class="container profile-form">
+<div class="container profile-form">  
   <%= form_with(url: create_referral_path(@user), method: "post") do |f| %>
   <h2>Refer Broker</h2>
 
@@ -33,29 +33,39 @@
 
   <div class="form-outline mb-4">
     <%= f.label :type_of_property, class: "form-label" %><br />
-    <%= select_tag(:type_of_property, options_for_select([['House', 'house'], ['Appartment', 'apto'], ['Local comercial', 'local']]), class: 'form-control') %>
+    <%= f.select(:type_of_property, @properties, {prompt: "select property", selected: @current_type_of_property }, {:class => 'form-control' }) %>  
   </div>
 
   <div class="form-outline mb-4">
     <%= f.label :number_of_rooms, class: "form-label" %><br />
-    <%= select_tag(:number_of_rooms, options_for_select([['One', '1'], ['Two', '2'], ['Three', '3'], ['Four', '4']]), class: 'form-control') %>
+    <%= f.select(:number_of_rooms, @number_of_rooms, {prompt: "select rooms", selected: @current_number_of_rooms }, {:class => 'form-control' }) %>  
+  </div>
+
+  <div class="form-outline mb-4">
+    <%= f.label :number_of_bathrooms, class: "form-label" %><br />    
+    <%= f.select(:number_of_bathrooms, @bathrooms, {prompt: "select bathrooms", selected: @current_number_of_bathrooms }, {:class => 'form-control' }) %>  
   </div>
 
   <div class="form-outline mb-2">
     <%= f.label :parkng_lot, class: "form-label" %><br />
-    <%= select_tag(:parkng_lot, options_for_select([['One', '1'], ['Two', '2'], ['Three', '3'], ['Four', '4']]), class: 'form-control') %>
+    <%= f.select(:parkng_lot, @parking_lots, {prompt: "select parking", selected: @current_parking_lot }, {:class => 'form-control' }) %>  
   </div>
 
   <div class="form-outline mb-2">
     <%= f.label :budget, class: "form-label" %><br />
-    <%= f.radio_button :budget, "10,000 - 30,000" %>
+    <%= f.radio_button :budget, '10,000 - 30,000',  checked: (@client.budget == '10,000 - 30,000') %>
     <%= f.label "10,000 - 30,000", class: "form-label" %><br />
     
-    <%= f.radio_button :budget, "30,000 - 60,000" %>
+    <%= f.radio_button :budget, '30,000 - 60,000', checked: (@client.budget == '30,000 - 60,000') %>
     <%= f.label "30,000 - 60,000", class: "form-label" %><br />
 
-    <%= f.radio_button :budget, "60,000 - 100,000" %>
+    <%= f.radio_button :budget, '60,000 - 100,000', checked: (@client.budget == '60,000 - 100,000') %>
     <%= f.label "60,000 - 100,000", class: "form-label" %><br />
+  </div>
+
+   <div class="form-outline mb-4">
+    <%= f.label :notes, class: "form-label" %><br />    
+    <%= f.text_area :notes, autofocus: true, value: @client.user.notes, class: "form-control" %>
   </div>
 
   <br/>

@@ -2,7 +2,7 @@ class ClientsController < ApplicationController
   before_action :authenticate_user!
   before_action :get_role_user
   before_action :validate_email_registered, only: [:create]
-  before_action :has_valid_profile
+  before_action :has_valid_profile  
 
   # Section list clients for brokers and agents
   def index
@@ -64,8 +64,9 @@ class ClientsController < ApplicationController
   def refer_broker
     select_referreds_by(@role_user)
     @user = User.find(params[:user_id])
-    @client = Client.find_by_user_id(@user.id)
     @brokers = Broker.all
+    @client = Client.find_by_user_id(@user.id)
+    common_refer_attributes(@client)
   end
 
   def refer_agent
@@ -73,22 +74,28 @@ class ClientsController < ApplicationController
     @user = User.find(params[:user_id])
     @client = Client.find_by_user_id(@user.id)
     @brokers = Broker.all
+    common_refer_attributes(@client)
   end
 
-  def create_referral #for refer agent and brokers
+  def create_referral #for refer agents and brokers       
     client = Client.find(params[:client_id])
+    user = User.find(client.user_id)
+    user.notes = params[:notes]
     # for the agent_id, if the role is broker would take the agent selected in the form, otherwise would be the current agent
     agent_id = current_user.role.downcase == 'broker' ? params[:client][:agent_id].to_i : current_user.agent.id
     client.agent_id = agent_id
+    
     # if role user is agent, the broker_id would be the agent's broker
     broker_id = current_user.role.downcase == 'agent' ? params[:client][:broker_id].to_i : current_user.broker.id
     client.broker_id = broker_id
     
-    client.type_of_house = params[:type_of_house] if  params[:type_of_house]
+    client.type_of_property = params[:type_of_property] if  params[:type_of_property]
     client.number_of_rooms = params[:number_of_rooms] if params[:number_of_rooms]
+    client.number_of_bathrooms = params[:number_of_bathrooms] if params[:number_of_bathrooms]
     client.parkng_lot = params[:parkng_lot] if params[:parkng_lot]
-    client.budget = params[:budget] if params[:budget]    
-    if client.save!    
+    client.budget = params[:budget] if params[:budget]
+
+    if client.save! && user.save!
       create_transaction(params, client)
       flash[:success] = "Refered created succesfully"
       redirect_to clients_path
@@ -115,12 +122,23 @@ class ClientsController < ApplicationController
       assigned_agent: assigned_agent,
       client_id: client.id
     }
-    transaction = Transaction.create(transaction_params)
-    
+    transaction = Transaction.create(transaction_params)    
     # create a transaction history and calculate fee or commission
   end
 
   private
+
+  def common_refer_attributes(client)
+    @properties = ApplicationHelper::PROPERTIES
+    @number_of_rooms = ApplicationHelper::ROOMS
+    @parking_lots = ApplicationHelper::PARKING_LOTS
+    @bathrooms = ApplicationHelper::BATHROOMS
+
+    @current_type_of_property = client.type_of_property
+    @current_number_of_rooms = client.number_of_rooms
+    @current_parking_lot = client.parkng_lot
+    @current_number_of_bathrooms = client.number_of_bathrooms  
+  end
 
   def get_role_user
     @role_user = current_user.role
@@ -166,7 +184,7 @@ class ClientsController < ApplicationController
   end
 
   def permit_params_user
-    params.permit(:first_name, :last_name, :email, :phone, :role, :password, :password_confirmation)
+    params.permit(:first_name, :last_name, :email, :phone, :role, :password, :password_confirmation, :notes)
   end
 
   def has_valid_profile
@@ -178,6 +196,10 @@ class ClientsController < ApplicationController
       valid = user.agent
     end    
     redirect_to profile_index_path, flash: {notice: "Please complete your profile"} unless valid
+  end
+
+  def permit_params_client
+    params.permit(:agent_id, :broker_id, :type_of_property, :number_of_rooms, :parkng_lot, :budget)
   end
 
   # def get_clients_by_agents_id
