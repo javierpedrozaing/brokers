@@ -20,9 +20,9 @@
     <% count = 0 %>
     <% @agents.each do |agent| %>
       <tr>
-        <td><%= count += 1 %></td>
-        <td><%= agent.full_name %></td>
-        <td><%= link_to agent.user.email, show_agent_path(agent.user.id)  %></td>
+        <td><%= count += 1 %></td>        
+        <td><%= link_to agent.full_name, show_agent_path(agent.user.id)  %></td>
+        <td><%= agent.user.email %></td>
         <td><%= agent.user.phone %></td>
         <td><%= agent.user.user_state %></td>
         <td><%= agent.clients.count %></td>

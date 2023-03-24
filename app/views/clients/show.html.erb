@@ -1,5 +1,4 @@
-<div class="container profile-form">
-
+<div class="container update-client">
   <% if @user.errors.any? %>
       <div id="errorExplanation">
         <% @user.errors.full_messages.each do |msg| %>
@@ -8,51 +7,67 @@
         </ul>
       </div>
   <% end %>
-
-  <%= form_with(url: edit_client_path(@user), local: true, method: "post") do |f| %>
-    <h2>Update Client</h2>
-    
-    <div class="form-outline mb-4">
-      <%= f.label :first_name, class: "form-label" %><br />
-      <%= f.text_field :first_name, value: @user.first_name, autofocus: true, autocomplete: "Last name", class: "form-control" %>
-    </div>
-
-    <div class="form-outline mb-4">
-      <%= f.label :last_name, class: "form-label" %><br />
-      <%= f.text_field :last_name, value: @user.last_name, autofocus: true, autocomplete: "Last name", class: "form-control" %>
-    </div>
-
-    <div class="form-outline mb-4">
-      <%= f.label :phone, class: "form-label" %><br />
-      <%= f.number_field :phone, value: @user.phone, autofocus: true, autocomplete: "Phone", class: "form-control" %>
-    </div>
-
-    <div class="form-outline mb-4">
-      <%= f.label :email, class: "form-label" %><br />
-      <%= f.email_field :email, value: @user.email, autofocus: true, autocomplete: "email", class: "form-control" %>
-    </div>
-
-    <br/>
-
-    <div class="row g-3">
-      <div class="col-md-2">
-        <%= f.label "User state:", class: "form-label" %><br />
+  <div class="row">      
+    <%= form_with(url: edit_client_path(@user), local: true, method: "post") do |f| %>
+    <div class="col-md-12">
+      <h2>Update Client</h2>
+      <%= f.hidden_field :client_id, value: @client.id %>
+      <div class="form-outline mb-4">
+        <%= f.label :first_name, class: "form-label" %><br />
+        <%= f.text_field :first_name, value: @user.first_name, autofocus: true, autocomplete: "Last name", class: "form-control" %>
       </div>
-      <div class="col-md-2">        
-        <%= radio_button_tag :user_state, "Inactive", @user.user_state.downcase == 'inactive' %>
-        <%= f.label "Inactive", class: "form-label" %><br />
+
+      <div class="form-outline mb-4">
+        <%= f.label :last_name, class: "form-label" %><br />
+        <%= f.text_field :last_name, value: @user.last_name, autofocus: true, autocomplete: "Last name", class: "form-control" %>
       </div>
+
+      <div class="form-outline mb-4">
+        <%= f.label :phone, class: "form-label" %><br />
+        <%= f.number_field :phone, value: @user.phone, autofocus: true, autocomplete: "Phone", class: "form-control" %>
+      </div>
+
+      <div class="form-outline mb-4">
+        <%= f.label :email, class: "form-label" %><br />
+        <%= f.email_field :email, value: @user.email, autofocus: true, autocomplete: "email", class: "form-control" %>
+      </div>
+      <br/>
+    </div>          
+    <div class="row">
+      <div class="col-md-12">
+        <%= f.label "User state:", class: "form-label" %><br /><br />
+      </div>
+      <% @user_states.each do |state| %>
+        <div class="col-md-6">
+          <%= f.radio_button :user_state, state, checked: (@user.user_state == state) %>
+          <%= f.label state, class: "form-label" %><br />
+        </div>
+      <% end %>    
+      <br/><br/>
       
-      <div class="col-md-4">
-        <%= radio_button_tag :user_state, "Active", @user.user_state.downcase == 'active' %>
-        <%= f.label "Active", class: "form-label" %><br />
-      </div>
-    </div>
-    
-    <br/>
-    
-    <div class="actions d-grid col-12 mx-auto">
-      <%= f.submit "Update", class: "btn btn-success" %>
-    </div>
-  <% end %>
+      <!-- Enable when close state is selected -->
+      <div class="close-transaction-fields">
+        <div class="form-outline mb-4">
+          <%= f.label :proof_check_pdf, class: "form-label" %><br />         
+            <%= link_to "proof check pdf", @pdf_attached if @pdf_attached.attached?  %>
+            <%= f.file_field(:proof_check, accept: 'pdf') %>
+        </div>
+        
+        <div class="form-outline mb-4">
+          <%= f.label :commission, class: "form-label" %><br />
+          <%= f.text_field :commission, value: @user.commission, autofocus: true, class: "form-control" %>
+        </div>
+
+        <div class="form-outline mb-4">
+          <%= f.label :full_sale, class: "form-label" %><br />
+          <%= f.text_field :full_sale, value: @user.full_sale, autofocus: true, class: "form-control" %>
+        </div>
+      </div>  
+      
+        <div class="actions d-grid col-12 mx-auto">
+          <%= f.submit "Update", class: "btn btn-success" %>
+        </div>    
+    </div>  
+    <% end %>
+  </div>
 </div>

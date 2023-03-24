@@ -18,5 +18,16 @@ $(document).on('turbolinks:load', function(){
     }    
     return true;
   });
-   
+
+  $("input[type='radio']").on("click", function() {
+    $('.close-transaction-fields').css("display", "none");
+  });
+
+  $('#user_state_close').on('click', function() {
+    $('.close-transaction-fields').css("display", "block");
+  });
+  if ($("#user_state_close").is(":checked")) {
+    $('.close-transaction-fields').css("display", "block");
+  }
+ 
 });

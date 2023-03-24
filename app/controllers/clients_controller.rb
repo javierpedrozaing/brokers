@@ -18,19 +18,22 @@ class ClientsController < ApplicationController
   end
 
   def show
+    @user_states = ApplicationHelper::USER_STATES
     @user = User.find(params[:user_id])
+    client_id = @user.client.id
+    @client = Client.find(client_id)
+    transaction = Transaction.find_by_client_id(client_id)    
+    @pdf_attached = transaction.proof_check
   end
 
   def edit
     user_id = params[:user_id]
-    client = User.find(user_id).client
-    client.user.first_name = params[:first_name] if params[:first_name]
-    client.user.last_name = params[:last_name] if params[:last_name]
-    client.user.phone = params[:phone] if params[:phone]
-    client.user.email = params[:email] if params[:email]
-    client.user.user_state = params[:user_state] if params[:user_state]
+    user = User.find(user_id)
+    transaction = Transaction.find_by_client_id(params[:client_id])    
+    transaction.proof_check.attach(params[:proof_check]) if params[:proof_check]
+    transaction.save if params[:user_state] == 'active'
     
-    if client.save!
+    if user.update!(permit_params_user)
       redirect_to show_client_path(user_id), flash: {notice: "Client successfully updated"}
     else
       render :edit
@@ -184,7 +187,7 @@ class ClientsController < ApplicationController
   end
 
   def permit_params_user
-    params.permit(:first_name, :last_name, :email, :phone, :role, :password, :password_confirmation, :notes)
+    params.permit(:first_name, :last_name, :email, :phone, :role, :password, :password_confirmation, :notes, :user_state, :commission, :full_sale)
   end
 
   def has_valid_profile
