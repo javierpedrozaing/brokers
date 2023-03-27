@@ -37,9 +37,10 @@ function initMap(locations) {
     zoom: 5,
   });
   
-  if(locations && locations.length > 0) {    
+  if(locations && locations.length > 1) {    
     latitude = (locations && locations[0].coordinates) ? locations[0].coordinates[0] : ""
     longitude = (locations && locations[0].coordinates) ? locations[0].coordinates[1] : ""
+    
     map.setCenter({ lat: latitude, lng:  longitude })
   
     const image =
