@@ -41,8 +41,10 @@ function initMap(locations) {
     latitude = (locations && locations[0].coordinates) ? locations[0].coordinates[0] : ""
     longitude = (locations && locations[0].coordinates) ? locations[0].coordinates[1] : ""
     
-    map.setCenter({ lat: latitude, lng:  longitude })
-  
+    if (latitude.length > 0 && longitude.length > 0) {
+      map.setCenter({ lat: latitude, lng:  longitude })
+    }
+
     const image =
     "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
       
