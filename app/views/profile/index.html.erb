@@ -3,7 +3,7 @@
     <h2>Profile</h2>
     <p style="text-align:center;">Welcome to brokersApp, you have to complete some information</p>
     <div class="<%= @user.role.downcase == 'broker' ? 'col-sm-4' : 'col-sm-4'  %>">
-      <%= form_with(url: update_profile_path(@user), method: "post") do |f| %>
+      <%= form_with(url: update_profile_path(@user), locale: true, method: "post") do |f| %>
         <% if current_user.member_since.blank? %>
         <% end %>
         <%= f.hidden_field :role, value: @user.role %>
