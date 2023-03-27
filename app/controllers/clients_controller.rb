@@ -40,12 +40,12 @@ class ClientsController < ApplicationController
     end
   end
 
-  def create
+  def create    
     select_referreds_by(@role_user)
     @user = User.new(permit_params_user)
-    if @user.save!
+    if @user.save
       client = Client.new
-      client.user_id = @user.id      
+      client.user_id = @user.id
       if current_user.role.downcase == 'broker'
         client.agent_id = 0
         client.broker_id = current_user.broker.id
@@ -54,9 +54,7 @@ class ClientsController < ApplicationController
         client.broker_id = 0
       end
       client.save!
-    end
 
-    if @user && client
       flash[:success] = "Client was successfully created."
       redirect_to clients_path
     else

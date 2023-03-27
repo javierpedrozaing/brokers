@@ -68,7 +68,7 @@
             <td><%= Broker.find(referido.broker_id).full_name %></td>
           <% end %>
           <% if current_user.role.downcase == 'agent' %>
-            <td><%= link_to "Refer Broker", refer_broker_path(referido.user.id), class: "btn btn-success" %></td>
+            <td><%= link_to "Manage", show_client_path(referido.user.id), class: "btn btn-success" %></td>
           <% else %>
             <td><%= link_to "Refer Agent", refer_agent_path(referido.user.id), class: "btn btn-success" %></td>
           <% end %>
@@ -99,7 +99,7 @@
       <% @outbound_referidos.each do |referido| %>
         <% unless referido.id == 0 %>
         <tr>
-          <td><%= count += 1 %></td>          
+          <td><%= count += 1 %></td>
           <td><%= link_to referido.full_name, show_client_path(referido.user.id) %></td>
           <td><%= referido.user.email %></td>                    
           <td><%= referido.user.phone %></td>

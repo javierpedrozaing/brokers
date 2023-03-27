@@ -1,7 +1,7 @@
 <div class="container profile-form">
   <div class="row justify-content-md-center">
     <h2>Profile</h2>
-    <p>Welcome to brokersApp, you have to complete some information</p>
+    <p style="text-align:center;">Welcome to brokersApp, you have to complete some information</p>
     <div class="<%= @user.role.downcase == 'broker' ? 'col-sm-4' : 'col-sm-4'  %>">
       <%= form_with(url: update_profile_path(@user), method: "post") do |f| %>
         <% if current_user.member_since.blank? %>

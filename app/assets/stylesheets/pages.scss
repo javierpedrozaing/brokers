@@ -2,8 +2,7 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-#errorExplanation {
-  max-width: 60%;
+#errorExplanation {  
   margin: 0 auto;
   li{
     color:red;
@@ -36,6 +35,19 @@ form .btn.search-broker{
   margin: 20px auto;
 }
 
+h3 {
+  width: 100%;
+  height: 30px;
+  background: rgb(245, 230, 220);
+  text-align: center;
+}
+h2 {
+  width: 100%;
+  height: 40px;
+  background: rgb(220, 222, 245);
+  text-align: center;
+}
+
 
 #map-brokers {
   height: 600px;
@@ -47,19 +59,7 @@ form .btn.search-broker{
   .list {
     width: 90%;
     margin: 20px auto;    
-  }
-  h3 {
-    width: 100%;
-    height: 30px;
-    background: rgb(245, 230, 220);
-    text-align: center;
-  }
-  h2 {
-    width: 100%;
-    height: 40px;
-    background: rgb(220, 222, 245);
-    text-align: center;
-  }
+  }  
 }
 
 .close-transaction-fields {
@@ -85,6 +85,11 @@ form .btn.search-broker{
       display: block;
     }
   } 
+}
+
+.new-client, .refer-client {
+  width: 60% !important;
+  margin: 0 auto;
 }
 
 @media (max-width: 768px) {
