@@ -33,13 +33,14 @@ function getLocations() {
 
 
 function initMap(locations) {
+  const map = new google.maps.Map(document.getElementById("map"), {
+    zoom: 5,
+  });
+  
   if(locations && locations.length > 0) {    
     latitude = (locations && locations[0].coordinates) ? locations[0].coordinates[0] : ""
     longitude = (locations && locations[0].coordinates) ? locations[0].coordinates[1] : ""
-    const map = new google.maps.Map(document.getElementById("map"), {
-      zoom: 5,
-      center: { lat: latitude, lng:  longitude },
-    });
+    map.setCenter({ lat: latitude, lng:  longitude })
   
     const image =
     "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
@@ -69,30 +70,25 @@ function initMap(locations) {
         }
       })(marker, i));
     }  
-  }  
-    
-  if (navigator.geolocation) {
-
-    const map = new google.maps.Map(document.getElementById("map"), {
-      zoom: 5,
-    });
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const pos = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        };
-        
-        map.setCenter(pos);
-      },
-      () => {
-        handleLocationError(true, infoWindow, map.getCenter());
-      }
-    );
   } else {
-    // Browser doesn't support Geolocation
-    handleLocationError(false, infoWindow, map.getCenter());
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+          
+          map.setCenter(pos);
+        },
+        () => {
+          handleLocationError(true, infoWindow, map.getCenter());
+        }
+      );
+    } else {
+      // Browser doesn't support Geolocation
+      handleLocationError(false, infoWindow, map.getCenter());
+    }  
   }
-
+  
 }
