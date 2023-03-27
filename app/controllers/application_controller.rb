@@ -65,8 +65,7 @@ class ApplicationController < ActionController::Base
     country = HTTParty.get("https://api.countrystatecity.in/v1/countries/#{country}", {
       headers: headers,
       debug_output: STDOUT, # To show that User-Agent is Httparty
-    })    
-    country["name"]
+    })
   end
 
   def get_state(country, state)
@@ -74,8 +73,6 @@ class ApplicationController < ActionController::Base
       headers: headers,
       debug_output: STDOUT, # To show that User-Agent is Httparty
     })
-
-    state["name"]
   end
 
   def headers

@@ -17,6 +17,7 @@ $(document).on('turbolinks:load', function(){
   });
     
   $('#state').change(function(){
+    current_country = $('#country').val();
     $('#city').empty();
     $('#state').data("state_name", $(this).text().toLowerCase());
     console.log("state => ", $( this ).val());
@@ -36,7 +37,8 @@ $(document).on('turbolinks:load', function(){
           });
           $('#state').change(function(){
             $('#city').empty();
-            $('#city').data("city_name", $(this).text().toLowerCase());            
+            $('#city').data("city_name", $(this).text().toLowerCase());
+            console.log("currentb country => ", country); 
             getCitiesByCountryandState(country, $( this ).val());            
           });
         }
