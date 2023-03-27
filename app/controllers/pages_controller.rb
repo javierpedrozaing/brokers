@@ -11,7 +11,7 @@ class PagesController < ApplicationController
     geocoder = Geocoder
     brokers = Broker.all.where.not(id: 0)
     brokers_coordinates = brokers.map do |br|
-      country = get_country(br&.country) unless br&.country
+      country = get_country(br.country) unless br.try(:country)
       country_name = country["name"] unless country.nil?
       state = get_state(country_name, br.state)
       state_name = state['name'] unless state.nil?
