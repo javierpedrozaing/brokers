@@ -15,7 +15,7 @@
 
   <body>
     <%= render 'partials/header' %>    
-    <% flash.each do |type, msg| %>   
+    <% flash.each do |type, msg| %>
       <div class="<%= type %>_message" role="alert">
         <%= msg %> <!-- notice -->
       </div>

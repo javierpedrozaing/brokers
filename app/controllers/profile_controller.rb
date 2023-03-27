@@ -8,10 +8,10 @@ class ProfileController < ApplicationController
     @current_country = current_user.role.downcase == 'broker' ? @broker&.country : @agent&.country
     @current_state = current_user.role.downcase == 'broker' ? @broker.state : @agent.state
     @current_city = current_user.role.downcase == 'broker' ? @broker.city : @agent.city
-    @countries = countries_list.map{|c| [c['name'], c['iso2']]} if countries_list
+    @countries = countries_list.map{|c| [c['name'], c['iso2']]} unless countries_list.empty?
     @states = @current_country ? states_list_by_country(@current_country).map{|c| [c['name'], c['iso2']]} : []
     @cities = @current_country ? cities_list(@current_country).map{|c| [c['name'], c['id']]} : []
-    byebug
+    
   end
 
   def update_profile
