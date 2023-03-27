@@ -36,7 +36,7 @@ Rails.application.routes.draw do
 
   post 'get_states_by_country/:country_id', to: 'pages#get_states_by_country'
 
-  post 'get_cities_by_country_and_state/:country_id/:state_id', to: 'pages#get_cities_by_country_and_state'
+  post 'get_cities_by_country_and_state/', to: 'pages#get_cities_by_country_and_state'
 
   get 'dashboard', to: 'dashboard#index', as: 'dashboard'
   
