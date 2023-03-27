@@ -11,13 +11,15 @@ class PagesController < ApplicationController
     geocoder = Geocoder
     brokers = Broker.all.where.not(id: 0)
     brokers_coordinates = brokers.map do |br|
-      country = get_country(br.country) unless br.try(:country)
-      country_name = country["name"] unless country.nil?
-      state = get_state(country_name, br.state)
-      state_name = state['name'] unless state.nil?
-      full_address = "#{br.address}, #{country_name}, #{state_name}"
+      country = get_country(br.country) unless br.country.empty?
+      country_name = country['name']  unless br.country.empty?
+      state = get_state(country_name, br.try(:state)) unless br.state.empty?
+      state_name = state['name'] unless br.state.empty?
+      address = br.address unless br.address.empty?
+      location = "#{address}, #{country_name}, #{state_name}"
+      full_address = location.strip.length > 3 ? location : ''      
       photo = br.user.photo.attached? ? url_for(br.user.photo) : ''
-      {   
+      {
         broker_id: br.id,
         name: "#{br.user.first_name} #{br.user.last_name}",
         city: br.city,

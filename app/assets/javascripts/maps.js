@@ -32,21 +32,22 @@ function getLocations() {
 };
 
 
-function initMap(locations) { 
+function initMap(locations) {
   const map = new google.maps.Map(document.getElementById("map"), {
     zoom: 5,
   });
 
   console.log("locations => ", locations.length);
-  latitude = (locations && locations[0].coordinates) ? locations[0].coordinates[0] : ""
-  longitude = (locations && locations[0].coordinates) ? locations[0].coordinates[1] : ""
+  latitude = (locations && locations[0]?.coordinates) ? locations[0]?.coordinates[0] : ""
+  longitude = (locations && locations[0]?.coordinates) ? locations[0]?.coordinates[1] : ""
   
-  if (latitude  && longitude ) {
+  if (latitude.length > 0  && longitude.length > 0 ) {
     map.setCenter({ lat: latitude, lng:  longitude })
   } else {   
+    
     const pos = {
-      lat: position.coords.latitude,
-      lng: position.coords.longitude,
+      lat: latitude,
+      lng: longitude,
     };
     map.setCenter(pos);
   }
@@ -67,7 +68,7 @@ function initMap(locations) {
 
     console.log(locations);
     marker = new google.maps.Marker({
-      position: new google.maps.LatLng(locations[i].coordinates[0], locations[i].coordinates[1]),
+      position: new google.maps.LatLng(locations[i]?.coordinates[0], locations[i]?.coordinates[1]),
       map: map,
       icon: image,
     });
