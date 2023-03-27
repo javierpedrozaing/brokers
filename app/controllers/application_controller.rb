@@ -53,7 +53,7 @@ class ApplicationController < ActionController::Base
     render json: {states: states}
   end
 
-  def cities_by_country_and_state(country_id, state_id)
+  def cities_by_country_and_state(country_id, state_id)    
     cities = HTTParty.get("https://api.countrystatecity.in/v1/countries/#{country_id}/states/#{state_id}/cities", {
       headers: headers,
       debug_output: STDOUT, # To show that User-Agent is Httparty

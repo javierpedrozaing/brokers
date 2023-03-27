@@ -6,9 +6,10 @@ $(document).on('turbolinks:load', function(){
     $('#city').data("city_name", $('#city').val());
 
     current_country = $('#country').data('country_name');
-    current_state = $('#state').data('state_name');
-    
-    getCitiesByCountryandState(current_country, current_state);
+    current_state = $('#state').data('state_name');    
+    if(current_country.length > 0 && current_state.length > 0) {
+      getCitiesByCountryandState(current_country, current_state);
+    }    
   }
   $('#country').change(function(){
     console.log("country => ", $( this ).val())
@@ -37,8 +38,7 @@ $(document).on('turbolinks:load', function(){
           });
           $('#state').change(function(){
             $('#city').empty();
-            $('#city').data("city_name", $(this).text().toLowerCase());
-            console.log("currentb country => ", country); 
+            $('#city').data("city_name", $(this).text().toLowerCase());           
             getCitiesByCountryandState(country, $( this ).val());            
           });
         }

@@ -52,7 +52,7 @@ class PagesController < ApplicationController
   end
 
   def get_cities_by_country_and_state
-    cities_by_country_and_state(params[:country_id], params[:state_id])
+    cities_by_country_and_state(params[:country], params[:state_id])
   end
 
   private  
