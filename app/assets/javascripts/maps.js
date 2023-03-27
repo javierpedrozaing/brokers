@@ -72,6 +72,11 @@ function initMap(locations) {
   }  
     
   if (navigator.geolocation) {
+
+    const map = new google.maps.Map(document.getElementById("map"), {
+      zoom: 5,
+    });
+
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const pos = {
