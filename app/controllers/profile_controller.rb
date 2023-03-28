@@ -8,7 +8,6 @@ class ProfileController < ApplicationController
     @current_country = current_user.role.downcase == 'broker' ? @broker&.country : @agent&.country
     @current_state = current_user.role.downcase == 'broker' ? @broker.state : @agent.state
     @current_city = current_user.role.downcase == 'broker' ? @broker.city : @agent.city
-    byebug
     @countries = countries_list.map{|c| [c['name'], c['iso2']]} unless countries_list.nil?
     states_list = states_list_by_country(@current_country) unless @current_country.nil?
     @states = states_list.nil? ? [] : states_list.map{|c| [c['name'], c['iso2']]}
