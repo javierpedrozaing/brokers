@@ -10,7 +10,7 @@ function getLocations() {
     url: "/brokers_locations",
     type: "get",
     success: function(data) {   
-      coordinates = data.map((data) => {
+      locations = data.map((data) => {
         photo = data.photo ? data.photo : 'https://sleepy-garden-18861.herokuapp.com/assets/profile-c6176daa79e0b765aaa2547b00b4f89cc40ca69e274ddcc123d271cd0a0ac574.png';
         return {
           coordinates: data.coordinates,
@@ -19,12 +19,9 @@ function getLocations() {
           city: data.city,
           phone: data.phone
         }
-      });    
+      });
       //window.initMap = initMap();
-      if (coordinates !== undefined) {
-        initMap(coordinates);
-      }
-      
+      initMap(locations);
     },    
     error: function(data) {
       console.error(data);
@@ -64,8 +61,8 @@ function initMap(locations) {
         console.log("Browser doesn't support Geolocation");
       }
     );
-  } 
-  
+  }
+
   for (i = 0; i < locations.length; i++) {
 
     const infowindow = new google.maps.InfoWindow({
@@ -75,18 +72,20 @@ function initMap(locations) {
       + "</div></div>",
     });
 
-    console.log(locations);
-    marker = new google.maps.Marker({
-      position: new google.maps.LatLng(locations[i]?.coordinates[0], locations[i]?.coordinates[1]),
-      map: map,
-      icon: image,
-    });
-    
-    google.maps.event.addListener(marker, 'click', (function(marker, i) {
-      return function() {
-        // infowindow.setContent(locations[i][0]);
-        infowindow.open(map, marker);
-      }
-    })(marker, i));
+    if(locations[i].coordinates) {
+      console.log(locations);
+      marker = new google.maps.Marker({
+        position: new google.maps.LatLng(locations[i]?.coordinates[0], locations[i]?.coordinates[1]),
+        map: map,
+        icon: image,
+      });
+
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+          // infowindow.setContent(locations[i][0]);
+          infowindow.open(map, marker);
+        }
+      })(marker, i));
+    }
   }
 }
