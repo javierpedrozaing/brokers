@@ -7,12 +7,13 @@ class ProfileController < ApplicationController
     @broker = Broker.find_by_user_id(current_user.id) || Broker.new
     @current_country = current_user.role.downcase == 'broker' ? @broker&.country : @agent&.country
     @current_state = current_user.role.downcase == 'broker' ? @broker.state : @agent.state
-    @current_city = current_user.role.downcase == 'broker' ? @broker.city : @agent.city    
+    @current_city = current_user.role.downcase == 'broker' ? @broker.city : @agent.city
+    byebug
     @countries = countries_list.map{|c| [c['name'], c['iso2']]} unless countries_list.nil?
     states_list = states_list_by_country(@current_country) unless @current_country.nil?
     @states = states_list.nil? ? [] : states_list.map{|c| [c['name'], c['iso2']]}
     cities_list = cities_list(@current_country) unless @current_country.nil?
-    @cities = cities_list.nil? ? [] : cities_list.map{|c| [c['name'], c['id']]}
+    @cities = cities_list.nil? ? [] : cities_list.map{|c| [c['name'], c['name'].downcase]}
   end
 
   def update_profile

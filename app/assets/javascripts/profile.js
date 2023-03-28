@@ -7,9 +7,9 @@ $(document).on('turbolinks:load', function(){
 
     current_country = $('#country').data('country_name');
     current_state = $('#state').data('state_name');    
-    if(current_country.length > 0 && current_state.length > 0) {
-      getCitiesByCountryandState(current_country, current_state);
-    }    
+    // if(current_country.length > 0 && current_state.length > 0) {
+    //   getCitiesByCountryandState(current_country, current_state);
+    // }    
   }
   $('#country').change(function(){
     console.log("country => ", $( this ).val())
@@ -59,7 +59,7 @@ $(document).on('turbolinks:load', function(){
           cities = data.cities.map(city => [city.name, city.id]);     
           if ( cities.length > 0) {
             cities.forEach(city => {
-              $('#city').append(new Option(city[0], city[1]));
+              $('#city').append(new Option(city[0], city[0].toLowerCase()));
             });
           }
         }

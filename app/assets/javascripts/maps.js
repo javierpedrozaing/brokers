@@ -11,10 +11,11 @@ function getLocations() {
     type: "get",
     success: function(data) {   
       coordinates = data.map((data) => {
+        photo = data.photo ? data.photo : 'https://sleepy-garden-18861.herokuapp.com/assets/profile-c6176daa79e0b765aaa2547b00b4f89cc40ca69e274ddcc123d271cd0a0ac574.png';
         return {
           coordinates: data.coordinates,
           name: data.name,
-          photo: data.photo,
+          photo: photo,
           city: data.city,
           phone: data.phone
         }
