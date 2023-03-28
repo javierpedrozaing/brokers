@@ -37,25 +37,33 @@ function initMap(locations) {
     zoom: 5,
   });
 
-  console.log("locations => ", locations.length);
   latitude = (locations && locations[0]?.coordinates) ? locations[0]?.coordinates[0] : ""
   longitude = (locations && locations[0]?.coordinates) ? locations[0]?.coordinates[1] : ""
   
   if (latitude.length > 0  && longitude.length > 0 ) {
     map.setCenter({ lat: latitude, lng:  longitude })
-  } else {   
-    
-    const pos = {
-      lat: latitude,
-      lng: longitude,
-    };
-    map.setCenter(pos);
-  }
+  } 
 
   const image =
   "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
     
   var marker, i;
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        };
+        
+        map.setCenter(pos);
+      },
+      () => {
+        console.log("Browser doesn't support Geolocation");
+      }
+    );
+  } 
   
   for (i = 0; i < locations.length; i++) {
 

@@ -45,11 +45,7 @@ function getSearchLocations(position = null) {
       });    
       
       //window.initMap = initMap();
-      if (coordinates !== undefined) {
-        initSearchMap(coordinates, position);
-      } else {
-        initSearchMap(coordinates);
-      }      
+      initSearchMap(coordinates, position);
     },    
     error: function(data) {
       console.error(data);
@@ -59,15 +55,18 @@ function getSearchLocations(position = null) {
 
 
 function initSearchMap(locations, position = null) {  
-  if (locations.length > 0) {
-    latitude = locations ? locations[0].coordinates[0] : ""
-    longitude = locations ? locations[0].coordinates[1] : ""
-  
-    const map = new google.maps.Map(document.getElementById("map-brokers"), {
-      zoom: 12,
-      center: { lat: latitude, lng:  longitude },
-    });   
-     
+
+  const map = new google.maps.Map(document.getElementById("map-brokers"), {
+    zoom: 12
+  });   
+ 
+    latitude = (locations && locations[0]?.coordinates) ? locations[0]?.coordinates[0] : ""
+    longitude = (locations && locations[0]?.coordinates) ? locations[0]?.coordinates[1] : ""
+    
+    if (latitude.length > 0  && longitude.length > 0 ) {
+      map.setCenter({ lat: latitude, lng:  longitude })
+    } 
+
     if (position != null) {  
       const newpos = {
         lat: position[0],
@@ -89,17 +88,16 @@ function initSearchMap(locations, position = null) {
             handleLocationError(true, infoWindow, map.getCenter());
           }
         );
-      } else {
-        // Browser doesn't support Geolocation
-        handleLocationError(false, infoWindow, map.getCenter());
+      } else {        
+        console.log("Browser doesn't support Geolocation");
       }
     
     }
+    
     const image =
     "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
       
-    var marker, i;
-    
+    var marker, i;    
     for (i = 0; i < locations.length; i++) {
 
       const infowindow = new google.maps.InfoWindow({
@@ -109,19 +107,19 @@ function initSearchMap(locations, position = null) {
         + "</div></div>",
       });
 
-      console.log(locations);
-      marker = new google.maps.Marker({
-        position: new google.maps.LatLng(locations[i].coordinates[0], locations[i].coordinates[1]),
-        map: map,
-        icon: image,
-      });
-      
-      google.maps.event.addListener(marker, 'click', (function(marker, i) {
-        return function() {
-          // infowindow.setContent(locations[i][0]);
-          infowindow.open(map, marker);
-        }
-      })(marker, i));
+        console.log(locations);
+        marker = new google.maps.Marker({
+          position: new google.maps.LatLng(locations[i].coordinates[0], locations[i].coordinates[1]),
+          map: map,
+          icon: image,
+        });
+        
+        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+          return function() {
+            // infowindow.setContent(locations[i][0]);
+            infowindow.open(map, marker);
+          }
+        })(marker, i));
+   
     }
-  }  
 }
