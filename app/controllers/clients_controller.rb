@@ -23,7 +23,7 @@ class ClientsController < ApplicationController
     client_id = @user.client.id
     @client = Client.find(client_id)
     transaction = Transaction.find_by_client_id(client_id)    
-    @pdf_attached = transaction.proof_check
+    @pdf_attached = transaction.proof_check if transaction
   end
 
   def edit
@@ -107,7 +107,7 @@ class ClientsController < ApplicationController
 
   def create_transaction(params, client)
     if current_user.role.downcase == 'agent'
-      origin_agent = current_user.agent.id
+      origin_agent = current_user.agent.id      
       destination_broker = params[:client][:broker_id]
     end
 
@@ -157,12 +157,15 @@ class ClientsController < ApplicationController
 
   def get_clients_by(role_user)
     if role_user.downcase == 'broker'
-      broker = User.find(current_user.id).broker 
+      broker = User.find(current_user.id).broker
       return unless broker
-      unassing_clients = Client.where(broker_id: broker.id, agent_id: 0)
-      inbound_clients =Client.where(broker_id: broker.id).joins(:transactions).where('transactions.destination_broker = ?', broker.id)
+      own_clients = Client.where(broker_id: broker.id, agent_id: 0)
+      unassing_clients_refered = Client.where(broker_id: broker.id).joins(:transactions).where('transactions.destination_broker = ?', broker.id)      
+      unassing_clients = unassing_clients_refered.empty? ? own_clients : own_clients + unassing_clients_refered
+
+      inbound_clients =Client.where(broker_id: broker.id).joins(:transactions).where('transactions.origin_broker = ?', broker.id)
       outbound_clients = Client.joins(:transactions).where('transactions.origin_broker = ?', broker.id)
-    else      
+    else
       agent = User.find(current_user.id).agent
       unassing_clients = Client.where(agent_id: agent.id, broker_id: 0)
       inbound_clients = Client.where(agent_id: agent.id).joins(:transactions).where('transactions.assigned_agent = ?', agent.id)

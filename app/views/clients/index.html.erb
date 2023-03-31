@@ -37,7 +37,7 @@
     </tbody>
   </table>
   <br/>
-  <h3>Inboud Clients</h3>
+  <h3>Clients</h3>
    <table class="table">
     <thead>
       <tr>
@@ -47,6 +47,9 @@
         <th scope="col">phone</th>
         <th scope="col">User status</th>
         <th scope="col">Assigned from</th>
+         <% if current_user.role.downcase == 'broker'%>
+        <th scope="col">Assigned to</th>
+        <% end %>
         <th scope="col"></th>
       </tr>
     </thead>
@@ -59,14 +62,37 @@
         <tr>
           <td><%= count += 1 %></td>
           <td><%= link_to referido.full_name, show_client_path(referido.user.id) %></td>
-          <td><%= referido.user.email %></td>          
+          <td><%= referido.user.email %></td>
           <td><%= referido.user.phone %></td>
-          <td><%= referido.user.role.downcase != 'broker' ? 'active' : 'inactive' %></td>
-          <% if current_user.role.downcase == 'broker'%>
-            <td><%= referido.agent.full_name %></td>
-          <% elsif current_user.role.downcase == 'agent' %>
-            <td><%= Broker.find(referido.broker_id).full_name %></td>
+          <td><%= referido.user.user_state %></td>           
+          <% 
+          origin_user_id = Transaction.find_by_client_id(referido.id).origin_broker          
+          origin_user = Broker.find(origin_user_id) if origin_user_id 
+
+          unless origin_user
+          origin_user_id = Transaction.find_by_client_id(referido.id).origin_agent         
+          origin_user = Agent.find(origin_user_id) if origin_user_id 
+          end          
+          %>
+          <% if current_user.role.downcase == 'broker'%>        
+            <td><%= origin_user.full_name if origin_user %></td>
+          <% elsif current_user.role.downcase == 'agent' %>          
+            <td><%= origin_user.full_name if origin_user %></td>
           <% end %>
+          <!-- assigned to -->
+           <% if current_user.role.downcase == 'broker'%>           
+           <% 
+           assigned_user_id = Transaction.find_by_client_id(referido.id).assigned_agent
+           assigned_user = Agent.find(assigned_user_id) if assigned_user_id 
+           
+            unless assigned_user
+              assigned_user_id = Transaction.find_by_client_id(referido.id).destination_broker
+              assigned_user = Broker.find(assigned_user_id) if assigned_user_id            
+            end
+           %>
+          <td><%= assigned_user.full_name if assigned_user %></td>
+          <% end %>
+
           <% if current_user.role.downcase == 'agent' %>
             <td><%= link_to "Manage", show_client_path(referido.user.id), class: "btn btn-success" %></td>
           <% else %>
@@ -104,7 +130,12 @@
           <td><%= referido.user.email %></td>                    
           <td><%= referido.user.phone %></td>
           <td><%= referido.user.role.downcase != 'broker' ? 'active' : 'inactive' %></td>
-          <td><%= referido.agent.full_name %></td>
+           <% if current_user.role.downcase == 'agent' %>           
+           <td><%= referido.broker.full_name %></td>
+           <% else %>
+           <td><%= referido.agent.full_name %></td>
+           <% end %>
+          
         
         </tr>
         <% end %>

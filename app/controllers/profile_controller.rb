@@ -9,10 +9,10 @@ class ProfileController < ApplicationController
     @current_state = current_user.role.downcase == 'broker' ? @broker.state : @agent.state
     @current_city = current_user.role.downcase == 'broker' ? @broker.city : @agent.city
     @countries = countries_list.map{|c| [c['name'], c['iso2']]} unless countries_list.nil?
-    states_list = states_list_by_country(@current_country) unless @current_country.nil?
-    @states = states_list.nil? ? [] : states_list.map{|c| [c['name'], c['iso2']]}
+    states_list = states_list_by_country(@current_country) unless @current_country.nil?    
+    @states = states_list.nil? || states_list.length <= 1 ? [] : states_list.map{|c| [c['name'], c['iso2']]}
     cities_list = cities_list(@current_country) unless @current_country.nil?
-    @cities = cities_list.nil? ? [] : cities_list.map{|c| [c['name'], c['name'].downcase]}
+    @cities = cities_list.nil? || states_list.length <= 1 ? [] : cities_list.map{|c| [c['name'], c['name'].downcase]}
   end
 
   def update_profile
@@ -47,7 +47,7 @@ class ProfileController < ApplicationController
   private
 
   def permit_params_user
-    params.permit(:first_name, :last_name, :phone, :email)
+    params.permit(:first_name, :last_name, :phone, :email, :user_state)
   end
 
   def permit_params_broker

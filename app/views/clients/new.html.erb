@@ -11,7 +11,7 @@
 
   <%= form_with(url: create_client_path(@user), local: true, method: "post") do |f| %>
   <h2>Create new Client</h2>
-  <%= f.hidden_field :user_state, value: 'active' %>
+  <%= f.hidden_field :user_state, value: current_user&.role&.downcase == 'agent'  ? 'active' : 'inactive' %>
   <div class="form-outline mb-4">
     <%= f.label :first_name, class: "form-label" %><br />
     <%= f.text_field :first_name, autofocus: true, autocomplete: "First name", class: "form-control" %>
@@ -33,7 +33,7 @@
   </div>
   
   <% if current_user.role.downcase == 'agent' %>
-  <div class="field">
+  <div class="field" style="display:none;">
     <%= f.label "Assign Agent", class: "form-label" %>
     <%= collection_select(:client, :agent_id, @referreds, :id, :full_name, {}, class: "form-control") %>
   </div>

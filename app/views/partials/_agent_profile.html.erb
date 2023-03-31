@@ -1,30 +1,31 @@
+
 <div class="col-sm-6">  
-  <div class="form-outline mb-4">
+  <div class="form-outline">
     <%= form.label :country, class: "form-label" %><br />
     <%= form.select(:country, @countries, {prompt: "select country", selected:  @current_country }, {:class => 'form-control' }) %>  
   </div>
 
-  <div class="form-outline mb-4">
+  <div class="form-outline">
     <%= form.label :state, class: "form-label" %><br />
     <%= form.select(:state, [], {prompt: "select state", selected: @current_state }, { :class => 'form-control' }) %>    
   </div>
 
-  <div class="form-outline mb-4">
+  <div class="form-outline">
     <%= form.label :city, class: "form-label" %><br />
     <%= form.select(:city, [], {prompt: "select city", selected: @current_city }, { :class => 'form-control' } ) %>
   </div>
 
-  <div class="form-outline mb-4">
+  <div class="form-outline">
     <%= form.label :address, class: "form-label" %><br />
     <%= form.text_field :address, value: @agent.address, autofocus: true, autocomplete: "Address", class: "form-control" %>  
   </div>
 
-  <div class="form-outline mb-4">
+  <div class="form-outline">
     <%= form.label "Company zip code", class: "form-label" %><br />
     <%= form.text_field :zip_code, value: @agent.zip_code, autofocus: true, autocomplete: "zip_code", class: "form-control" %>  
   </div>
 
-  <div class="form-outline mb-4" >
+  <div class="form-outline" style="display:none;">
     <%= form.label "Registerd in", class: "form-label" %><br />
     <%= form.text_field :created_at, value: current_user.created_at.strftime("%Y-%m-%d"), readonly: true, class: "form-control" %>    
   </div>

@@ -2,6 +2,8 @@ class Broker < ApplicationRecord
   belongs_to :user, class_name: "User", foreign_key: "user_id"
   has_many :transactions
   has_many :agents, class_name: "Agent"
+  has_many :clients, class_name: "Client"
+  
   geocoded_by :full_address
   after_validation :geocode, if: ->(obj){ obj.address.present? and obj.address_changed? }  
 

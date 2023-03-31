@@ -1,19 +1,22 @@
-<div class="container profile-form">
-  <div class="row justify-content-md-center">
+<div class="container profile-form">  
     <h2>Profile</h2>
-    <p style="text-align:center;">Welcome to brokersApp, you have to complete some information</p>
-    <div class="<%= @user.role.downcase == 'broker' ? 'col-sm-4' : 'col-sm-4'  %>">
-      <%= form_with(url: update_profile_path(@user), method: "post") do |f| %>
-        <% if current_user.member_since.blank? %>
-        <% end %>
+    <p style="text-align:center;">Welcome to brokersApp, you have to complete some information</p>    
+    <%= form_with(url: update_profile_path(@user), method: "post") do |f| %>
+    <div class="row justify-content-md-center">
+      <div class="<%= @user.role.downcase == 'broker' ? 'col-sm-4' : 'col-sm-4'  %>">
         <%= f.hidden_field :role, value: @user.role %>
         <%= f.hidden_field :user_id, value: @user.id %>
-        <div class="form-outline mb-4 photo">
+        <%= f.hidden_field :user_state, value: 'active' %>
+        <div class="form-outline mb-2 photo">
           <%= image_tag(image_url('profile.png')) unless @user.photo.attached? %>          
           <%= image_tag(@user.photo) if @user.photo.attached? %>
           <%= f.file_field :photo, accept: 'image/png,image/gif,image/jpeg', class: "form-control upload-photo" %>
         </div>
-      
+        <div class="form-outline mb-4"></div>
+      </div>
+    </div>
+    <div class="row justify-content-md-center">
+      <div class="<%= @user.role.downcase == 'broker' ? 'col-sm-4' : 'col-sm-4'  %>">
         <div class="form-outline mb-4">
           <%= f.label :first_name, class: "form-label" %><br />
           <%= f.text_field :first_name, value: @user.first_name, autofocus: true, autocomplete: "Last name", class: "form-control" %>
@@ -33,15 +36,15 @@
           <%= f.label :email, class: "form-label" %><br />
           <%= f.email_field :email, value: @user.email, autofocus: true, autocomplete: "email", class: "form-control" %>
         </div>
-    </div>
+      </div>
       <% if @user.role.downcase == 'broker' %>
-          <%= render 'partials/broker_profile', form: f %>
-        <% else %>
-          <%= render 'partials/agent_profile', form: f %>
-        <% end %>      
+        <%= render 'partials/broker_profile', form: f %>
+      <% else %>
+        <%= render 'partials/agent_profile', form: f %>
+      <% end %>      
       <div class="actions">
-          <%= f.submit "Update profile", class: "btn btn-primary btn-block mb-4 register"  %>      
+        <%= f.submit "Update profile", class: "btn btn-primary btn-block mb-4 register"  %>      
       </div>    
-      <% end %>
-  </div>
+    </div>
+  <% end %>  
 </div>
