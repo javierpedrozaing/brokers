@@ -49,12 +49,12 @@
       <div class="close-transaction-fields">
         <div class="form-outline mb-4">
           <%= f.label :proof_check_pdf, class: "form-label" %><br />         
-            <%= link_to "proof check pdf", @pdf_attached if @pdf_attached  %>
+            <%= link_to "proof check pdf", @pdf_attached if @pdf_attached.attached? %>
             <%= f.file_field(:proof_check, accept: 'pdf') %>
         </div>
         
         <div class="form-outline mb-4">
-          <%= f.label :commission, class: "form-label" %><br />
+          <%= f.label 'commission %', class: "form-label" %><br />
           <%= f.text_field :commission, value: @user.commission, autofocus: true, class: "form-control" %>
         </div>
 

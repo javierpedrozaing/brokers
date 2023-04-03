@@ -17,6 +17,10 @@ Rails.application.routes.draw do
   
   get 'clients/refer_agent/:user_id', to: 'clients#refer_agent', as: 'refer_agent'
   
+  get 'clients/assign_broker/:user_id', to: 'clients#assign_broker', as: 'assign_broker'
+  post 'clients/change_broker/:user_id', to: 'clients#change_broker', as: 'change_broker'
+
+
   post 'clients/create_referral/', to: 'clients#create_referral', as: 'create_referral'
 
   get 'clients', to: 'clients#index'

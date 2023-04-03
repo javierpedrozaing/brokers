@@ -1,0 +1,39 @@
+<div class="container refer-client">
+  <%= form_with(url: change_broker_path(@user), method: "post") do |f| %>
+  <h2>Update client</h2>
+
+  <%= f.hidden_field :client_id, value: @client.id %>
+
+  <div class="form-outline mb-4">
+    <%= f.label :first_name, class: "form-label" %><br />
+    <%= f.text_field :first_name, autofocus: true, autocomplete: "First name", value: @client.user.first_name, readonly: true, class: "form-control" %>
+  </div>
+
+  <div class="form-outline mb-4">
+    <%= f.label :last_name, class: "form-label" %><br />
+    <%= f.text_field :last_name, autofocus: true, autocomplete: "Last name", value: @client.user.last_name, readonly: true, class: "form-control" %>
+  </div>
+
+  <div class="form-outline mb-4">
+    <%= f.label :phone, class: "form-label" %><br />
+    <%= f.text_field :phone, autofocus: true, autocomplete: "Phone", value: @client.user.email, readonly: true, class: "form-control" %>
+  </div>
+
+  <div class="form-outline mb-4">
+    <%= f.label :email, class: "form-label" %><br />
+    <%= f.email_field :email, autofocus: true, autocomplete: "email", value: @client.user.email, readonly: true, class: "form-control" %>
+  </div>
+  
+  <div class="field">
+    <%= f.label "Assign Broker", class: "form-label" %>
+    <%= collection_select(:client, :broker_id, @brokers, :id, :full_name, {}, class: "form-control") %>
+  </div>
+  <br/>
+
+  <br/>
+  
+  <div class="actions d-grid col-12 mx-auto">
+    <%= f.submit "Refer", class: "btn btn-success" %>
+  </div>
+  <% end %>
+</div>

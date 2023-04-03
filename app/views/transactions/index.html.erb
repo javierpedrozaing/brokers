@@ -4,7 +4,7 @@
   <div class="actions d-grid col-10 justify-content-md-start">
     <%# link_to "New Client", new_client_path, class: "btn btn-primary btn-block mb-4" %>
   </div>
-  <table class="table">
+  <table class="table transactions-list">
     <thead>
         <tr>
           <th scope="col">#</th>
@@ -18,23 +18,24 @@
           <th scope="col">Property Address</th>
           <th scope="col">Close Date</th>
           <th scope="col">Proof Check(PDF)</th>
-          <th scope="col">Role</th>
-
-          <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
     <% count = 0 %>
-        <% if @users %>
-          <% @users.each do |user| %>
+        <% if @transactions %>
+          <% @transactions.each do |transaction| %>
             <tr>
               <td><%= count += 1 %></td>
-              <td><%= user.full_name %></td>
-              <td><%= user.email %></td>
-              <td><%= user.phone %></td>
-              <td><%= user.user_state%></td>
-              <td><%= user.role %></td>
-              <td><%= link_to "Edit", show_user_path(user.id), class: "btn btn-success" %></td>
+              <td><%= Agent.find(transaction.origin_agent).user.full_name unless transaction.origin_agent.nil? %> / <%= Broker.find(transaction.origin_broker).user.full_name unless transaction.origin_broker.nil? %> </td>
+              <td><%= Agent.find(transaction.assigned_agent).user.full_name unless transaction.assigned_agent.nil? %> / <%= Broker.find(transaction.destination_broker).user.full_name unless transaction.destination_broker.nil?  %> </td>
+              <td><%= transaction.client.user.full_name %></td>
+              <td><%= transaction.client.user.email%></td>
+              <td><%= transaction.client.user.user_state.sub('_', ' ').capitalize %></td>
+              <td><%= transaction.contract_price%></td>
+              <td><%= transaction.client.type_of_property %></td>
+              <td><%= transaction.property_address %></td>
+              <td><%= transaction.close_date %></td>
+              <td><%= link_to "proof check pdf", transaction.proof_check if transaction.proof_check.attached? %></td>
             </tr>
           <% end %> 
         <% end %>

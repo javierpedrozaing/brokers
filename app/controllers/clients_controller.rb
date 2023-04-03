@@ -31,9 +31,12 @@ class ClientsController < ApplicationController
     user = User.find(user_id)
     transaction = Transaction.find_by_client_id(params[:client_id])    
     transaction.proof_check.attach(params[:proof_check]) if params[:proof_check]
-    transaction.save if params[:user_state] == 'active'
+    transaction.contract_price = params[:full_sale]
+    transaction.close_date = DateTime.now.to_time
+    transaction.commission = params[:commission]
+    user.user_state =  params[:user_state]
     
-    if user.update!(permit_params_user)
+    if user.update!(permit_params_user) && transaction.save
       redirect_to show_client_path(user_id), flash: {notice: "Client successfully updated"}
     else
       render :edit
@@ -78,7 +81,7 @@ class ClientsController < ApplicationController
     common_refer_attributes(@client)
   end
 
-  def create_referral #for refer agents and brokers       
+  def create_referral #for refer agents and brokers
     client = Client.find(params[:client_id])
     user = User.find(client.user_id)
     user.notes = params[:notes]
@@ -112,6 +115,7 @@ class ClientsController < ApplicationController
     end
 
     if current_user.role.downcase == 'broker'
+      destination_broker = 0
       origin_broker = current_user.broker.id
       assigned_agent = params[:client][:agent_id]
     end
@@ -121,10 +125,31 @@ class ClientsController < ApplicationController
       destination_broker: destination_broker,
       origin_agent: origin_agent,
       assigned_agent: assigned_agent,
-      client_id: client.id
+      client_id: client.id,                        
+      property_address: params[:property_address],
     }
     transaction = Transaction.create(transaction_params)    
     # create a transaction history and calculate fee or commission
+  end
+
+  def assign_broker
+    @user = User.find(params[:user_id])
+    @client = Client.find_by_user_id(@user.id)
+    @brokers = Broker.all
+  end
+
+  def change_broker
+    client = Client.find(params[:client_id])
+    client.broker_id = params[:client][:broker_id]
+    transaction = Transaction.find_by_client_id(params[:client_id])
+    transaction.origin_broker = current_user.broker.id
+    transaction.destination_broker = params[:client][:broker_id]
+    if transaction.save! && client.save!
+      flash[:success] = "Refered created succesfully"
+      redirect_to clients_path
+    else
+      render :assign_broker
+    end
   end
 
   private
@@ -160,18 +185,18 @@ class ClientsController < ApplicationController
       broker = User.find(current_user.id).broker
       return unless broker
       own_clients = Client.where(broker_id: broker.id, agent_id: 0)
-      unassing_clients_refered = Client.where(broker_id: broker.id).joins(:transactions).where('transactions.destination_broker = ?', broker.id)      
+      unassing_clients_refered = Client.joins(:transactions).where('transactions.destination_broker = ?', broker.id)      
       unassing_clients = unassing_clients_refered.empty? ? own_clients : own_clients + unassing_clients_refered
 
-      inbound_clients =Client.where(broker_id: broker.id).joins(:transactions).where('transactions.origin_broker = ?', broker.id)
-      outbound_clients = Client.joins(:transactions).where('transactions.origin_broker = ?', broker.id)
+      inbound_clients = Client.where(broker_id: broker.id).joins(:transactions).where(['transactions.origin_broker = ? and transactions.destination_broker != ?', broker.id,  broker.id])
+      outbound_clients = Client.where('broker_id != ?', broker.id).joins(:transactions).where('transactions.origin_broker = ?', broker.id)
     else
       agent = User.find(current_user.id).agent
       unassing_clients = Client.where(agent_id: agent.id, broker_id: 0)
       inbound_clients = Client.where(agent_id: agent.id).joins(:transactions).where('transactions.assigned_agent = ?', agent.id)
-      outbound_clients = Client.joins(:transactions).where('transactions.origin_agent= ?', agent.id)
+      outbound_clients = Client.where(agent_id: agent.id).joins(:transactions).where('transactions.origin_agent= ?', agent.id)
     end
-    [unassing_clients, inbound_clients, outbound_clients]
+    [unassing_clients.uniq, inbound_clients.uniq, outbound_clients.uniq]
   end
 
   def select_referreds_by(role_user)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_24_142323) do
+ActiveRecord::Schema.define(version: 2023_04_01_172553) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -140,15 +140,12 @@ ActiveRecord::Schema.define(version: 2023_03_24_142323) do
     t.integer "assigned_agent"
     t.string "property_address"
     t.string "contract_price"
-    t.date "closing_date"
-    t.string "destination_broker_commission_percent"
-    t.string "destination_broker_commission"
-    t.string "origin_broker_commision_percent"
-    t.string "origin_broker_commission"
+    t.string "close_date"
     t.string "proof_check"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "client_id"
+    t.string "commission"
     t.index ["client_id"], name: "index_transactions_on_client_id"
   end
 
