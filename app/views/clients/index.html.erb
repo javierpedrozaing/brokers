@@ -143,5 +143,38 @@
     <% end %>
     </tbody>
   </table>
+
+  <% if current_user.role.downcase == 'broker' %>
+    <h3>Clients of my agents</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">name</th>
+          <th scope="col">email</th>
+          <th scope="col">phone</th>
+          <th scope="col">User status</th>               
+        </tr>
+      </thead>
+      <tbody>    
+      
+    
+      <% count = 0 %>
+      <% if @agent_clients %>
+        <% @agent_clients.each do |client| %>
+          <% unless client.id == 0 %>
+          <tr>
+            <td><%= count += 1 %></td>
+            <td><%= client.full_name %></td>
+            <td><%= client.user.email %></td>                    
+            <td><%= client.user.phone %></td>
+            <td><b><%= client.user.user_state %></b></td>            
+          </tr>
+          <% end %>
+        <% end %>
+      <% end %>
+      </tbody>
+    </table>
+  <% end %>
   </div>
 </div>

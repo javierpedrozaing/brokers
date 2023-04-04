@@ -8,7 +8,7 @@ class ClientsController < ApplicationController
   def index
     #@clients = Client.all
     @title = current_user.role.downcase == "broker" ? "Broker Clients" : "Agents Clients"
-    @clients, @inbound_referidos, @outbound_referidos = get_clients_by(@role_user)    
+    @clients, @inbound_referidos, @outbound_referidos, @agent_clients = get_clients_by(@role_user)    
   end
 
   def new
@@ -181,10 +181,14 @@ class ClientsController < ApplicationController
   end
 
   def get_clients_by(role_user)
+    agent_clients = []
     if role_user.downcase == 'broker'
       broker = User.find(current_user.id).broker
       return unless broker
+
       own_clients = Client.where(broker_id: broker.id, agent_id: 0)
+      agents_broker_id = broker.agents.map{|br| br.id}
+      agent_clients = Client.where(agent_id: agents_broker_id)
       unassing_clients_refered = Client.joins(:transactions).where('transactions.destination_broker = ?', broker.id)      
       unassing_clients = unassing_clients_refered.empty? ? own_clients : own_clients + unassing_clients_refered
 
@@ -196,7 +200,7 @@ class ClientsController < ApplicationController
       inbound_clients = Client.where(agent_id: agent.id).joins(:transactions).where('transactions.assigned_agent = ?', agent.id)
       outbound_clients = Client.where(agent_id: agent.id).joins(:transactions).where('transactions.origin_agent= ?', agent.id)
     end
-    [unassing_clients.uniq, inbound_clients.uniq, outbound_clients.uniq]
+    [unassing_clients.uniq, inbound_clients.uniq, outbound_clients.uniq, agent_clients]
   end
 
   def select_referreds_by(role_user)
