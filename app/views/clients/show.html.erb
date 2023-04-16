@@ -38,18 +38,6 @@
           <%= f.text_field '', value: @transaction.origin_broker ? Broker.find(@transaction.origin_broker).user.full_name : Broker.find(@client.broker_id).user.full_name, readonly: true, class: "form-control" %>
         <% end %><br/>
       
-<!-- 
-        <% if @transaction.origin_agent || @client.agent_id %>
-          <%= f.label 'Origin Agent', class: "form-label" %><br />
-          <%= f.text_field '', value: @transaction.origin_agent ? Agent.find().user.full_name : Agent.find(@client.agent_id).user.full_name, readonly: true, class: "form-control" %>      
-        <% end %>
-
-        <% if  @transaction.destination_broker %>
-          <%= f.label 'Assigned Broker', class: "form-label" %><br />
-          <%= f.text_field '', value: Broker.find(@transaction.destination_broker).user.full_name, readonly: true, class: "form-control" %>      
-        <% end %>
--->
-
         <% if  @transaction.assigned_agent %>
           <%= f.label 'Assigned Agent', class: "form-label" %><br />
           <%= f.text_field '', value: Agent.find(@transaction.assigned_agent).user.full_name, readonly: true, class: "form-control" %>      
