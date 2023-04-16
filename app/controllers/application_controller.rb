@@ -75,7 +75,7 @@ class ApplicationController < ActionController::Base
         debug_output: STDOUT, # To show that User-Agent is Httparty
       })
     rescue => exception
-      console.log("error connecting API with #{exception}")        
+      puts "error connecting API with #{exception}"
     end
   end
 
