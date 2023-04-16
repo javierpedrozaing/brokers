@@ -22,8 +22,8 @@ class ClientsController < ApplicationController
     @user = User.find(params[:user_id])
     client_id = @user.client.id
     @client = Client.find(client_id)
-    transaction = Transaction.find_by_client_id(client_id)    
-    @pdf_attached = transaction.proof_check if transaction
+    @transaction = Transaction.find_by_client_id(client_id)    
+    @pdf_attached = @transaction.proof_check if @transaction
   end
 
   def edit
@@ -86,8 +86,8 @@ class ClientsController < ApplicationController
     user = User.find(client.user_id)
     user.notes = params[:notes]
     # for the agent_id, if the role is broker would take the agent selected in the form, otherwise would be the current agent
-    agent_id = current_user.role.downcase == 'broker' ? params[:client][:agent_id].to_i : current_user.agent.id
-    client.agent_id = agent_id
+    # agent_id = current_user.role.downcase == 'broker' ? params[:client][:agent_id].to_i : current_user.agent.id
+    # client.agent_id = agent_id
     
     # if role user is agent, the broker_id would be the agent's broker
     broker_id = current_user.role.downcase == 'agent' ? params[:client][:broker_id].to_i : current_user.broker.id
@@ -110,15 +110,15 @@ class ClientsController < ApplicationController
 
   def create_transaction(params, client)
     if current_user.role.downcase == 'agent'
-      origin_agent = current_user.agent.id      
+      origin_agent = current_user.agent.id
       destination_broker = params[:client][:broker_id]
-      origin_broker = 0 # clean origin broker, for refereds to external broker from agent
+      origin_broker = Agent.find(origin_agent).broker_id # clean origin broker, for refereds to external broker from agent
     end
 
     if current_user.role.downcase == 'broker'
-      destination_broker = 0
       origin_broker = current_user.broker.id
       assigned_agent = params[:client][:agent_id]
+      destination_broker = current_user.broker.id
     end
 
     transaction_params = {
@@ -129,7 +129,21 @@ class ClientsController < ApplicationController
       client_id: client.id,                        
       property_address: params[:property_address],
     }
-    transaction = Transaction.create(transaction_params)    
+    
+    current_transaction = Transaction.find_by_client_id(client.id)
+    
+    if current_transaction
+      current_transaction.origin_broker = origin_broker
+      current_transaction.destination_broker = destination_broker
+      current_transaction.origin_agent = origin_agent
+      current_transaction.assigned_agent = assigned_agent
+      current_transaction.property_address = params[:property_address]
+      current_transaction.save!
+    else
+      transaction = Transaction.create(transaction_params)
+    end
+    
+    
     # create a transaction history and calculate fee or commission
   end
 
@@ -161,10 +175,10 @@ class ClientsController < ApplicationController
     @parking_lots = ApplicationHelper::PARKING_LOTS
     @bathrooms = ApplicationHelper::BATHROOMS
 
-    @current_type_of_property = client.type_of_property
-    @current_number_of_rooms = client.number_of_rooms
-    @current_parking_lot = client.parkng_lot
-    @current_number_of_bathrooms = client.number_of_bathrooms  
+    @current_type_of_property = client&.type_of_property
+    @current_number_of_rooms = client&.number_of_rooms
+    @current_parking_lot = client&.parkng_lot
+    @current_number_of_bathrooms = client&.number_of_bathrooms  
   end
 
   def get_role_user
@@ -192,7 +206,7 @@ class ClientsController < ApplicationController
       unassing_clients = own_clients + clients_from_agents
 
       inbound_clients = Client.where(broker_id: broker.id).joins(:transactions).where(['transactions.origin_broker = ? and transactions.destination_broker != ?', broker.id,  broker.id])
-      clients_refered_from_agents = Client.where('broker_id = ?', broker.id).joins(:transactions).where('transactions.destination_broker = ?', broker.id)
+      clients_refered_from_agents = Client.joins(:transactions).where('transactions.destination_broker = ?', broker.id)
       inbound_clients += clients_refered_from_agents
 
       outbound_clients = Client.where('broker_id != ?', broker.id).joins(:transactions).where('transactions.origin_broker = ?', broker.id)
@@ -200,8 +214,8 @@ class ClientsController < ApplicationController
       outbound_clients += outbound_clients_of_agent
     else
       agent = User.find(current_user.id).agent
-      unassing_clients = Client.where(agent_id: agent.id, broker_id: 0)
-      inbound_clients = Client.where(agent_id: agent.id).joins(:transactions).where('transactions.assigned_agent = ?', agent.id)
+      unassing_clients = Client.where(agent_id: agent.id, broker_id: 0).includes(:transactions).where(transactions: { id: nil })
+      inbound_clients = Client.joins(:transactions).where('transactions.assigned_agent = ?', agent.id)
       outbound_clients = Client.where(agent_id: agent.id).joins(:transactions).where('transactions.destination_broker != ?', 0)
     end
     [unassing_clients.uniq, inbound_clients.uniq, outbound_clients.uniq]

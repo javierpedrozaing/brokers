@@ -57,7 +57,7 @@
           <th scope="col"></th>
       </tr>
     </thead>
-    <tbody>    
+    <tbody>
      
     <% count = 0 %>
     <% if @inbound_referidos %>
@@ -68,10 +68,10 @@
           <td><%= link_to referido.full_name, show_client_path(referido.user.id) %></td>                              
           <% if current_user.role.downcase == 'broker'%>        
             <td><%= referido.agent.full_name %></td>
-            <td><%= referido.broker.full_name %></td>            
+            <td><%= Broker.find(Transaction.where(client_id: referido.id).last.destination_broker).user.full_name %></td>
           <% elsif current_user.role.downcase == 'agent' %>          
-            <td><%= referido.broker.full_name %></td>
-            <td><%= referido.agent.full_name %></td>
+            <td><%= Broker.find(Transaction.where(client_id: referido.id).last.destination_broker).user.full_name %></td>
+            <td><%= Agent.find(Transaction.where(client_id: referido.id).last.assigned_agent).user.full_name %></td>
           <% end %>        
           <td><%= referido.user.user_state %></td>
           <% if current_user.role.downcase == 'agent' %>
@@ -110,7 +110,7 @@
           <td><%= count += 1 %></td>
           <td><%= referido.full_name %></td>          
           <td><%= referido.agent.full_name %></td>          
-          <td><%= referido.broker.full_name %></td>
+          <td><%= Broker.find(Transaction.find_by_client_id(referido.id).destination_broker).user.full_name %></td>
           <td><%= referido.user.user_state %></td>
           <td><%= link_to 'View Details', show_client_path(referido.user.id), class: "btn btn-success" %></td>
         </tr>
