@@ -76,7 +76,7 @@ class ApplicationController < ActionController::Base
       })
     rescue => exception
       puts "error connecting API with #{exception}"
-      {[]}
+      return {}
     end
   end
 
