@@ -69,10 +69,14 @@ class ApplicationController < ActionController::Base
   end
 
   def get_state(country, state)
-    state = HTTParty.get("https://api.countrystatecity.in/v1/countries/#{country}/states/#{state}", {
-      headers: headers,
-      debug_output: STDOUT, # To show that User-Agent is Httparty
-    })
+    begin
+      state = HTTParty.get("https://api.countrystatecity.in/v1/countries/#{country}/states/#{state}", {
+        headers: headers,
+        debug_output: STDOUT, # To show that User-Agent is Httparty
+      })
+    rescue => exception
+      console.log("error connecting API with #{exception}")        
+    end
   end
 
   def headers
