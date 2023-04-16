@@ -112,6 +112,7 @@ class ClientsController < ApplicationController
     if current_user.role.downcase == 'agent'
       origin_agent = current_user.agent.id      
       destination_broker = params[:client][:broker_id]
+      origin_broker = 0 # clean origin broker, for refereds to external broker from agent
     end
 
     if current_user.role.downcase == 'broker'
@@ -180,27 +181,30 @@ class ClientsController < ApplicationController
     end
   end
 
-  def get_clients_by(role_user)
-    agent_clients = []
+  def get_clients_by(role_user)    
     if role_user.downcase == 'broker'
       broker = User.find(current_user.id).broker
       return unless broker
 
       own_clients = Client.where(broker_id: broker.id, agent_id: 0)
-      agents_broker_id = broker.agents.map{|br| br.id}
-      agent_clients = Client.where(agent_id: agents_broker_id)
-      unassing_clients_refered = Client.joins(:transactions).where('transactions.destination_broker = ?', broker.id)      
-      unassing_clients = unassing_clients_refered.empty? ? own_clients : own_clients + unassing_clients_refered
+      agents_broker_id = broker.agents.map{|ag| ag.id}
+      clients_from_agents = Client.where(agent_id: agents_broker_id).includes(:transactions).where(transactions: { id: nil })
+      unassing_clients = own_clients + clients_from_agents
 
       inbound_clients = Client.where(broker_id: broker.id).joins(:transactions).where(['transactions.origin_broker = ? and transactions.destination_broker != ?', broker.id,  broker.id])
+      clients_refered_from_agents = Client.where('broker_id = ?', broker.id).joins(:transactions).where('transactions.destination_broker = ?', broker.id)
+      inbound_clients += clients_refered_from_agents
+
       outbound_clients = Client.where('broker_id != ?', broker.id).joins(:transactions).where('transactions.origin_broker = ?', broker.id)
+      outbound_clients_of_agent = Client.where('broker_id != ?', broker.id).joins(:transactions).where('transactions.destination_broker != ?', broker.id)
+      outbound_clients += outbound_clients_of_agent
     else
       agent = User.find(current_user.id).agent
       unassing_clients = Client.where(agent_id: agent.id, broker_id: 0)
       inbound_clients = Client.where(agent_id: agent.id).joins(:transactions).where('transactions.assigned_agent = ?', agent.id)
-      outbound_clients = Client.where(agent_id: agent.id).joins(:transactions).where('transactions.origin_agent= ?', agent.id)
+      outbound_clients = Client.where(agent_id: agent.id).joins(:transactions).where('transactions.destination_broker != ?', 0)
     end
-    [unassing_clients.uniq, inbound_clients.uniq, outbound_clients.uniq, agent_clients]
+    [unassing_clients.uniq, inbound_clients.uniq, outbound_clients.uniq]
   end
 
   def select_referreds_by(role_user)

@@ -2,7 +2,9 @@
   <h2><%= @title  %></h2>
   <div class="list">
   <div class="actions d-grid col-10 justify-content-md-start">
+    <% unless current_user.role.downcase == 'broker' %>
     <%= link_to "New Client", new_client_path, class: "btn btn-primary btn-block mb-4" %>
+    <% end %>
   </div>
   <h3>Unassign Clients</h3>
   <table class="table">
@@ -10,9 +12,9 @@
       <tr>
         <th scope="col">#</th>
         <th scope="col">name</th>
-        <th scope="col">email</th>
-        <th scope="col">phone</th>   
+        <th scope="col">From Agent</th>
         <th scope="col">User status</th>
+        <th scope="col"></th>
         <th scope="col"></th>
       </tr>
     </thead>
@@ -23,13 +25,13 @@
         <tr>
           <td><%= count += 1 %></td>
           <td><%= link_to client.full_name, show_client_path(client.user.id) %></td>
-          <td><%= client.user.email %></td>          
-          <td><%= client.user.phone %></td>
+          <td><%= Agent.find(client.agent_id).full_name %></td> <!--update for from agent-->
           <td><%= client.user.role.downcase != 'broker' ? 'active' : 'inactive' %></td>          
           <% if current_user.role.downcase == 'agent' %>
-            <td><%= link_to "Refer Broker", refer_broker_path(client.user.id), class: "btn btn-success" %></td>
+            <td><%= link_to "Refer Broker", refer_broker_path(client.user.id), class: "btn btn-success" %></td>            
           <% else %>
             <td><%= link_to "Assign Agent", refer_agent_path(client.user.id), class: "btn btn-success" %></td>
+            <td><%= link_to 'View Details', show_client_path(client.user.id), class: "btn btn-success" %></td>
           <% end %>
         </tr>
       <% end %>
@@ -42,16 +44,17 @@
     <thead>
       <tr>
         <th scope="col">#</th>
-        <th scope="col">name</th>
-        <th scope="col">email</th>
-        <th scope="col">phone</th>
-        <th scope="col">User status</th>
-        <th scope="col">Assigned from</th>
-         <% if current_user.role.downcase == 'broker'%>
-        <th scope="col">Assigned to</th>
+        <th scope="col">name</th>                         
+        <% if current_user.role.downcase == 'broker'%>        
+          <th scope="col">From agent</th>  
+          <th scope="col">Assigned broker</th>                   
+        <% elsif current_user.role.downcase == 'agent' %> 
+          <th scope="col">Origin broker</th>                  
+          <th scope="col">Assigned agent</th>          
         <% end %>
-        <th scope="col"></th>
-        <th scope="col"></th>
+        <th scope="col">User status</th>
+          <th scope="col"></th>
+          <th scope="col"></th>
       </tr>
     </thead>
     <tbody>    
@@ -62,43 +65,20 @@
         <% unless referido.id == 0 %>
         <tr>
           <td><%= count += 1 %></td>
-          <td><%= link_to referido.full_name, show_client_path(referido.user.id) %></td>
-          <td><%= referido.user.email %></td>
-          <td><%= referido.user.phone %></td>
-          <td><%= referido.user.user_state %></td>           
-          <% 
-          origin_user_id = Transaction.find_by_client_id(referido.id).origin_broker          
-          origin_user = Broker.find(origin_user_id) if origin_user_id 
-
-          unless origin_user
-          origin_user_id = Transaction.find_by_client_id(referido.id).origin_agent         
-          origin_user = Agent.find(origin_user_id) if origin_user_id 
-          end          
-          %>
+          <td><%= link_to referido.full_name, show_client_path(referido.user.id) %></td>                              
           <% if current_user.role.downcase == 'broker'%>        
-            <td><%= origin_user.full_name if origin_user %></td>
+            <td><%= referido.agent.full_name %></td>
+            <td><%= referido.broker.full_name %></td>            
           <% elsif current_user.role.downcase == 'agent' %>          
-            <td><%= origin_user.full_name if origin_user %></td>
-          <% end %>
-          <!-- assigned to -->
-           <% if current_user.role.downcase == 'broker'%>           
-           <% 
-           assigned_user_id = Transaction.find_by_client_id(referido.id).assigned_agent
-           assigned_user = Agent.find(assigned_user_id) if assigned_user_id 
-           
-            unless assigned_user
-              assigned_user_id = Transaction.find_by_client_id(referido.id).destination_broker
-              assigned_user = Broker.find(assigned_user_id) if assigned_user_id            
-            end
-           %>
-          <td><%= assigned_user.full_name if assigned_user %></td>
-          <% end %>
-
+            <td><%= referido.broker.full_name %></td>
+            <td><%= referido.agent.full_name %></td>
+          <% end %>        
+          <td><%= referido.user.user_state %></td>
           <% if current_user.role.downcase == 'agent' %>
-            <td><%= link_to "Manage", show_client_path(referido.user.id), class: "btn btn-success" %></td>
+            <td><%= link_to "View Details", show_client_path(referido.user.id), class: "btn btn-success" %></td>
           <% else %>
             <td><%= link_to "Refer Agent", refer_agent_path(referido.user.id), class: "btn btn-success" %></td>
-            <td><%= link_to "Assign broker", assign_broker_path(referido.user.id), class: "btn btn-success" %></td>
+            <td><%= link_to "View Details", show_client_path(referido.user.id), class: "btn btn-success" %></td>
           <% end %>
         </tr>
         <% end %>
@@ -114,10 +94,10 @@
       <tr>
         <th scope="col">#</th>
         <th scope="col">name</th>
-        <th scope="col">email</th>
-        <th scope="col">phone</th>
+        <th scope="col">From Agent</th>
+        <th scope="col">Assigned Broker</th>
         <th scope="col">User status</th>
-        <th scope="col">Assigned to</th>        
+        <th scope="col"></th>               
       </tr>
     </thead>
     <tbody>    
@@ -128,53 +108,16 @@
         <% unless referido.id == 0 %>
         <tr>
           <td><%= count += 1 %></td>
-          <td><%= referido.full_name %></td>
-          <td><%= referido.user.email %></td>                    
-          <td><%= referido.user.phone %></td>
-          <td><b><%= referido.user.user_state %></b></td>
-           <% if current_user.role.downcase == 'agent' %>           
-           <td><%= referido.broker.full_name %></td>
-           <% else %>
-           <td><%= referido.agent.full_name %></td>
-           <% end %>
+          <td><%= referido.full_name %></td>          
+          <td><%= referido.agent.full_name %></td>          
+          <td><%= referido.broker.full_name %></td>
+          <td><%= referido.user.user_state %></td>
+          <td><%= link_to 'View Details', show_client_path(referido.user.id), class: "btn btn-success" %></td>
         </tr>
         <% end %>
       <% end %>
     <% end %>
     </tbody>
   </table>
-
-  <% if current_user.role.downcase == 'broker' %>
-    <h3>Clients of my agents</h3>
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">name</th>
-          <th scope="col">email</th>
-          <th scope="col">phone</th>
-          <th scope="col">User status</th>               
-        </tr>
-      </thead>
-      <tbody>    
-      
-    
-      <% count = 0 %>
-      <% if @agent_clients %>
-        <% @agent_clients.each do |client| %>
-          <% unless client.id == 0 %>
-          <tr>
-            <td><%= count += 1 %></td>
-            <td><%= client.full_name %></td>
-            <td><%= client.user.email %></td>                    
-            <td><%= client.user.phone %></td>
-            <td><b><%= client.user.user_state %></b></td>            
-          </tr>
-          <% end %>
-        <% end %>
-      <% end %>
-      </tbody>
-    </table>
-  <% end %>
   </div>
 </div>
