@@ -87,9 +87,15 @@ h2 {
   } 
 }
 
-.new-client, .refer-client {
+.new-client, .refer-client, .show-client {
   width: 60% !important;
   margin: 0 auto;
+  span {
+    font-weight: 400;
+  }
+  .card {
+    padding: 10px;
+  }
 }
 
 table.transactions-list {

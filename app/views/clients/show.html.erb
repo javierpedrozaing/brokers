@@ -1,4 +1,4 @@
-<div class="container update-client">
+<div class="container show-client">
   <% if @user.errors.any? %>
       <div id="errorExplanation">
         <% @user.errors.full_messages.each do |msg| %>
@@ -8,79 +8,67 @@
       </div>
   <% end %>
   <div class="row">      
-    <%= form_with(url: edit_client_path(@user), local: true, method: "post") do |f| %>
     <div class="col-md-12">
-      <h2>Client Detail</h2>
-      <%= f.hidden_field :client_id, value: @client.id %>
-      <div class="form-outline mb-4">
-        <%= f.label :first_name, class: "form-label" %><br />
-        <%= f.text_field :first_name, value: @user.first_name, autofocus: true, autocomplete: "Last name", class: "form-control" %>
-      </div>
-
-      <div class="form-outline mb-4">
-        <%= f.label :last_name, class: "form-label" %><br />
-        <%= f.text_field :last_name, value: @user.last_name, autofocus: true, autocomplete: "Last name", class: "form-control" %>
-      </div>
-
-      <div class="form-outline mb-4">
-        <%= f.label :phone, class: "form-label" %><br />
-        <%= f.number_field :phone, value: @user.phone, autofocus: true, autocomplete: "Phone", class: "form-control" %>
-      </div>
-
-      <div class="form-outline mb-4">
-        <%= f.label :email, class: "form-label" %><br />
-        <%= f.email_field :email, value: @user.email, autofocus: true, autocomplete: "email", class: "form-control" %>
-      </div>      
-      
-      <% unless @transaction.nil? %>
-        <% if @transaction.origin_broker || @client.broker_id %>
-          <%= f.label 'From Broker', class: "form-label" %><br />
-          <%= f.text_field '', value: @transaction.origin_broker ? Broker.find(@transaction.origin_broker).user.full_name : Broker.find(@client.broker_id).user.full_name, readonly: true, class: "form-control" %>
-        <% end %><br/>
-      
-        <% if  @transaction.assigned_agent %>
-          <%= f.label 'Assigned Agent', class: "form-label" %><br />
-          <%= f.text_field '', value: Agent.find(@transaction.assigned_agent).user.full_name, readonly: true, class: "form-control" %>      
-        <% end %>
-      <% end %>
-    </div>      
-    <br/>
-          
-    <div class="row">
-      <div class="col-md-12">
-        <%= f.label "User state:", class: "form-label" %><br />
-      </div>
-      <% @user_states.each do |state| %>
-        <div class="col-md-6">
-          <%= f.radio_button :user_state, state, checked: (@user.user_state == state) %>
-          <%= f.label state, class: "form-label" %><br />
-        </div>
-      <% end %>    
-      <br/><br/>
-      <hr class="border-2 border-top ">
-      <!-- Enable when close state is selected -->
-      <div class="close-transaction-fields">
+      <div class="card">
+        <h2>Client Detail</h2>
+        <%= hidden_field :client_id, value: @client.id %>
         <div class="form-outline mb-4">
-          <%= f.label :proof_check_pdf, class: "form-label" %><br />         
-            <%= link_to "proof check pdf", @pdf_attached if @pdf_attached.attached? %>
-            <%= f.file_field(:proof_check, accept: 'pdf') %>
+          <b>First name</b>
+          <span><%= @user.first_name %></span>
         </div>
+
+        <div class="form-outline mb-4">
+          <b>Last name</b>
+          <span><%= @user.last_name %></span>        
+        </div>
+
+        <div class="form-outline mb-4">
+          <b>phone number</b>
+          <span><%= @user.phone %></span>
+        </div>
+
+        <div class="form-outline mb-4">
+          <b>Email</b>
+          <span><%= @user.email %></span>
+        </div>      
         
         <div class="form-outline mb-4">
-          <%= f.label 'commission %', class: "form-label" %><br />
-          <%= f.text_field :commission, value: @user.commission, autofocus: true, class: "form-control" %>
+          <b>User state<b>
+          <span><%= @user.user_state %></span>
         </div>
 
-        <div class="form-outline mb-4">
-          <%= f.label :full_sale, class: "form-label" %><br />
-          <%= f.text_field :full_sale, value: @user.full_sale, autofocus: true, class: "form-control" %>
-        </div>
-      </div>  
-      
-        <div class="actions d-grid col-12 mx-auto">
-          <%= f.submit "Update", class: "btn btn-success" %>
-        </div>    
-    </div>  
-    <% end %>
+        <hr class="border-2 border-top ">
+        
+        
+        <% unless @transaction.nil? %>
+          <h4>Transaction info</h4>
+          <div class="form-outline mb-4">
+            <b>From Broker:</b>            
+            <span> <%= @transaction.origin_broker ? Broker.find(@transaction.origin_broker).user.full_name : Broker.find(@client.broker_id).user.full_name %> </span>
+          </div>
+          <div class="form-outline mb-4">
+            <% if  @transaction.assigned_agent %>
+              <b>Assigned Agent</b>          
+              <span><%= Agent.find(@transaction.assigned_agent).user.full_name %></span>
+            <% end %>
+          </div>
+
+          <div class="form-outline mb-4">
+            <b>Proof of check:</b>
+            <%= link_to "proof check pdf", @pdf_attached if @pdf_attached.attached? %>
+          </div>
+
+          <div class="form-outline mb-4">
+            <b>Commision:</b>
+            <span><%= @user.commission %>%</span>
+          </div>
+
+          <div class="form-outline mb-4">
+            <b>Full sale:</b>
+            <span>$<%= @user.full_sale %></span>
+          </div>
+        <% end %>
+      </div>
+    </div>
   </div>
 </div>

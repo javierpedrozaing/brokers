@@ -1,0 +1,49 @@
+<div class="col-sm-6">
+  <h4>Refer Information</h4><br/>
+    <div class="field form-outline mb-4">
+      <%= f.label "Assign Broker", class: "form-label" %>
+      <%= collection_select(:client, :broker_id, @brokers, :id, :full_name, {}, class: "form-control") %>
+    </div><br/>
+
+    <div class="field form-outline mb-4">
+      <%= f.label :type_of_property, class: "form-label" %><br />
+      <%= f.select(:type_of_property, @properties, {}, {:class => 'form-control' }) %>  
+    </div><br/>
+
+    <div class="field form-outline mb-4">
+      <%= f.label :number_of_rooms, class: "form-label" %><br />
+      <%= f.select(:number_of_rooms, @number_of_rooms, {}, {:class => 'form-control' }) %>  
+    </div><br/>
+
+    <div class="field form-outline mb-4">
+      <%= f.label :number_of_bathrooms, class: "form-label" %><br />    
+      <%= f.select(:number_of_bathrooms, @bathrooms, {}, {:class => 'form-control' }) %>  
+    </div><br/>
+
+    <div class="field form-outline mb-4">
+      <%= f.label :parkng_lot, class: "form-label" %><br />
+      <%= f.select(:parkng_lot, @parking_lots, {}, {:class => 'form-control' }) %>  
+    </div><br/>
+
+    <div class="field form-outline mb-4">
+      <%= f.label :property_address, class: "form-label" %><br />
+      <%= f.text_field :property_address, autofocus: true, autocomplete: "Property address", class: "form-control" %>
+    </div><br/>
+
+    <div class="field form-outline mb-4">
+      <%= f.label :budget, class: "form-label" %><br />
+      <%= f.radio_button :budget, '10,000 - 30,000' %>
+      <%= f.label "10,000 - 30,000", class: "form-label" %><br />
+      
+      <%= f.radio_button :budget, '30,000 - 60,000' %>
+      <%= f.label "30,000 - 60,000", class: "form-label" %><br />
+
+      <%= f.radio_button :budget, '60,000 - 100,000' %>
+      <%= f.label "60,000 - 100,000", class: "form-label" %><br />
+    </div><br/>
+
+    <div class="field form-outline mb-4">
+      <%= f.label :notes, class: "form-label" %><br />    
+      <%= f.text_area :notes, autofocus: true, class: "form-control" %>
+    </div><br/>
+</div>

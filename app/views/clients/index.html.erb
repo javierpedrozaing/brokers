@@ -2,7 +2,9 @@
   <h2><%= @title  %></h2>
   <div class="list">
   <div class="actions d-grid col-10 justify-content-md-start">
-    <% unless current_user.role.downcase == 'broker' %>
+    <% if current_user.role.downcase == 'broker' %>
+    <%= link_to "Refer Client", refer_client_from_broker_path, class: "btn btn-primary btn-block mb-4" %>
+    <% else %>
     <%= link_to "New Client", new_client_path, class: "btn btn-primary btn-block mb-4" %>
     <% end %>
   </div>
@@ -45,7 +47,7 @@
       <tr>
         <th scope="col">#</th>
         <th scope="col">name</th>                         
-        <% if current_user.role.downcase == 'broker'%>        
+        <% if current_user.role.downcase == 'broker'%>
           <th scope="col">From agent</th>  
           <th scope="col">Assigned broker</th>                   
         <% elsif current_user.role.downcase == 'agent' %> 
@@ -75,10 +77,10 @@
           <% end %>        
           <td><%= referido.user.user_state %></td>
           <% if current_user.role.downcase == 'agent' %>
-            <td><%= link_to "View Details", show_client_path(referido.user.id), class: "btn btn-success" %></td>
+            <td><%= link_to "Manage", edit_client_path(referido.user.id), class: "btn btn-success" %></td>
           <% else %>
             <td><%= link_to "Refer Agent", refer_agent_path(referido.user.id), class: "btn btn-success" %></td>
-            <td><%= link_to "View Details", show_client_path(referido.user.id), class: "btn btn-success" %></td>
+            <td><%= link_to "Manage", edit_client_path(referido.user.id), class: "btn btn-success" %></td>
           <% end %>
         </tr>
         <% end %>

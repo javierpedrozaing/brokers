@@ -25,12 +25,12 @@ Rails.application.routes.draw do
 
   get 'clients', to: 'clients#index'
   get 'clients/new', to: 'clients#new', as: 'new_client'
-  post 'clients/create', to: 'clients#create', as: 'create_client'
+  post 'clients/create_client', to: 'clients#create_client', as: 'create_client'
 
   get 'clients/show/:user_id', to: 'clients#show', as: 'show_client'
-  post 'clients/edit/:user_id', to: 'clients#edit', as: 'edit_client'
+  post 'clients/update_client/:user_id', to: 'clients#update_client', as: 'update_client'
 
-  get 'update_client/:id', to: 'clients#update', as: 'update_clients'
+  get 'clients/edit/:user_id', to: 'clients#edit', as: 'edit_client'
   get 'update_agent/:id', to: 'agents#update', as: 'update_agents'
   
   post 'profile/update_profile', to: 'profile#update_profile', as: 'update_profile'
@@ -51,5 +51,7 @@ Rails.application.routes.draw do
   get 'transactions', to: 'transactions#index', as: 'transactions'
 
   get 'remove_user/:user_id', to: 'dashboard#remove_user', as: 'remove_user'
+
+  match "clients/refer_client_from_broker", to: "clients#refer_client_from_broker", as: 'refer_client_from_broker', via: [:get, :post]
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

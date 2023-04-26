@@ -2,13 +2,13 @@ class ClientsController < ApplicationController
   before_action :authenticate_user!
   before_action :get_role_user
   before_action :validate_email_registered, only: [:create]
-  before_action :has_valid_profile  
+  before_action :has_valid_profile
 
   # Section list clients for brokers and agents
   def index
     #@clients = Client.all
     @title = current_user.role.downcase == "broker" ? "Broker Clients" : "Agents Clients"
-    @clients, @inbound_referidos, @outbound_referidos, @agent_clients = get_clients_by(@role_user)    
+    @clients, @inbound_referidos, @outbound_referidos = get_clients_by(@role_user)    
   end
 
   def new
@@ -22,11 +22,20 @@ class ClientsController < ApplicationController
     @user = User.find(params[:user_id])
     client_id = @user.client.id
     @client = Client.find(client_id)
-    @transaction = Transaction.find_by_client_id(client_id)    
+    @transaction = Transaction.find_by_client_id(client_id)
     @pdf_attached = @transaction.proof_check if @transaction
   end
 
   def edit
+    @user_states = ApplicationHelper::USER_STATES
+    @user = User.find(params[:user_id])
+    client_id = @user.client.id
+    @client = Client.find(client_id)
+    @transaction = Transaction.find_by_client_id(client_id)
+    @pdf_attached = @transaction.proof_check if @transaction
+  end
+
+  def update_client
     user_id = params[:user_id]
     user = User.find(user_id)
     transaction = Transaction.find_by_client_id(params[:client_id])    
@@ -43,7 +52,7 @@ class ClientsController < ApplicationController
     end
   end
 
-  def create    
+  def create_client
     select_referreds_by(@role_user)
     @user = User.new(permit_params_user)
     if @user.save
@@ -79,6 +88,69 @@ class ClientsController < ApplicationController
     @client = Client.find_by_user_id(@user.id)
     @brokers = Broker.all
     common_refer_attributes(@client)
+  end
+
+  def refer_client_from_broker
+    @brokers = Broker.all
+    default_values_for_create_referreds
+    
+    @client = params.include?(:email) ? create_client_from_broker : nil        
+
+    unless @client.nil?
+      @user = User.find(@client.user_id)
+      @user.notes = params[:notes]
+      @client.broker_id = params[:client][:broker_id].to_i
+      @client.type_of_property = params[:type_of_property] if  params[:type_of_property]
+      @client.number_of_rooms = params[:number_of_rooms] if params[:number_of_rooms]
+      @client.number_of_bathrooms = params[:number_of_bathrooms] if params[:number_of_bathrooms]
+      @client.parkng_lot = params[:parkng_lot] if params[:parkng_lot]
+      @client.budget = params[:budget] if params[:budget]
+  
+      if @client.save && @user.save
+        create_transaction_from_broker(params, @client)
+        flash[:success] = "Refered created succesfully"
+        redirect_to clients_path
+      else
+        render :refer_client_from_broker
+      end
+    end
+  end
+
+  def create_client_from_broker
+    user = User.new(permit_params_user)
+    user.with_lock do
+      if user.save
+        client = Client.new
+        client.user_id = user.id
+        client.agent_id = 0
+        client.broker_id = current_user.broker.id
+        client.save!
+        client
+      end
+    end
+  end
+
+  def create_transaction_from_broker(params, client)
+    origin_broker = current_user.broker.id
+    destination_broker = params[:client][:broker_id]
+    
+    transaction_params = {
+      origin_broker: origin_broker,
+      destination_broker: destination_broker,
+      client_id: client.id,
+      property_address: params[:property_address],
+    }
+    
+    current_transaction = Transaction.find_by_client_id(client.id)
+    
+    if current_transaction
+      current_transaction.origin_broker = origin_broker
+      current_transaction.destination_broker = destination_broker
+      current_transaction.property_address = params[:property_address]
+      current_transaction.save!
+    else
+      transaction = Transaction.create(transaction_params)
+    end
   end
 
   def create_referral #for refer agents and brokers
@@ -142,9 +214,6 @@ class ClientsController < ApplicationController
     else
       transaction = Transaction.create(transaction_params)
     end
-    
-    
-    # create a transaction history and calculate fee or commission
   end
 
   def assign_broker
@@ -170,15 +239,21 @@ class ClientsController < ApplicationController
   private
 
   def common_refer_attributes(client)
+    default_values_for_create_referreds
+
+    unless client
+      @current_type_of_property = client&.type_of_property
+      @current_number_of_rooms = client&.number_of_rooms
+      @current_parking_lot = client&.parkng_lot
+      @current_number_of_bathrooms = client&.number_of_bathrooms  
+    end    
+  end
+
+  def default_values_for_create_referreds
     @properties = ApplicationHelper::PROPERTIES
     @number_of_rooms = ApplicationHelper::ROOMS
     @parking_lots = ApplicationHelper::PARKING_LOTS
     @bathrooms = ApplicationHelper::BATHROOMS
-
-    @current_type_of_property = client&.type_of_property
-    @current_number_of_rooms = client&.number_of_rooms
-    @current_parking_lot = client&.parkng_lot
-    @current_number_of_bathrooms = client&.number_of_bathrooms  
   end
 
   def get_role_user
