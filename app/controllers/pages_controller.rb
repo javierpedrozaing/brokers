@@ -11,9 +11,9 @@ class PagesController < ApplicationController
     geocoder = Geocoder
     brokers = Broker.all.where.not(id: 0)
     brokers_coordinates = brokers.map do |br|
-      country = get_country(br.country) unless br.country.empty?      
+      country = ApplicationController::get_country(br.country) unless br.country.empty?      
       country_name = country ? JSON.parse(country.body)["name"] : ''
-      state = get_state(country_name, br.try(:state))
+      state = ApplicationController::get_state(country_name, br.try(:state))
       state_name = state['name']
       address = br.address
       location = "#{address}, #{country_name}, #{state_name}"
@@ -39,7 +39,7 @@ class PagesController < ApplicationController
   end
 
   def search_brokers
-    @countries = countries_list
+    @countries, @states, @cities = ApplicationHelper::get_countries_states_and_cities
     unless request.method == 'GET'
       location = JSON.parse(params.keys.first)['location']
       address = ""
@@ -49,12 +49,14 @@ class PagesController < ApplicationController
     end
   end
 
-  def get_states_by_country    
-    states_by_country(params[:country_id])
+  def get_states_by_country
+    states = ApplicationController::states_by_country(params[:country_id])
+    render json: {states: states}
   end
 
   def get_cities_by_country_and_state
-    cities_by_country_and_state(params[:country], params[:state_id])
+    cities = ApplicationController::cities_by_country_and_state(params[:country], params[:state_id])
+    render json: {cities: cities}
   end
 
   private  

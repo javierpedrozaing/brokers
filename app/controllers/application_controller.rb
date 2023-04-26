@@ -16,59 +16,56 @@ class ApplicationController < ActionController::Base
       end
   end
 
-  def countries_list
+  def self.countries_list
     countries = HTTParty.get('https://api.countrystatecity.in/v1/countries', {
-      headers: headers,
+      headers: self.headers,
       debug_output: STDOUT, # To show that User-Agent is Httparty
     })
   end
 
-  def states_list
+  def self.states_list
     states = HTTParty.get('https://api.countrystatecity.in/v1/states', {
       headers: headers,
       debug_output: STDOUT, # To show that User-Agent is Httparty
     })
   end
 
-  def cities_list(country)
+  def self.cities_list(country)
     cities = HTTParty.get("https://api.countrystatecity.in/v1/countries/#{country}/cities", {
       headers: headers,
       debug_output: STDOUT, # To show that User-Agent is Httparty
     })
   end
 
-  def states_list_by_country(country)
+  def self.states_list_by_country(country)
     states = HTTParty.get("https://api.countrystatecity.in/v1/countries/#{country}/states", {
       headers: headers,
       debug_output: STDOUT, # To show that User-Agent is Httparty
     })
   end
 
-  def states_by_country(country_id)
+  def self.states_by_country(country_id)
     states = HTTParty.get("https://api.countrystatecity.in/v1/countries/#{country_id}/states", {
       headers: headers,
       debug_output: STDOUT, # To show that User-Agent is Httparty
     })
-
-    render json: {states: states}
   end
 
-  def cities_by_country_and_state(country_id, state_id)    
+  def self.cities_by_country_and_state(country_id, state_id)    
     cities = HTTParty.get("https://api.countrystatecity.in/v1/countries/#{country_id}/states/#{state_id}/cities", {
       headers: headers,
       debug_output: STDOUT, # To show that User-Agent is Httparty
-    })
-    render json: {cities: cities}
+    })    
   end
 
-  def get_country(country)
+  def self.get_country(country)
     country = HTTParty.get("https://api.countrystatecity.in/v1/countries/#{country}", {
       headers: headers,
       debug_output: STDOUT, # To show that User-Agent is Httparty
     })
   end
 
-  def get_state(country, state)
+  def self.get_state(country, state)
     begin
       state = HTTParty.get("https://api.countrystatecity.in/v1/countries/#{country}/states/#{state}", {
         headers: headers,
@@ -80,7 +77,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def headers
+  def self.headers
     { 'X-CSCAPI-KEY' => ENV['KEY_COUNTRIES'] }
   end
 end

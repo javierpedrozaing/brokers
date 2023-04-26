@@ -21,6 +21,7 @@
               <% end %>
               <% if current_user.role.downcase == "broker" %>
               <li> <%= link_to 'Agents', agents_path %> </li>
+              <li> <%= link_to 'Brokers', search_brokers_path %> </li>
               <% elsif current_user.role.downcase == "agent" %>
               <li> <%= link_to 'Brokers', search_brokers_path %> </li>
               <% end %>
