@@ -11,12 +11,13 @@ $(document).on('turbolinks:load', function(){
       
       let mydata = {location: {country: country, state: state, city: city}}
           
-      Rails.ajax({
+      Rails.ajax({ 
         url: "/search_brokers",
         type: "post",
         data: JSON.stringify(mydata),
-        success: function(position) {  
-          getSearchLocations(position);
+        success: function(response) {  
+          getSearchLocations(response.coordinates);
+          updateBrokersList(response.brokers);
         },    
         error: function(data) {
           console.error(data);
@@ -27,7 +28,18 @@ $(document).on('turbolinks:load', function(){
   
 });
 
-
+function updateBrokersList(brokers) {  
+  tbody = $(".broker-list tbody"); 
+  row = $(".broker-list tbody tr").remove();
+  brokers.forEach(broker => {
+    tbody.html("<tr>" + 
+    "<td>" + broker.full_name + "</td>" +
+    "<td>" + broker.email + "</td>" +
+    "<td>" + broker.phone + "</td>" +    
+    "<td><a href=" + '/profile/view_profile/' + broker.id + ">View Profile</a></td>" + 
+    "</tr>" );
+  });
+}
 
 function getSearchLocations(position = null) {
   Rails.ajax({
@@ -40,6 +52,8 @@ function getSearchLocations(position = null) {
           name: data.name,
           photo: data.photo,
           city: data.city,
+          email: data.email,
+          company: data.company,
           phone: data.phone
         }
       });    
@@ -60,8 +74,8 @@ function initSearchMap(locations, position = null) {
     zoom: 12
   });   
  
-    latitude = (locations && locations[0]?.coordinates) ? locations[0]?.coordinates[0] : ""
-    longitude = (locations && locations[0]?.coordinates) ? locations[0]?.coordinates[1] : ""
+    latitude = (locations && locations[0]?.coordinates !== null) ? locations[0]?.coordinates[0] : ""
+    longitude = (locations && locations[0]?.coordinates !== null) ? locations[0]?.coordinates[1] : ""
     
     if (latitude.length > 0  && longitude.length > 0 ) {
       map.setCenter({ lat: latitude, lng:  longitude })
@@ -103,16 +117,20 @@ function initSearchMap(locations, position = null) {
       const infowindow = new google.maps.InfoWindow({
         content: "<div class='container' style='max-width: 240px;'>" + "<div class='row'>"
         + "<div class='col-sm-3'><img style='max-width: 50px;' src='"+ locations[i].photo +"'></div>"
-        + "<div class='col-sm-9'><p>Hola Soy, " + locations[i].name + "</p><p>Call me: " + "<a href=tel:"+locations[i].phone+">" + locations[i].phone + "</a></p></div>" 
+        + "<div class='col-sm-9'><p>Hola Soy, " + locations[i].name + "</p><p>" + "<a href=tel:"+locations[i].phone+">" + locations[i].phone + "</a></p>"
+        + "<p>" + locations[i].email + "</p>" + "</div>"
         + "</div></div>",
       });
 
         console.log(locations);
-        marker = new google.maps.Marker({
-          position: new google.maps.LatLng(locations[i].coordinates[0], locations[i].coordinates[1]),
-          map: map,
-          icon: image,
-        });
+
+        if (locations[i].coordinates != null) {
+          marker = new google.maps.Marker({
+            position: new google.maps.LatLng(locations[i].coordinates[0], locations[i].coordinates[1]),
+            map: map,
+            icon: image,
+          });                 
+        }
         
         google.maps.event.addListener(marker, 'click', (function(marker, i) {
           return function() {

@@ -27,10 +27,28 @@
     </div>    
   <% end %>
 
-  <div class="row">
-    <%# <div class="broker-list col-sm-6">
-      <p>List</p>
-    </div> %>
-    <div id="map-brokers" class="col-sm-12"></div>
-  </div>
+  <div class="row broker-list">    
+    <div class="col-sm-6">
+      <h3>Brokers List</h3>
+      <table class="table table-striped">
+        <thead>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th></th>
+        </thead>
+        <tbody>
+        <% @brokers.each do |br| %>
+          <tr>          
+              <td><%= br.full_name %></td>
+              <td><%= br.user.email %></td>
+              <td><%= br.user.phone %></td>
+              <td><%= link_to "View Profile", view_profile_path(br.id) %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <div id="map-brokers" class="col-sm-6"></div>
+   </div>
 </div>

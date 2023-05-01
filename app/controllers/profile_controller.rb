@@ -32,6 +32,10 @@ class ProfileController < ApplicationController
     end
   end
 
+  def view_profile
+    @broker = Broker.find(params[:id])
+  end
+
   def update_agents_params agent
     agent.update!(permit_params_agent)
   end

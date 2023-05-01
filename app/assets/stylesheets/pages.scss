@@ -9,7 +9,6 @@
   }
 }
 
-
 // Login form
 form.new_user, form.edit_user {
   width: 40%;
@@ -50,8 +49,7 @@ h2 {
 
 
 #map-brokers {
-  height: 600px;
-  margin: 10px auto;
+  height: 600px;  
 }
   
 .clients-container, .agents-container, .form-search-brokers, .profile-form  {
@@ -60,6 +58,10 @@ h2 {
     width: 90%;
     margin: 20px auto;
   }  
+}
+
+.broker-list {
+  margin-top: 45px !important;
 }
 
 .close-transaction-fields {

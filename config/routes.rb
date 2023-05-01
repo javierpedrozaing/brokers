@@ -33,7 +33,10 @@ Rails.application.routes.draw do
   get 'clients/edit/:user_id', to: 'clients#edit', as: 'edit_client'
   get 'update_agent/:id', to: 'agents#update', as: 'update_agents'
   
+  get 'profile/view_profile/:id', to: 'profile#view_profile', as: 'view_profile'
   post 'profile/update_profile', to: 'profile#update_profile', as: 'update_profile'
+
+
   devise_for :users
   get 'brokers_locations', to: 'pages#get_brokers_locations', as: 'brokers_locations'
   root 'pages#home'

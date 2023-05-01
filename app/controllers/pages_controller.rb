@@ -18,13 +18,15 @@ class PagesController < ApplicationController
       address = br.address
       location = "#{address}, #{country_name}, #{state_name}"
       full_address = location.strip.length > 3 ? location : ''
-      photo = br.user.photo.attached? ? url_for(br.user.photo) : ''
+      photo = br.user.photo.attached? ? url_for(br.user.photo) : ActionController::Base.helpers.image_path('profile.png')
       {
         broker_id: br.id,
         name: "#{br.user.first_name} #{br.user.last_name}",
         city: br.city,
         photo: photo,
         phone: br.user.phone,
+        email: br.user.email,
+        company: br.company_name,
         coordinates: geocoder.coordinates(full_address)
       }
     end
@@ -39,14 +41,26 @@ class PagesController < ApplicationController
   end
 
   def search_brokers
-    @countries, @states, @cities = ApplicationHelper::get_countries_states_and_cities
+    @countries, @states, @cities = ApplicationHelper::get_countries_states_and_cities    
+
+    @brokers = Broker.all.reject{|br| br.user.role.downcase == 'admin'}
+
     unless request.method == 'GET'
-      location = JSON.parse(params.keys.first)['location']
+      location = JSON.parse(params.keys.first)['location'] if params.keys.first
       address = ""
-      address << location['country'].to_s << " " << location['state'].to_s << " " << location['city'].to_s
+      @country = location['country'].to_s 
+      @state = location['state'].to_s
+      @city = location['city'].to_s
+      address << @country << " " << @state << " " << @city
       locations = Geocoder.search(address)
-      render json: locations.first.coordinates.to_json
-    end
+      with_country = @country.nil? || @country.empty? ? '' : "brokers.country = ? and"
+      with_state = @state.nil? || @state.empty? ? '' : "brokers.state = ? and"
+      with_city =  @city.nil? || @city.empty? ? '' : "brokers.city = ? " 
+      query_location = "#{with_country} #{with_state} #{with_city}"        
+      @brokers = Broker.where(query_location, @country, @state, @city)
+      users = @brokers.map{|br| {full_name: br.user.full_name, email: br.user.email, phone: br.user.phone, id: br.id}}      
+      render json: {coordinates: locations.first.coordinates, brokers: users }
+    end        
   end
 
   def get_states_by_country

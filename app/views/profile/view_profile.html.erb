@@ -1,0 +1,70 @@
+<div class="container profile-form">
+  <br/>
+  <div class="row justify-content-md-center">
+    <div class="col-sm-4">
+     <div class="form-outline mb-2 photo">
+      <%= image_tag(image_url('profile.png')) unless @broker.user.photo.attached? %>
+      <%= image_tag(@broker.user.photo) if @broker.user.photo.attached? %>      
+    </div>      
+    </div>
+
+    <div class="col-sm-4">       
+      <b>First Name</b>
+      <p><%= @broker.user.first_name %></p>
+      
+      <b>Last Name</b>
+      <p><%= @broker.user.last_name %></p>
+      
+      <b>Phone</b>
+      <p><%= @broker.user.phone %></p>
+      
+      <b>Email</b>
+      <p><%= @broker.user.email %></p>
+
+      <b>Years in bussiness</b>
+      <p><%= @broker.years_in_bussiness %></p>
+      
+      <b>Insurance carrier</b>
+      <p><%= @broker.insurance_carrier %></p>
+      
+      <b>Insurance policy</b>
+      <p><%= @broker.insurance_policy %></p>
+      
+      <b>Broker licence</b>
+      <p><%= @broker.licence %></p>
+
+      <b>Broker licencia expiration date</b>
+      <p><%= @broker.licencia_expiration_date %></p>
+    </div>
+
+    <div class="col-sm-4">
+      <b>Company name</b>
+      <p><%= @broker.company_name %></p>
+      
+      <b>Company licence</b>
+      <p><%= @broker.company_licence %></p>
+
+      <b>Company country</b>
+      <p><%= @broker.country %></p>
+
+      <b>Company state</b>
+      <p><%= @broker.state %></p>
+
+      <b>Company city</b>
+      <p><%= @broker.city %></p>
+
+      <b>Company address</b>
+      <p><%= @broker.address %></p>
+
+      <b>Company zip code</b>
+      <p><%= @broker.reserver_zip_code %></p>
+
+      <b></b>
+      <p><%= %></p>
+
+      <b></b>
+      <p><%= %></p>
+    </div>
+
+  </div>
+</div>
