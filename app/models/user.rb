@@ -15,6 +15,8 @@ class User < ApplicationRecord
   validates :last_name, presence: true
   validates :phone, presence: true, :numericality => {:only_integer => true}
 
+  after_create :send_confirm_registration_email
+
   def active_for_authentication?
     super && self.is_active?
   end
@@ -27,4 +29,7 @@ class User < ApplicationRecord
     "#{self.first_name} #{self.last_name}"     
   end
 
+  def send_confirm_registration_email
+    UserMailer.welcome_email(self).deliver_now
+  end
 end

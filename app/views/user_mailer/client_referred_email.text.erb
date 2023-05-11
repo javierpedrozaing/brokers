@@ -1,0 +1,16 @@
+Hello <%= @client.first_name %>,
+
+We are pleased to inform you that you have been referred to one of our agents by <%= @broker.first_name %> <%= @broker.last_name %>.
+
+Here are the details of the agent who will be handling your case:
+
+Name: <%= @agent.first_name %> <%= @agent.last_name %>
+Email: <%= @agent.email %>
+Phone: <%= @agent.phone_number %>
+
+Please contact <%= @agent.first_name %> as soon as possible to begin the process.
+
+Thank you for choosing our service.
+
+Best regards,
+The Brokerage Team

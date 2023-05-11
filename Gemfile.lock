@@ -270,6 +270,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  actionmailer
   bootsnap (>= 1.1.0)
   bootstrap (~> 5.2, >= 5.2.3)
   byebug

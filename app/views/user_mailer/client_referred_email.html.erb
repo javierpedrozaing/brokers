@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Referred Email</title>
+    <style>
+      /* Base styles */
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f8f8;
+        color: #333;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        font-size: 24px;
+        margin: 0 0 20px;
+      }
+
+      p {
+        font-size: 16px;
+        line-height: 1.5;
+        margin: 0 0 20px;
+      }
+
+      a {
+        color: #007bff;
+        text-decoration: none;
+      }
+
+      /* Responsive styles */
+      @media screen and (max-width: 480px) {
+        .container {
+          padding: 10px;
+        }
+
+        h1 {
+          font-size: 20px;
+          margin-bottom: 10px;
+        }
+
+        p {
+          font-size: 14px;
+          margin-bottom: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Client Referred Email</h1>
+      <p>Hello <%= @agent.first_name %>,</p>
+      <p><%= @broker.first_name %> has referred a new client to you:</p>
+      <ul>
+        <li>Name: <%= @client.name %></li>
+        <li>Email: <%= @client.email %></li>
+        <li>Phone: <%= @client.phone_number %></li>
+      </ul>
+      <p>You can contact them at <%= @client.email %> or <%= @client.phone_number %>.</p>
+      <p>Thank you for using our service!</p>
+    </div>
+  </body>
+</html>
