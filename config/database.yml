@@ -24,7 +24,7 @@ production:
   url: <%= ENV['DATABASE_URL'] %>
   adapter: postgresql
   encoding: unicode
-  username: sakigaxbbushhp
+  username: nkkjpcoqtabtkx
   password: <%= ENV['BROKERS_DATABASE_PASSWORD'] %>
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  database: d8loltv74pb3pi
+  database: d1v6p8ujuumfsq
