@@ -1,9 +1,9 @@
 class UserMailer < ApplicationMailer
-  default from: 'notifications@example.com'
+  default from: 'noreply@example.com'
  
-  def welcome_email
-    @user = params[:user]
-    @url  = 'http://example.com/login'
+  def welcome_email(user)
+    @user = user
+    @url  = ENV['HOSTNAME'] || 'https://sleepy-garden-18861.herokuapp.com/'
     mail(to: @user.email, subject: 'Welcome to your Brokers app')
   end
 

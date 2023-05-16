@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Clients, type: :model do
+RSpec.describe Client, type: :model do
   
 
 end

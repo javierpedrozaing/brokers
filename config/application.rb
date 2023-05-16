@@ -10,6 +10,10 @@ module AppBrokers
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.2
+    
+    config.action_mailer.default_url_options = { host: 'localhost:3002' }
+    config.autoload_paths +=  %W(#{config.root}/app/mailers)
+    
     config.assets.initialize_on_precompile = false
     config.serve_static_assets = true
     config.generators do |g|
