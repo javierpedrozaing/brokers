@@ -46,6 +46,7 @@ class ClientsController < ApplicationController
     user.user_state =  params[:user_state]
     
     if user.update!(permit_params_user) && transaction.save
+      UserMailer.client_updated_status(user_id, params[:client_id]).deliver_now
       redirect_to show_client_path(user_id), flash: {notice: "Client successfully updated"}
     else
       render :edit
