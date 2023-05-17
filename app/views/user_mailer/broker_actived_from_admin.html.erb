@@ -43,12 +43,16 @@
   <body>
     <div class="container">
       <h1>BrokersApp!</h1>
-      <h2>Hi <%= @client.full_name %> congratulations</h2>
-      <p>The Broker <%= @broker.full_name %> has updated you status to be "<b><%= @user_status %></b>" </p>
-      <p>Now you can login and start working with BrokersApp</p>
-      <a href="<%= @url %>" class="button">Get started</a>
-      <p>Best regards,</p>
-      <p>BrokersApp team</p>
+      <h2>Hi <%= @full_name %></h2>
+      <p>The administrator has updated you status to be "<b><%= @user_status %></b>" </p>
+      <% if @user_status.downcase == 'active' %>
+        <p>Now you can login and start working with BrokersApp</p>
+        <a href="<%= @url %>" class="button">Login</a>
+      <% else %>
+        <p>If you have any questions, please don't hesitate to get in touch.</p>
+        <p>Best regards,</p>
+        <p>BrokersApp team</p>
+      <% end %>
     </div>
   </body>
 </html>

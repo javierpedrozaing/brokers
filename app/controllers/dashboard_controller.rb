@@ -21,6 +21,7 @@ class DashboardController < ApplicationController
     user.user_state = params[:user_state] if params[:user_state]
     
     if user.save!
+      UserMailer.broker_actived_from_admin(user_id).deliver_now
       redirect_to dashboard_path(user_id), flash: {notice: "User successfully updated"}
     else
       render :edit
