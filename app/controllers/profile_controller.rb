@@ -6,10 +6,21 @@ class ProfileController < ApplicationController
     @agent = Agent.find_by_user_id(current_user.id) || Agent.new
     @broker = Broker.find_by_user_id(current_user.id) || Broker.new
     @current_country = current_user.role.downcase == 'broker' ? @broker&.country : @agent&.country
-    @current_state = current_user.role.downcase == 'broker' ? @broker.state : @agent.state
-    @current_city = current_user.role.downcase == 'broker' ? @broker.city : @agent.city
-    @countries, @states, @cities = ApplicationHelper::get_countries_states_and_cities
+    @current_state = current_user.role.downcase == 'broker' ? @broker&.state : @agent&.state
+    @current_city = current_user.role.downcase == 'broker' ? @broker&.city : @agent&.city
+    @countries, @states, @cities = get_countries_states_and_cities
   end
+
+  def get_countries_states_and_cities
+    @current_country = current_user.role.downcase == 'broker' ? @broker&.country : @agent&.country
+    @countries = ApplicationController::countries_list.map{|c| [c['name'], c['iso2']]} unless ApplicationController::countries_list.nil? || ApplicationController::countries_list.empty?
+    states_list = ApplicationController::states_list_by_country(@current_country) unless @current_country.nil?    
+    @states = states_list.nil? || states_list.length <= 1 ? [] : states_list.map{|c| [c['name'], c['iso2']]}
+    cities_list = ApplicationController::cities_list(@current_country) unless @current_country.nil?
+    @cities = cities_list.nil? || states_list.length <= 1 ? [] : cities_list.map{|c| [c['name'], c['name'].downcase]}
+    [@countries, @states, @cities]
+  end
+
 
   def update_profile
     user = User.find(current_user.id)
