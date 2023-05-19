@@ -21,6 +21,7 @@ class ApplicationController < ActionController::Base
       headers: self.headers,
       debug_output: STDOUT, # To show that User-Agent is Httparty
     })
+    JSON.parse(countries.body)
   end
 
   def self.states_list
