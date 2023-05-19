@@ -23,24 +23,25 @@ class ProfileController < ApplicationController
 
 
   def update_profile
-    user = User.find(current_user.id)
-    user.photo.attach(params[:photo]) if params[:photo]
-    user.member_since = DateTime.now
-    user.member_end = DateTime.now.next_year(1).to_time
-    user.update!(permit_params_user)
-    if user.role.downcase == 'broker'
-      broker_exist = Broker.find_by_user_id(user.id)
-      @broker = broker_exist.nil? ? Broker.create(permit_params_broker) : update_brokers_params(broker_exist)            
+    @user = User.find(current_user.id)
+    @user.photo.attach(params[:photo]) if params[:photo]
+    @user.member_since = DateTime.now
+    @user.member_end = DateTime.now.next_year(1).to_time
+    @user.update!(permit_params_user)
+    @countries, @states, @cities = get_countries_states_and_cities
+    if @user.role.downcase == 'broker'      
+      current_broker = Broker.find_by_user_id(@user.id)      
+      @broker = current_broker.nil? ? Broker.create(permit_params_broker) : update_brokers_params(current_broker)
     elsif
-      agent_exist = Agent.find_by_user_id(user.id)
-      @agent = agent_exist.nil? ? Agent.create(permit_params_agent) : update_agents_params(agent_exist)          
+      current_agent = Agent.find_by_user_id(@user.id)
+      @agent = current_agent.nil? ? Agent.create(permit_params_agent) : update_agents_params(current_agent)          
     end
 
-    if user.save && (@broker || @agent)
-      redirect_to "/", flash: {notice: "Profile successfully updated"}
-    elsif
-      redirect_to profile_index_path, flash: {alert: "Something was wrong, try again"}
-    end
+    if (@user.save && @broker && @broker.valid?) || (@user.save && @agent)
+      redirect_to '/', notice: "Profile successfully updated" 
+    else
+      render :index
+    end   
   end
 
   def view_profile
@@ -52,7 +53,8 @@ class ProfileController < ApplicationController
   end
 
   def update_brokers_params broker
-    broker.update!(permit_params_broker)
+    broker.update(permit_params_broker)
+    broker
   end
 
   private

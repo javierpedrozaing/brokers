@@ -34,7 +34,7 @@ Rails.application.routes.draw do
   get 'update_agent/:id', to: 'agents#update', as: 'update_agents'
   
   get 'profile/view_profile/:id', to: 'profile#view_profile', as: 'view_profile'
-  post 'profile/update_profile', to: 'profile#update_profile', as: 'update_profile'
+  match 'profile/update_profile', to: 'profile#update_profile', as: 'update_profile', via: [:get, :post]
 
 
   devise_for :users

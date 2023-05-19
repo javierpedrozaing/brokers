@@ -2,7 +2,7 @@
   <h4>Refer Information</h4><br/>
     <div class="field form-outline mb-4">
       <%= f.label "Assign Broker", class: "form-label" %>
-      <%= collection_select(:client, :broker_id, @brokers, :id, :full_name, {}, class: "form-control") %>
+      <%= collection_select(:client, :broker_id, @brokers, :id, :company_name, {}, class: "form-control") %>
     </div><br/>
 
     <div class="field form-outline mb-4">

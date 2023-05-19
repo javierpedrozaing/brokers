@@ -3,6 +3,12 @@ class Broker < ApplicationRecord
   has_many :transactions
   has_many :agents, class_name: "Agent"
   has_many :clients, class_name: "Client"
+
+  validates :company_name, presence: true
+  validates :country, presence: true
+  validates :city, presence: true
+  validates :state, presence: true
+  validates :address, presence: true
   
   geocoded_by :full_address
   after_validation :geocode, if: ->(obj){ obj.address.present? and obj.address_changed? }  
