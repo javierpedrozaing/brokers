@@ -41,7 +41,7 @@ class PagesController < ApplicationController
   end
 
   def search_brokers
-    @countries, @states, @cities = ApplicationHelper::get_countries_states_and_cities    
+    @countries, @states, @cities = get_countries_states_and_cities    
 
     @brokers = Broker.all.reject{|br| br.user.role.downcase == 'admin'}
 
@@ -62,6 +62,16 @@ class PagesController < ApplicationController
       render json: {coordinates: locations.first.coordinates, brokers: users }
     end        
   end
+
+  def get_countries_states_and_cities
+    @current_country = current_user.role.downcase == 'broker' ? @broker&.country : @agent&.country
+    @countries = ApplicationController::countries_list.map{|c| [c['name'], c['iso2']]} unless ApplicationController::countries_list.nil? || ApplicationController::countries_list.empty?
+    states_list = ApplicationController::states_list_by_country(@current_country) unless @current_country.nil?    
+    @states = states_list.nil? || states_list.length <= 1 ? [] : states_list.map{|c| [c['name'], c['iso2']]}
+    cities_list = ApplicationController::cities_list(@current_country) unless @current_country.nil?
+    @cities = cities_list.nil? || states_list.length <= 1 ? [] : cities_list.map{|c| [c['name'], c['name'].downcase]}
+    [@countries, @states, @cities]
+  end    
 
   def get_states_by_country
     states = ApplicationController::states_by_country(params[:country_id])
