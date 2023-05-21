@@ -154,7 +154,7 @@ class ClientsController < ApplicationController
       transaction = Transaction.create(transaction_params)
     end
 
-    self.send_confirm_referred_email(@referral)
+    # self.send_confirm_referred_email(@referral)
   end
 
   def create_referral #for refer agents and brokers
@@ -221,7 +221,7 @@ class ClientsController < ApplicationController
       transaction = Transaction.create(transaction_params)
     end
 
-    self.send_confirm_referred_email(@referral)
+    # self.send_confirm_referred_email(@referral)
   end
 
   def assign_broker
