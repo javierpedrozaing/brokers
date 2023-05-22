@@ -7,11 +7,16 @@ class UserMailer < ApplicationMailer
     mail(to: @user.email, subject: 'Welcome to your Brokers app')
   end
 
-  def client_referred_email(referral)
-    @referral = referral
-    @agent = @referral.agent
-    @client = @referral.client
-    mail(to: @agent.email, subject: "BrokersApp: New Client Referral")
+  def client_referred_email(sender, destination, client)    
+    begin      
+      @sneder = sender
+      @destination = destination
+      @client = client
+      mail(to: @destination.email, subject: "BrokersApp: New Client Referral")  
+    rescue => exception
+      puts "the notification email not was deliver"
+    end
+    
   end
 
   def client_updated_status(broker_id, client_id)    

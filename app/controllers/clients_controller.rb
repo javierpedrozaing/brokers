@@ -154,7 +154,7 @@ class ClientsController < ApplicationController
       transaction = Transaction.create(transaction_params)
     end
 
-    # self.send_confirm_referred_email(@referral)
+    self.send_confirm_referred_email(origin_broker, destination_broker, client.id)
   end
 
   def create_referral #for refer agents and brokers
@@ -221,7 +221,7 @@ class ClientsController < ApplicationController
       transaction = Transaction.create(transaction_params)
     end
 
-    # self.send_confirm_referred_email(@referral)
+    self.send_confirm_referred_email(origin_agent, destination_broker, client.id)
   end
 
   def assign_broker
@@ -336,8 +336,11 @@ class ClientsController < ApplicationController
     params.permit(:agent_id, :broker_id, :type_of_property, :number_of_rooms, :parkng_lot, :budget)
   end
 
-  def send_confirm_referred_email(referral)
-    UserMailer.client_referred_email(referral).deliver_now
+  def send_confirm_referred_email(sender, destination, client)
+    # the destination user always gonna be a borker user
+    broker = Broker.find(destination)
+    user_sender = current_user.role.downcase == 'agent' ? Agent.find(sender) : Broker.find(sender)
+    UserMailer.client_referred_email(user_sender, broker, client).deliver_now
   end
 
   # def get_clients_by_agents_id

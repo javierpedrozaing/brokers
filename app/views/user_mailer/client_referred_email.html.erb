@@ -58,8 +58,8 @@
   <body>
     <div class="container">
       <h1>Client Referred Email</h1>
-      <p>Hello <%= @agent.first_name %>,</p>
-      <p><%= @broker.first_name %> has referred a new client to you:</p>
+      <p>Hello <%= @destination.first_name %>,</p>
+      <p><%= @sender.first_name %> has referred a new client to you:</p>
       <h3>Client information</h3>
       <ul>
         <li>Name: <%= @client.name %></li>
