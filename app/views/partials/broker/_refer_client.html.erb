@@ -1,4 +1,4 @@
-<div class="col-sm-6">
+<div class="col-sm-4">
   <h4>Refer Information</h4><br/>
     <div class="field form-outline mb-4">
       <%= f.label "Assign Broker", class: "form-label" %>
@@ -21,29 +21,46 @@
     </div><br/>
 
     <div class="field form-outline mb-4">
-      <%= f.label :parkng_lot, class: "form-label" %><br />
-      <%= f.select(:parkng_lot, @parking_lots, {}, {:class => 'form-control' }) %>  
+      <%= f.label "Pool:", class: "form-label" %>
+      <%= f.radio_button :pool, 'yes' %>
+      <%= f.label " yes", class: "form-label" %>
+      <%= f.radio_button :pool, 'no' %>
+      <%= f.label " no", class: "form-label" %><br />
     </div><br/>
 
     <div class="field form-outline mb-4">
       <%= f.label :property_address, class: "form-label" %><br />
       <%= f.text_field :property_address, autofocus: true, autocomplete: "Property address", class: "form-control" %>
     </div><br/>
+</div>
 
-    <div class="field form-outline mb-4">
-      <%= f.label :budget, class: "form-label" %><br />
-      <%= f.radio_button :budget, '10,000 - 30,000' %>
-      <%= f.label "10,000 - 30,000", class: "form-label" %><br />
-      
-      <%= f.radio_button :budget, '30,000 - 60,000' %>
-      <%= f.label "30,000 - 60,000", class: "form-label" %><br />
 
-      <%= f.radio_button :budget, '60,000 - 100,000' %>
-      <%= f.label "60,000 - 100,000", class: "form-label" %><br />
-    </div><br/>
-
-    <div class="field form-outline mb-4">
+<div class="col-sm-4">
+  <h4>Additional Information</h4><br/>
+<div class="field form-outline mb-4">
       <%= f.label :notes, class: "form-label" %><br />    
       <%= f.text_area :notes, autofocus: true, class: "form-control" %>
     </div><br/>
+    
+    <div class="field form-outline mb-4">
+    <%= f.label :budget, class: "form-label" %><br />
+      <div class="overflow-auto price-range">
+        <%                
+            @price_range_group_a.each do |price_range|
+            start_price, end_price = price_range %>          
+            <%= f.radio_button :budget, "#{start_price} - #{end_price}" %>
+            <%= f.label "#{start_price} - #{end_price}", class: "form-label" %><br />
+        <%  
+          end
+        %>
+        <%     
+          all_radio_buttons = []
+          @price_range_group_b.each do |price_range|
+            start_price, end_price = price_range %>          
+            <%= f.radio_button :budget, "#{start_price} - #{end_price}" %>
+            <%= f.label "#{start_price} - #{end_price}", class: "form-label" %><br />
+        <%  end %>
+        </div>
+    </div>
+    
 </div>

@@ -2,7 +2,7 @@
 // Australia.
 
 $(document).on('turbolinks:load', function(){
-  getLocations();
+    getLocations();
 });
 
 function getLocations() {
@@ -20,7 +20,6 @@ function getLocations() {
           phone: data.phone
         }
       });
-      //window.initMap = initMap();
       initMap(locations);
     },    
     error: function(data) {

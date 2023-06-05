@@ -15,8 +15,9 @@ class PagesController < ApplicationController
       country_name = country ? JSON.parse(country.body)["name"] : ''
       state = ApplicationController::get_state(country_name, br.try(:state))
       state_name = state['name']
+      city =  br&.city.capitalize()
       address = br.address
-      location = "#{address}, #{country_name}, #{state_name}"
+      location = "#{country_name}, #{state_name}, #{city}, #{address}"
       full_address = location.strip.length > 3 ? location : ''
       photo = br.user.photo.attached? ? url_for(br.user.photo) : ActionController::Base.helpers.image_path('profile.png')
       {

@@ -16,4 +16,6 @@
 //= require rails-ujs
 //= require activestorage
 //= require turbolinks
+//= stub 'maps'
+//= stub 'search_brokers_map'
 //= require_tree .

@@ -12,8 +12,7 @@
         <th scope="col">email</th>
         <th scope="col">phone</th>
         <th scope="col">User status</th>
-        <th scope="col"># clients</th>
-        <th scope="col"></th>
+        <th scope="col"># clients</th>        
       </tr>
     </thead>
     <tbody>
@@ -25,8 +24,7 @@
         <td><%= agent.user.email %></td>
         <td><%= agent.user.phone %></td>
         <td><%= agent.user.user_state %></td>
-        <td><%= agent.clients.count %></td>
-        <td><%= link_to "Assign Client", assign_client_path(agent.user.id), class: "btn btn-success" %></td>
+        <td><%= agent.clients.count %></td>        
       </tr>
     <% end %>
     </tbody>

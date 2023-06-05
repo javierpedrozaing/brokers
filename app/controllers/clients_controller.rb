@@ -94,7 +94,20 @@ class ClientsController < ApplicationController
   def refer_client_from_broker
     @brokers = Broker.all
     default_values_for_create_referreds
-    
+    @price_range_group_a =  [
+      [0, 100000],
+      [100000, 200000],
+      [200000, 300000],
+      [300000, 400000],
+      [400000, 500000],
+      [500000, 600000],
+      [600000, 700000],
+      [700000, 800000],
+      [800000, 900000],
+      [900000, 1000000]                    
+    ]
+
+    @price_range_group_b = price_range_group_b
     @client = params.include?(:email) ? create_client_from_broker : nil        
 
     unless @client.nil?
@@ -194,8 +207,11 @@ class ClientsController < ApplicationController
 
     if current_user.role.downcase == 'broker'
       origin_broker = current_user.broker.id
-      @referral = Agent.find(origin_broker)
+      @referral = Broker.find(origin_broker)
       assigned_agent = params[:client][:agent_id]
+      client = Client.find(client.id)
+      client.agent_id = assigned_agent
+      client.save!
       destination_broker = current_user.broker.id
     end
 
@@ -213,7 +229,7 @@ class ClientsController < ApplicationController
     if current_transaction
       current_transaction.origin_broker = origin_broker
       current_transaction.destination_broker = destination_broker
-      current_transaction.origin_agent = origin_agent
+      current_transaction.origin_agent = origin_agent || 0
       current_transaction.assigned_agent = assigned_agent
       current_transaction.property_address = params[:property_address]
       current_transaction.save!
@@ -221,7 +237,7 @@ class ClientsController < ApplicationController
       transaction = Transaction.create(transaction_params)
     end
 
-    self.send_confirm_referred_email(origin_agent, destination_broker, client.id)
+    self.send_confirm_referred_email(origin_agent || origin_broker, destination_broker, client.id)
   end
 
   def assign_broker
@@ -293,7 +309,7 @@ class ClientsController < ApplicationController
       inbound_clients += clients_refered_from_agents
 
       outbound_clients = Client.where('broker_id != ?', broker.id).joins(:transactions).where('transactions.origin_broker = ?', broker.id)
-      outbound_clients_of_agent = Client.where('broker_id != ?', broker.id).joins(:transactions).where('transactions.destination_broker != ?', broker.id)
+      outbound_clients_of_agent = Client.where(broker_id: broker.id).joins(:transactions).where('transactions.destination_broker != ?', broker.id)
       outbound_clients += outbound_clients_of_agent
     else
       agent = User.find(current_user.id).agent
@@ -341,6 +357,19 @@ class ClientsController < ApplicationController
     broker = Broker.find(destination)
     user_sender = current_user.role.downcase == 'agent' ? Agent.find(sender) : Broker.find(sender)
     UserMailer.client_referred_email(user_sender, broker, client).deliver_now
+  end
+
+  def price_range_group_b
+    start_price = 1_000_000
+    end_price = 50_000_000
+    interval = 500_000
+
+    price_ranges = []
+    while start_price <= end_price
+      price_ranges << [start_price, start_price + 1_500_000]
+      start_price += interval
+    end
+    price_ranges
   end
 
   # def get_clients_by_agents_id

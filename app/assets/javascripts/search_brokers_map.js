@@ -1,32 +1,31 @@
 // This example adds a marker to indicate the position of Bondi Beach in Sydney,
 // Australia.
 
-$(document).on('turbolinks:load', function(){
-  if (window.location.href.indexOf("search") > -1) {
-    getSearchLocations();    
-    $("#search-brokers").on('click', () => {
-      let country = $("#country").val();
-      let state = $("#state").val();
-      let city = $("#city").val();
-      
-      let mydata = {location: {country: country, state: state, city: city}}
-          
-      Rails.ajax({ 
-        url: "/search_brokers",
-        type: "post",
-        data: JSON.stringify(mydata),
-        success: function(response) {  
-          getSearchLocations(response.coordinates);
-          updateBrokersList(response.brokers);
-        },    
-        error: function(data) {
-          console.error(data);
-        }
-      })
+$(document).on('turbolinks:load', function(){  
+  getSearchLocations();    
+
+  $("#search-brokers").on('click', () => {
+    let country = $("#country").val();
+    let state = $("#state").val();
+    let city = $("#city").val();
+    
+    let mydata = {location: {country: country, state: state, city: city}}
+        
+    Rails.ajax({ 
+      url: "/search_brokers",
+      type: "post",
+      data: JSON.stringify(mydata),
+      success: function(response) {  
+        getSearchLocations(response.coordinates);
+        updateBrokersList(response.brokers);
+      },    
+      error: function(data) {
+        console.error(data);
+      }
     })
-  }
-  
+  });  
 });
+
 
 function updateBrokersList(brokers) {  
   tbody = $(".broker-list tbody"); 
@@ -56,9 +55,8 @@ function getSearchLocations(position = null) {
           company: data.company,
           phone: data.phone
         }
-      });    
+      });
       
-      //window.initMap = initMap();
       initSearchMap(coordinates, position);
     },    
     error: function(data) {
@@ -69,7 +67,6 @@ function getSearchLocations(position = null) {
 
 
 function initSearchMap(locations, position = null) {  
-
   const map = new google.maps.Map(document.getElementById("map-brokers"), {
     zoom: 12
   });   
@@ -138,6 +135,5 @@ function initSearchMap(locations, position = null) {
             infowindow.open(map, marker);
           }
         })(marker, i));
-   
     }
 }

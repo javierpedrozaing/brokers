@@ -1,4 +1,4 @@
-<div class="col-sm-6">
+<div class="col-sm-4">
   <h4>Client information</h4><br/>
   <%= f.hidden_field :user_state, value: current_user&.role&.downcase == 'agent'  ? 'active' : 'inactive' %>
   <div class="form-outline mb-4">

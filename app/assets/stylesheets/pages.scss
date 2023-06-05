@@ -104,6 +104,11 @@ table.transactions-list {
   font-size: 0.8rem;
 }
 
+.price-range {
+  max-width: 300px;
+  max-height: 400px;
+}
+
 @media (max-width: 768px) {
   form.new_user {
     width: 80%;
