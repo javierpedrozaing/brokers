@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_04_01_172553) do
+ActiveRecord::Schema.define(version: 2023_05_23_194558) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -86,6 +86,9 @@ ActiveRecord::Schema.define(version: 2023_04_01_172553) do
     t.string "budget"
     t.integer "broker_id"
     t.string "number_of_bathrooms"
+    t.string "bed_rooms"
+    t.string "bath_rooms"
+    t.boolean "pool", default: false
     t.index ["agent_id"], name: "index_clients_on_agent_id"
     t.index ["broker_id"], name: "index_clients_on_broker_id"
     t.index ["user_id"], name: "index_clients_on_user_id"
