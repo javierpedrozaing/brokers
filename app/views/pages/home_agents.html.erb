@@ -188,12 +188,12 @@
       </thead>
       <tbody>
         <tr>
-          <td>450</td>
-          <td>450</td>
-          <td>450</td>
+          <td><%= @total_countries %></td>
+          <td><%= @total_brokers %></td>
+          <td><%= @total_closed_transactions %></td>
         </tr>
         <th scope="col"></th>
-        <th scope="col">Total sales volume: $60.000</th>
+        <th scope="col">Total sales volume: $ <%= @total_sales %></th>
         <th scope="col"></th>
       </tbody>
     </table>
@@ -210,12 +210,12 @@
         <tr>
           <th scope="col">Total outbound</th>
           <th scope="col"></th>
-          <th scope="col">Total inbout</th>
+          <th scope="col">Total inbound</th>
         </tr>
         <tr>
-          <td>450</td>
+          <td><%= @total_outbound %></td>
           <td></td>
-          <td>450</td>
+          <td><%= @total_inbound %></td>
         </tr>
       </thead>
       <tbody>
@@ -225,9 +225,9 @@
           <th scope="col">Closed</th>
         </tr>
         <tr>
-          <td>23</td>
-          <td>45</td>
-          <td>100</td>
+          <td><%= @showing  %></td>
+          <td><%= @in_progress %></td>
+          <td><%= @closed %></td>
         </tr>
       </tbody>
     </table>

@@ -27,6 +27,14 @@ class PagesController < ApplicationController
     
   end
 
+  def home_brokers
+
+  end
+
+  def home_agents
+    
+  end
+
   def get_brokers_locations
     geocoder = Geocoder
     brokers = Broker.all.where.not(id: 0)
