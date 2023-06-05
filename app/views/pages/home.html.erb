@@ -13,11 +13,6 @@
   </section><!-- End Hero -->
 
   <main id="main">
-  
-  <% unless user_signed_in? %>
-    <div id="map"></div>
-  <% end %>
-  
     <!-- ======= What We Do Section ======= -->
     <section id="what-we-do" class="what-we-do">
       <div class="container">
@@ -56,6 +51,10 @@
       </div>
     </section><!-- End What We Do Section -->
 
+    <% unless user_signed_in? %>
+      <div id="map"></div>
+    <% end %>
+    
     <!-- ======= About Section ======= -->
     <section id="about" class="about">
       <div class="container">

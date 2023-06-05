@@ -10,7 +10,16 @@
         </div>
         <nav id="navbar" class="navbar order-last order-lg-0">
           <ul>
-            <li><a class="nav-link scrollto active" href="/">Home</a></li>
+            <% if user_signed_in? %>
+              <% if current_user.role.downcase == "broker" %>
+              <li> <%= link_to 'Home', home_brokers_path %> </li>                
+              <% else %>
+                <li> <%= link_to 'Home', home_agents_path %> </li>
+              <% end %>
+            <% else %>
+              <li><a class="nav-link scrollto active" href="/">Home</a></li>
+            <% end %>
+            
             <% if user_signed_in? && current_user.role.downcase == 'admin' %>
             <li> <%= link_to 'Usuarios', dashboard_path %> </li>
             <li> <%= link_to 'Transactions', transactions_path %> </li>
