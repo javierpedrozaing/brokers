@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   get 'profile/index'
 
+  get '/home_brokers', to: 'pages#home_brokers', as: 'home_brokers'
+  get '/home_agents', to: 'pages#home_agents', as: 'home_agents'
+  
   get 'agents', to: 'agents#index'
   get 'agents/new', to: 'agents#new', as: 'new_agent'
   post 'agents/create', to: 'agents#create', as: 'create_agent'
