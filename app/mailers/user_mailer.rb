@@ -19,9 +19,9 @@ class UserMailer < ApplicationMailer
     
   end
 
-  def client_updated_status(broker_id, client_id)    
-    @client = Agent.find(client_id)
-    @broker = Broker.find(broker_id)
+  def client_updated_status(current_user, client_id) 
+    @client = Client.find(client_id)
+    @broker =Broker.find(current_user.broker.id)
     @url  = ENV['HOSTNAME']
     @user_status = User.find(@client.user_id).user_state
     mail(to: @client.user.email, subject: "BrokersApp: User activation")
