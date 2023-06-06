@@ -8,6 +8,40 @@
     <%= link_to "New Client", new_client_path, class: "btn btn-primary btn-block mb-4" %>
     <% end %>
   </div>
+  <% if  current_user.role.downcase == "agent" %>
+    <h3>Unassign Clients</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">name</th>
+          <th scope="col">From Agent</th>
+          <th scope="col">User status</th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+      <% count = 0 %>
+      <% if @clients %>
+        <% @clients.each do |client| %>
+          <tr>
+            <td><%= count += 1 %></td>
+            <td><%= link_to client.full_name, show_client_path(client.user.id) %></td>
+            <td><%= Agent.find(client.agent_id).full_name %></td> <!--update for from agent-->
+            <td><%= client.user.role.downcase != 'broker' ? 'active' : 'inactive' %></td>          
+            <% if current_user.role.downcase == 'agent' %>
+              <td><%= link_to "Refer Broker", refer_broker_path(client.user.id), class: "btn btn-success" %></td>            
+            <% else %>
+              <td><%= link_to "Assign Agent", refer_agent_path(client.user.id), class: "btn btn-success" %></td>
+              <td><%= link_to 'View Details', show_client_path(client.user.id), class: "btn btn-success" %></td>
+            <% end %>
+          </tr>
+        <% end %>
+      <% end %>
+      </tbody>
+    </table>
+  <% end %>
   <br/>
   <h3>Inbound Clients</h3>
    <table class="table">
@@ -16,7 +50,8 @@
         <th scope="col">#</th>
         <th scope="col">name</th>
         <% if current_user.role.downcase == 'broker'%>          
-          <th scope="col">Assigned Agent</th>                   
+          <th scope="col">From</th>  
+          <th scope="col">Assigned to</th>                   
         <% elsif current_user.role.downcase == 'agent' %> 
           <th scope="col">Origin broker</th>                  
           <th scope="col">Assigned agent</th>          
@@ -35,8 +70,15 @@
         <tr>
           <td><%= count += 1 %></td>
           <td><%= link_to referido.full_name, show_client_path(referido.user.id) %></td>                              
-          <% if current_user.role.downcase == 'broker'%>            
-            <td><%= referido.agent.full_name %></td>
+          <% if current_user.role.downcase == 'broker'%>
+            <% 
+            from_user = Broker.find(Transaction.where(client_id: referido.id).last.origin_broker).company_name
+            from_user = from_user.downcase == 'unassigned' ? Agent.find(Transaction.where(client_id: referido.id).last.origin_agent).user.full_name : from_user
+            assigned_to = Broker.find(Transaction.where(client_id: referido.id).last.destination_broker).company_name
+            assigned_to = assigned_to.downcase == 'unassigned' ? Agent.find(Transaction.where(client_id: referido.id).last.assigned_agent).user.full_name : assigned_to            
+            %>
+            <td><%= from_user %></td>
+            <td><%= assigned_to %></td>
           <% elsif current_user.role.downcase == 'agent' %>
             <td><%= Broker.find(Transaction.where(client_id: referido.id).last.destination_broker).user.full_name %></td>
             <td><%= Agent.find(Transaction.where(client_id: referido.id).last.assigned_agent).user.full_name %></td>
@@ -62,7 +104,7 @@
       <tr>
         <th scope="col">#</th>
         <th scope="col">name</th>
-        <th scope="col">From Agent</th>
+        <th scope="col">From</th>
         <th scope="col">Assigned Broker</th>
         <th scope="col">User status</th>
         <th scope="col"></th>               
@@ -78,7 +120,7 @@
           <td><%= count += 1 %></td>
           <td><%= referido.full_name %></td>          
           <td><%= referido.agent.full_name %></td>          
-          <td><%= Broker.find(Transaction.find_by_client_id(referido.id).destination_broker).user.full_name %></td>
+          <td><%= Broker.find(Transaction.find_by_client_id(referido.id).destination_broker).company_name %></td>
           <td><%= referido.user.user_state %></td>
           <td><%= link_to 'View Details', show_client_path(referido.user.id), class: "btn btn-success" %></td>
         </tr>

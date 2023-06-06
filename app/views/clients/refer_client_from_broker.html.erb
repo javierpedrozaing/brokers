@@ -1,7 +1,7 @@
 <div class="container">
 
 
-  <% if  @client && @client.errors.any? %>
+  <% if @client && @client.errors.any? %>
       <div id="errorExplanation">
         <% @client.errors.full_messages.each do |msg| %>
           <li><%= msg %></li>
@@ -10,7 +10,15 @@
       </div>
   <% end %>
 
-
+ <% if @user && @user.errors.any? %>
+      <div id="errorExplanation">
+        <% @user.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
+  <% end %>
+  
   <%= form_with(url: refer_client_from_broker_path(@user), method: "post") do |f| %>
     <h2>Refer Broker</h2>
     <div class="row justify-content-md-center">

@@ -2,22 +2,22 @@
   <h4>Client information</h4><br/>
   <%= f.hidden_field :user_state, value: current_user&.role&.downcase == 'agent'  ? 'active' : 'inactive' %>
   <div class="form-outline mb-4">
-    <%= f.label :first_name, class: "form-label" %><br />
+    <%= f.label 'First name *', class: "form-label" %><br />
     <%= f.text_field :first_name, autofocus: true, autocomplete: "First name", class: "form-control" %>
   </div>
 
   <div class="form-outline mb-4">
-    <%= f.label :last_name, class: "form-label" %><br />
+    <%= f.label 'Last name *', class: "form-label" %><br />
     <%= f.text_field :last_name, autofocus: true, autocomplete: "Last name", class: "form-control" %>
   </div>
 
   <div class="form-outline mb-4">
-    <%= f.label :phone, class: "form-label" %><br />
+    <%= f.label 'Phone *', class: "form-label" %><br />
     <%= f.number_field :phone, autofocus: true, autocomplete: "Phone", class: "form-control" %>
   </div>
 
   <div class="form-outline mb-4">
-    <%= f.label :email, class: "form-label" %><br />
+    <%= f.label 'Email *', class: "form-label" %><br />
     <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
   </div>
   
@@ -33,7 +33,7 @@
   
 
   <div class="field">
-    <%= f.label "password (6 characters minimum)", class: "form-label" %>
+    <%= f.label "password (6 characters minimum) *", class: "form-label" %>
     <% if @minimum_password_length %>
     <em>(<%= @minimum_password_length %> characters minimum)</em>
     <% end %><br />
@@ -41,7 +41,7 @@
   </div>
 
   <div class="field">
-    <%= f.label :password_confirmation, class: "form-label" %><br />
+    <%= f.label 'password_confirmation *', class: "form-label" %><br />
     <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %>
   </div>
 </div>

@@ -141,6 +141,7 @@ class ClientsController < ApplicationController
         client.save!
         client
       end
+      #todo add validation to render with message errros
     end
   end
 
@@ -212,7 +213,7 @@ class ClientsController < ApplicationController
       client = Client.find(client.id)
       client.agent_id = assigned_agent
       client.save!
-      destination_broker = current_user.broker.id
+      destination_broker = assigned_agent.to_i > 0 ? 0 : current_user.broker.id
     end
 
     transaction_params = {
