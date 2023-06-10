@@ -1,0 +1,82 @@
+$background-color_1: #e1e1e1;
+
+.carousel-container {
+	max-width: 80%;
+	margin: auto;
+}
+.img-wrapper {	
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+}
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+.img-position {
+	display: flex;
+	height: 15vw;
+	justify-content: center;
+}
+.carousel-inner {
+	padding: 1em;
+	margin: auto;
+}
+.card {
+	margin: 0 .1em;
+	box-shadow: 2px 6px 8px 0 rgba(22, 22, 26, .18);
+	max-height: 100%;
+}
+.card-text {
+	font-size: 10px;
+}
+.card-title {
+	font-size: 15px;
+}
+.card-body {
+	padding-top: 0.5em;
+}
+.carousel-control-prev {
+	width: 6vh;
+	height: 6vh;
+	background-color: $background-color_1;
+	border-radius: 50%;
+	top: 50%;
+	transform: translateY(-50%);
+	transform: translateX(-100%);
+}
+.carousel-control-next {
+	width: 6vh;
+	height: 6vh;
+	background-color: $background-color_1;
+	border-radius: 50%;
+	top: 50%;
+	transform: translateY(-50%);
+	transform: translateX(-100%);
+	transform: translateX(100%);
+}
+.container-tabla1 {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+.table {
+	width: 70%;
+}
+.container-tabla2 {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+@media screen and (min-width: 700px) {
+	.carousel-inner {
+		display: flex;
+	}
+	.carousel-item {
+		display: block;
+		margin-right: 0;
+		flex: 0 0 calc(100%/3);
+	}	
+}
