@@ -4,7 +4,11 @@ class PagesController < ApplicationController
   def home
     if user_signed_in? && current_user.member_since.nil?
       redirect_to profile_index_path, id_user: current_user.id
-    end    
+    elsif user_signed_in? && current_user.role == 'broker'
+      redirect_to home_brokers_path
+    elsif user_signed_in? && current_user.role == 'agent'
+      redirect_to home_agents_path
+    end
   end
 
   def home_brokers
