@@ -12,19 +12,29 @@ class PagesController < ApplicationController
   end
 
   def home_brokers
+    @total_countries = 250
+    @total_brokers = Broker.all.count
+    @total_closed_transactions = Transaction.where.not(close_date: nil).count
+    @total_sales = User.pluck(:full_sale).sum(&:to_f)
 
+    @total_outbound = Transaction.where("origin_broker = ? and assigned_agent > ?", current_user.id, 0).count
+    @total_inbound = Transaction.where("destination_broker = ?", current_user.id).count
+    @showing = Broker.find_by_user_id(current_user.id).clients.map{|client| client.user.user_state == 'showing_property'}.count
+    @in_progress = Broker.find_by_user_id(current_user.id).clients.map{|client| client.user.user_state == 'active' || client.user.user_state == 'transaction_processing' || client.user.user_state == 'making_offer' }.count
+    @closed = Transaction.where(origin_broker: current_user.id).where.not(close_date: nil).count
   end
 
   def home_agents
-    
-  end
+    @total_countries = 250
+    @total_brokers = Broker.all.count
+    @total_closed_transactions = Transaction.where.not(close_date: nil).count
+    @total_sales = User.pluck(:full_sale).sum(&:to_f)
 
-  def home_brokers
-
-  end
-
-  def home_agents
-    
+    @total_outbound = Transaction.where("origin_agent = ? and assigned_agent > ?", current_user.id, 0).count
+    @total_inbound = Transaction.where("assigned_agent = ?", current_user.id).count
+    @showing = Agent.find_by_user_id(current_user.id).clients.map{|client| client.user.user_state == 'showing_property'}.count
+    @in_progress = Agent.find_by_user_id(current_user.id).clients.map{|client| client.user.user_state == 'active' || client.user.user_state == 'transaction_processing' || client.user.user_state == 'making_offer' }.count
+    @closed = Transaction.where(origin_agent: current_user.id).where.not(close_date: nil).count
   end
 
   def home_brokers
