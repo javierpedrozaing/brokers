@@ -13,7 +13,7 @@ class PagesController < ApplicationController
 
   def home_brokers
     @total_countries = 250
-    @total_brokers = Broker.all.count
+    @total_brokers = Broker.all.count - 1
     @total_closed_transactions = Transaction.where.not(close_date: nil).count
     @total_sales = User.pluck(:full_sale).sum(&:to_f)
 
@@ -26,7 +26,7 @@ class PagesController < ApplicationController
 
   def home_agents
     @total_countries = 250
-    @total_brokers = Broker.all.count
+    @total_brokers = Broker.all.count -1
     @total_closed_transactions = Transaction.where.not(close_date: nil).count
     @total_sales = User.pluck(:full_sale).sum(&:to_f)
 

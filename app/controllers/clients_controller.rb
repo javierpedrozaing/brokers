@@ -309,9 +309,9 @@ class ClientsController < ApplicationController
       clients_refered_from_agents = Client.joins(:transactions).where('transactions.destination_broker = ?', broker.id)
       inbound_clients += clients_refered_from_agents
 
-      outbound_clients = Client.where('broker_id != ?', broker.id).joins(:transactions).where('transactions.origin_broker = ?', broker.id)
+      outbound_clients = Client.where('broker_id != ?', broker.id).joins(:transactions).where('transactions.origin_broker = ? and transactions.destination_broker > ?', broker.id, 0)
       outbound_clients_of_agent = Client.where(broker_id: broker.id).joins(:transactions).where('transactions.destination_broker != ?', broker.id)
-      outbound_clients += outbound_clients
+      outbound_clients
     else
       agent = User.find(current_user.id).agent
       unassing_clients = Client.where(agent_id: agent.id, broker_id: 0).includes(:transactions).where(transactions: { id: nil })
