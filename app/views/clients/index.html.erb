@@ -72,8 +72,9 @@
           <td><%= link_to referido.full_name, show_client_path(referido.user.id) %></td>                              
           <% if current_user.role.downcase == 'broker'%>
             <% 
-            from_user = Broker.find(Transaction.where(client_id: referido.id).last.origin_broker).company_name
-            from_user = from_user.downcase == 'unassigned' ? Agent.find(Transaction.where(client_id: referido.id).last.origin_agent).user.full_name : from_user
+            transaction = Transaction.where(client_id: referido.id)
+            company_broker = Broker.find(transaction.last.origin_broker).company_name unless transaction
+            from_user = (company_broker && company_broker.downcase == 'unassigned') ? Agent.find(Transaction.where(client_id: referido.id).last.origin_agent).user.full_name : current_user.broker.company_name
             assigned_to_broker = referido.broker.company_name
             assigend_to_agent = referido.agent.user.first_name
 
