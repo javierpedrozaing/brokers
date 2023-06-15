@@ -2,7 +2,7 @@ $(document).on('turbolinks:load', function(){
   const multipleCardCarousel = document.querySelector(
     "#carouselExampleIndicators"
   );
-debugger
+
   if (window.matchMedia("(min-width: 1200px)").matches) {
     var carousel = new bootstrap.Carousel(multipleCardCarousel, {
       interval: false,

@@ -311,7 +311,7 @@ class ClientsController < ApplicationController
 
       outbound_clients = Client.where('broker_id != ?', broker.id).joins(:transactions).where('transactions.origin_broker = ?', broker.id)
       outbound_clients_of_agent = Client.where(broker_id: broker.id).joins(:transactions).where('transactions.destination_broker != ?', broker.id)
-      outbound_clients += outbound_clients_of_agent
+      outbound_clients += outbound_clients
     else
       agent = User.find(current_user.id).agent
       unassing_clients = Client.where(agent_id: agent.id, broker_id: 0).includes(:transactions).where(transactions: { id: nil })

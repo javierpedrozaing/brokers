@@ -18,4 +18,5 @@
 //= require turbolinks
 //= stub 'maps'
 //= stub 'search_brokers_map'
+//= stub 'home'
 //= require_tree .
