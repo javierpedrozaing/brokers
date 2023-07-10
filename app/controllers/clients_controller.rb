@@ -202,14 +202,14 @@ class ClientsController < ApplicationController
     if current_user.role.downcase == 'agent'      
       origin_agent = current_user.agent.id
       @referral = Agent.find(origin_agent)
-      destination_broker = params[:client][:broker_id]
+      destination_broker = params[:client][:broker_id].to_i
       origin_broker = Agent.find(origin_agent).broker_id # clean origin broker, for refereds to external broker from agent
     end
 
     if current_user.role.downcase == 'broker'
       origin_broker = current_user.broker.id
       @referral = Broker.find(origin_broker)
-      assigned_agent = params[:client][:agent_id]
+      assigned_agent = params[:client][:agent_id].to_i
       client = Client.find(client.id)
       client.agent_id = assigned_agent
       client.save!
@@ -308,7 +308,7 @@ class ClientsController < ApplicationController
       inbound_clients_default_assigned = Client.where(broker_id: 0)
       inbound_clients = Client.where(broker_id: broker.id).joins(:transactions).where(['transactions.origin_broker = ? and transactions.destination_broker != ?', broker.id,  broker.id])
       clients_refered_from_agents = Client.joins(:transactions).where('transactions.destination_broker = ?', broker.id)
-      inbound_clients += inbound_clients_default_assigned
+      inbound_clients += inbound_clients_default_assigned + clients_refered_from_agents
       
       outbound_clients = Client.where('broker_id != ?', broker.id).joins(:transactions).where('transactions.origin_broker = ? and transactions.destination_broker > ?', broker.id, 0)
       outbound_clients_of_agent = Client.where(broker_id: broker.id).joins(:transactions).where('transactions.destination_broker != ?', broker.id)
